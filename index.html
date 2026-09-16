@@ -364,7 +364,9 @@
   }
   .tablet-nav-btn svg { width: 16px; height: 16px; }
 
-  #tabletProductsView {
+  #tabletCategoriesView,
+  #tabletBottleView,
+  #tabletWaterView {
     width: min(560px, 92%);
     max-height: 92%;
     overflow-y: auto;
@@ -373,6 +375,99 @@
     box-sizing: border-box;
     gap: 12px;
   }
+
+  .tp-nav-card {
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+    cursor: pointer;
+    font: inherit;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: left;
+    padding: 16px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.045);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    touch-action: manipulation;
+  }
+  .tp-nav-card:active { background: rgba(255, 255, 255, 0.09); }
+  .tp-nav-card-text { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0; }
+  .tp-nav-card-title {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    color: #e9ecee;
+  }
+  .tp-nav-card-sub {
+    font-size: 11px;
+    color: rgba(235, 238, 240, 0.55);
+  }
+  .tp-nav-card-arrow { flex: none; opacity: 0.5; }
+  .tp-nav-card-arrow svg { width: 16px; height: 16px; }
+
+  #crosshair {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 6px;
+    height: 6px;
+    margin: -3px 0 0 -3px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(0, 0, 0, 0.25);
+    z-index: 30;
+    pointer-events: none;
+  }
+
+  #carryChip {
+    position: fixed;
+    left: 50%;
+    top: max(16px, env(safe-area-inset-top));
+    transform: translateX(-50%);
+    display: none;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 14px;
+    border-radius: 11px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(18, 20, 22, 0.6);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 40;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: #e9ecee;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+  }
+  #carryChip.visible { display: flex; }
+  #carryChip svg { width: 15px; height: 15px; }
+
+  #worldToast {
+    position: fixed;
+    left: 50%;
+    bottom: max(96px, calc(env(safe-area-inset-bottom) + 84px));
+    transform: translateX(-50%);
+    display: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    background: rgba(18, 20, 22, 0.72);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    z-index: 56;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: #e9ecee;
+    white-space: nowrap;
+  }
+  #worldToast.visible { display: block; }
 
   .tp-header {
     width: 100%;
@@ -669,6 +764,10 @@
   .production-panel {
     position: relative;
     width: min(420px, 92vw);
+    max-height: 88vh;
+    max-height: 88dvh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     box-sizing: border-box;
     padding: 18px;
     border-radius: 20px;
@@ -680,6 +779,11 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+  }
+  @media (max-height: 430px) {
+    .production-panel { padding: 12px; gap: 8px; }
+    .tp-card { padding: 10px; gap: 6px; }
+    .tablet-device { padding: 8px; }
   }
   .production-panel-title {
     font-size: 12px;
@@ -733,6 +837,10 @@
   <span id="budgetChipValue">$100</span>
 </div>
 
+<div id="crosshair"></div>
+<div id="carryChip"><span>Elimde boş şişe var</span></div>
+<div id="worldToast"></div>
+
 <div id="tabletOverlay">
   <div class="tablet-device">
     <div class="tablet-screen">
@@ -741,30 +849,85 @@
         <div id="tabletHomeView" class="tablet-view active">
           <div class="tablet-wordmark">İOZ DRINK COMPANY</div>
           <div class="tablet-wordmark-rule"></div>
-          <button id="openProductsBtn" class="tablet-nav-btn" type="button">
+          <button id="openMachinesBtn" class="tablet-nav-btn" type="button">
             <svg viewBox="0 0 24 24" fill="none" stroke="#e9ecee" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
               <rect x="4" y="7" width="16" height="13" rx="1.6"></rect>
               <path d="M8 7V5.6C8 4.2 9.3 3 11 3h2c1.7 0 3 1.2 3 2.6V7"></path>
             </svg>
-            <span>MAKİNE</span>
+            <span>MAKİNELER</span>
           </button>
         </div>
 
-        <div id="tabletProductsView" class="tablet-view">
+        <div id="tabletCategoriesView" class="tablet-view">
           <div class="tp-header">
-            <button id="tpBackBtn" class="tp-back-btn" type="button">
+            <button id="catBackBtn" class="tp-back-btn" type="button">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="15 5 8 12 15 19"></polyline>
               </svg>
               <span>GERİ</span>
             </button>
-            <div class="tp-title">MAKİNE</div>
+            <div class="tp-title">MAKİNELER</div>
             <div class="tp-budget">
               <svg viewBox="0 0 24 24" fill="none" stroke="#e9ecee" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="9"></circle>
                 <path d="M9.2 15.2c0 1.1 1.1 2 2.8 2s2.8-.8 2.8-1.9c0-3-5.6-1.5-5.6-4.4 0-1.1 1.1-1.9 2.8-1.9s2.8.9 2.8 2"></path>
               </svg>
-              <span id="tpBudgetValue">$100</span>
+              <span class="tp-budget-value">$100</span>
+            </div>
+          </div>
+
+          <button id="catBottleBtn" class="tp-nav-card" type="button">
+            <div class="tp-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#e9ecee" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10 2h4"></path>
+                <path d="M10 2v3.4c0 .5-.2 1-.5 1.4L8 8.6c-.6.7-.9 1.6-.9 2.5V20a1.6 1.6 0 0 0 1.6 1.6h6.6A1.6 1.6 0 0 0 17 20v-8.9c0-.9-.3-1.8-.9-2.5l-1.5-1.8c-.3-.4-.5-.9-.5-1.4V2"></path>
+                <line x1="7.3" y1="13.5" x2="16.7" y2="13.5"></line>
+              </svg>
+            </div>
+            <div class="tp-nav-card-text">
+              <div class="tp-nav-card-title">ŞİŞE MAKİNELERİ</div>
+              <div class="tp-nav-card-sub">Boş PET şişe üretir</div>
+            </div>
+            <div class="tp-nav-card-arrow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#e9ecee" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 5 16 12 9 19"></polyline>
+              </svg>
+            </div>
+          </button>
+
+          <button id="catWaterBtn" class="tp-nav-card" type="button">
+            <div class="tp-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#e9ecee" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 3c3 4 6 7.6 6 11a6 6 0 0 1-12 0c0-3.4 3-7 6-11z"></path>
+              </svg>
+            </div>
+            <div class="tp-nav-card-text">
+              <div class="tp-nav-card-title">ÜRETİM MAKİNELERİ</div>
+              <div class="tp-nav-card-sub">Şişeleri içecekle doldurur</div>
+            </div>
+            <div class="tp-nav-card-arrow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#e9ecee" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 5 16 12 9 19"></polyline>
+              </svg>
+            </div>
+          </button>
+        </div>
+
+        <div id="tabletBottleView" class="tablet-view">
+          <div class="tp-header">
+            <button id="bottleBackBtn" class="tp-back-btn" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 5 8 12 15 19"></polyline>
+              </svg>
+              <span>GERİ</span>
+            </button>
+            <div class="tp-title">ŞİŞE MAKİNESİ</div>
+            <div class="tp-budget">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#e9ecee" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M9.2 15.2c0 1.1 1.1 2 2.8 2s2.8-.8 2.8-1.9c0-3-5.6-1.5-5.6-4.4 0-1.1 1.1-1.9 2.8-1.9s2.8.9 2.8 2"></path>
+              </svg>
+              <span class="tp-budget-value">$100</span>
             </div>
           </div>
 
@@ -795,20 +958,82 @@
                 </svg>
               </div>
               <div>
-                <div class="tp-card-title">ÜRETİM MAKİNESİ</div>
-                <div class="tp-card-sub" id="machineStatusLine">Satın alınmadı &middot; $50 (tek seferlik)</div>
+                <div class="tp-card-title">ŞİŞE MAKİNESİ</div>
+                <div class="tp-card-sub" id="bottleMachineStatusLine">Satın alınmadı &middot; $30 (tek seferlik)</div>
               </div>
             </div>
-            <button id="buyMachineBtn" class="tp-btn" type="button">MAKİNEYİ SATIN AL &mdash; $50</button>
-            <button id="placeMachineBtn" class="tp-btn secondary" type="button" style="display:none;">MAKİNEYİ YERLEŞTİR</button>
-            <button id="moveMachineBtn" class="tp-btn secondary" type="button" style="display:none;">MAKİNEYİ TAŞI</button>
-            <div id="machineNote" class="tp-note" style="display:none;"></div>
+            <button id="buyBottleMachineBtn" class="tp-btn" type="button">MAKİNEYİ SATIN AL &mdash; $30</button>
+            <button id="placeBottleMachineBtn" class="tp-btn secondary" type="button" style="display:none;">MAKİNEYİ YERLEŞTİR</button>
+            <button id="moveBottleMachineBtn" class="tp-btn secondary" type="button" style="display:none;">MAKİNEYİ TAŞİ</button>
+            <div id="bottleMachineNote" class="tp-note" style="display:none;"></div>
           </div>
 
-          <div class="tp-card" id="machineHintCard" style="display:none;">
+          <div class="tp-card" id="bottleMachineHintCard" style="display:none;">
             <div class="tp-card-sub" style="margin-top:0; text-align:center;">Üretim menüsüne makinenin yanına gidince erişebilirsin.</div>
           </div>
+        </div>
 
+        <div id="tabletWaterView" class="tablet-view">
+          <div class="tp-header">
+            <button id="waterBackBtn" class="tp-back-btn" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 5 8 12 15 19"></polyline>
+              </svg>
+              <span>GERİ</span>
+            </button>
+            <div class="tp-title">SU DOLUM MAKİNESİ</div>
+            <div class="tp-budget">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#e9ecee" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M9.2 15.2c0 1.1 1.1 2 2.8 2s2.8-.8 2.8-1.9c0-3-5.6-1.5-5.6-4.4 0-1.1 1.1-1.9 2.8-1.9s2.8.9 2.8 2"></path>
+              </svg>
+              <span class="tp-budget-value">$100</span>
+            </div>
+          </div>
+
+          <div class="tp-card">
+            <div class="tp-card-row">
+              <div class="tp-card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#e9ecee" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="4" y="8" width="16" height="12" rx="1.4"></rect>
+                  <path d="M12 3c1.6 2.1 3.1 4 3.1 5.8a3.1 3.1 0 0 1-6.2 0C8.9 7 10.4 5.1 12 3z"></path>
+                </svg>
+              </div>
+              <div>
+                <div class="tp-card-title">SU DOLUM MAKİNESİ</div>
+                <div class="tp-card-sub" id="waterMachineStatusLine">Satın alınmadı &middot; $50 (tek seferlik)</div>
+              </div>
+            </div>
+            <button id="buyWaterMachineBtn" class="tp-btn" type="button">MAKİNEYİ SATIN AL &mdash; $50</button>
+            <button id="placeWaterMachineBtn" class="tp-btn secondary" type="button" style="display:none;">MAKİNEYİ YERLEŞTİR</button>
+            <button id="moveWaterMachineBtn" class="tp-btn secondary" type="button" style="display:none;">MAKİNEYİ TAŞİ</button>
+            <div id="waterMachineNote" class="tp-note" style="display:none;"></div>
+          </div>
+
+          <div class="tp-card">
+            <div class="tp-card-row">
+              <div class="tp-card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#e9ecee" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 3c3 4 6 7.6 6 11a6 6 0 0 1-12 0c0-3.4 3-7 6-11z"></path>
+                </svg>
+              </div>
+              <div>
+                <div class="tp-card-title">SU DEPOSU</div>
+                <div class="tp-card-sub" id="waterLevelLine">Depoda: 0 ML</div>
+              </div>
+            </div>
+            <div class="tp-qty-row">
+              <button class="tp-water-qty-btn tp-qty-btn selected" data-ml="1000" type="button">1000 ML</button>
+              <button class="tp-water-qty-btn tp-qty-btn" data-ml="5000" type="button">5000 ML</button>
+              <button class="tp-water-qty-btn tp-qty-btn" data-ml="10000" type="button">10000 ML</button>
+            </div>
+            <div class="tp-card-sub" id="waterCostLine" style="text-align:center;">Maliyet: $2</div>
+            <button id="buyWaterBtn" class="tp-btn secondary" type="button">SU SATIN AL</button>
+          </div>
+
+          <div class="tp-card" id="waterMachineHintCard" style="display:none;">
+            <div class="tp-card-sub" style="margin-top:0; text-align:center;">Boş bir şişeyi alıp makinenin yanına getir; su varsa otomatik doldursun.</div>
+          </div>
         </div>
 
       </div>
@@ -866,7 +1091,7 @@
         <line x1="19" y1="5" x2="5" y2="19"></line>
       </svg>
     </button>
-    <div class="production-panel-title">ÜRETİM</div>
+    <div class="production-panel-title">ŞİŞE ÜRETİMİ</div>
     <div class="tp-card" style="padding:0; border:none; background:none;">
       <div class="tp-card-row">
         <div class="tp-card-icon">
@@ -1321,41 +1546,72 @@
   });
 
   // ---------------------------------------------------------------------
-  // Production system: budget, bottle machine, production queue.
+  // Production system: budget, two machine types, carrying & feeding.
   //   Entirely additive -- does not touch movement, camera, joystick,
   //   grass, lighting, or the tablet open/close logic above.
   // ---------------------------------------------------------------------
-  var MACHINE_COST = 50;
+  var BOTTLE_MACHINE_COST = 30;
+  var WATER_MACHINE_COST = 50;
   var BOTTLE_COST = 1;
   var BOTTLE_TIME_MS = 2000;
-  // Bottles now pile up on the platform instead of flying to a fixed
-  // tray grid, so keep far more of them around before culling the
-  // oldest -- the old cap of 24 was low enough that a single "20 ADET"
-  // batch on top of an existing pile would start deleting bottles
-  // almost immediately, making it look like fewer came out than were
-  // actually produced.
+  var BOTTLE_VOLUME_ML = 250;
+  var WATER_PRICE_PER_1000ML = 2;
+  var WATER_FILL_TIME_MS = 3000;
+  // Bottles pile up on the platform instead of flying to a fixed tray
+  // grid, so keep far more of them around before culling the oldest.
   var MAX_VISIBLE_BOTTLES = 200;
 
   var econ = {
     budget: 100,
-    machineOwned: false,
-    machinePlaced: false,
-    producing: false
+    bottleMachineOwned: false,
+    bottleMachinePlaced: false,
+    waterMachineOwned: false,
+    waterMachinePlaced: false,
+    producing: false,
+    waterML: 0
   };
 
+  function disposeObj(o) {
+    if (o.geometry) o.geometry.dispose();
+    if (o.material) o.material.dispose();
+  }
+
   var budgetChipValue = document.getElementById("budgetChipValue");
-  var tpBudgetValue = document.getElementById("tpBudgetValue");
-  var openProductsBtn = document.getElementById("openProductsBtn");
-  var tpBackBtn = document.getElementById("tpBackBtn");
-  var tabletHomeView = document.getElementById("tabletHomeView");
-  var tabletProductsView = document.getElementById("tabletProductsView");
-  var buyMachineBtn = document.getElementById("buyMachineBtn");
-  var placeMachineBtn = document.getElementById("placeMachineBtn");
-  var moveMachineBtn = document.getElementById("moveMachineBtn");
-  var machineStatusLine = document.getElementById("machineStatusLine");
-  var machineNote = document.getElementById("machineNote");
-  var machineHintCard = document.getElementById("machineHintCard");
-  var qtyButtons = Array.prototype.slice.call(document.querySelectorAll(".tp-qty-btn"));
+  var tpBudgetValueEls = Array.prototype.slice.call(document.querySelectorAll(".tp-budget-value"));
+
+  var openMachinesBtn = document.getElementById("openMachinesBtn");
+  var catBackBtn = document.getElementById("catBackBtn");
+  var catBottleBtn = document.getElementById("catBottleBtn");
+  var catWaterBtn = document.getElementById("catWaterBtn");
+  var bottleBackBtn = document.getElementById("bottleBackBtn");
+  var waterBackBtn = document.getElementById("waterBackBtn");
+
+  var tabletViews = Array.prototype.slice.call(document.querySelectorAll(".tablet-view"));
+  function showTabletView(id) {
+    tabletViews.forEach(function (v) { v.classList.toggle("active", v.id === id); });
+  }
+
+  var buyBottleMachineBtn = document.getElementById("buyBottleMachineBtn");
+  var placeBottleMachineBtn = document.getElementById("placeBottleMachineBtn");
+  var moveBottleMachineBtn = document.getElementById("moveBottleMachineBtn");
+  var bottleMachineStatusLine = document.getElementById("bottleMachineStatusLine");
+  var bottleMachineNote = document.getElementById("bottleMachineNote");
+  var bottleMachineHintCard = document.getElementById("bottleMachineHintCard");
+
+  var buyWaterMachineBtn = document.getElementById("buyWaterMachineBtn");
+  var placeWaterMachineBtn = document.getElementById("placeWaterMachineBtn");
+  var moveWaterMachineBtn = document.getElementById("moveWaterMachineBtn");
+  var waterMachineStatusLine = document.getElementById("waterMachineStatusLine");
+  var waterMachineNote = document.getElementById("waterMachineNote");
+  var waterMachineHintCard = document.getElementById("waterMachineHintCard");
+
+  var waterLevelLine = document.getElementById("waterLevelLine");
+  var waterCostLine = document.getElementById("waterCostLine");
+  var buyWaterBtn = document.getElementById("buyWaterBtn");
+  var waterQtyButtons = Array.prototype.slice.call(document.querySelectorAll(".tp-water-qty-btn"));
+  var selectedWaterMl = 1000;
+
+  var qtyButtons = Array.prototype.slice.call(document.querySelectorAll(".tp-qty-btn:not(.tp-water-qty-btn)"));
   var startProductionBtn = document.getElementById("startProductionBtn");
   var productionCostLine = document.getElementById("productionCostLine");
   var productionProgressFill = document.getElementById("productionProgressFill");
@@ -1363,45 +1619,90 @@
   var productionOverlay = document.getElementById("productionOverlay");
   var productionCloseBtn = document.getElementById("productionCloseBtn");
   var machineInteractBtn = document.getElementById("machineInteractBtn");
+  var machineInteractLabel = machineInteractBtn.querySelector("span");
   var placementControls = document.getElementById("placementControls");
   var rotateLeftBtn = document.getElementById("rotateLeftBtn");
   var rotateRightBtn = document.getElementById("rotateRightBtn");
   var confirmPlaceBtn = document.getElementById("confirmPlaceBtn");
   var cancelPlaceBtn = document.getElementById("cancelPlaceBtn");
+  var carryChip = document.getElementById("carryChip");
+  var worldToastEl = document.getElementById("worldToast");
+  var worldToastTimer = null;
+
+  function flashWorldToast(msg) {
+    worldToastEl.textContent = msg;
+    worldToastEl.classList.add("visible");
+    clearTimeout(worldToastTimer);
+    worldToastTimer = setTimeout(function () { worldToastEl.classList.remove("visible"); }, 1600);
+  }
 
   var selectedQty = 1;
 
   function renderBudget() {
     var text = "$" + econ.budget;
     budgetChipValue.textContent = text;
-    tpBudgetValue.textContent = text;
+    tpBudgetValueEls.forEach(function (el) { el.textContent = text; });
   }
 
-  function renderMachineCard() {
-    if (!econ.machineOwned) {
-      machineStatusLine.textContent = "Satın alınmadı \u00B7 $" + MACHINE_COST + " (tek seferlik)";
-      buyMachineBtn.style.display = "";
-      placeMachineBtn.style.display = "none";
-      moveMachineBtn.style.display = "none";
-      machineHintCard.style.display = "none";
-      buyMachineBtn.disabled = econ.budget < MACHINE_COST;
-      machineNote.style.display = econ.budget < MACHINE_COST ? "block" : "none";
-      machineNote.textContent = "Yetersiz bütçe";
-    } else if (!econ.machinePlaced) {
-      machineStatusLine.textContent = "Satın alındı \u00B7 sahada yerleştirilmeyi bekliyor";
-      buyMachineBtn.style.display = "none";
-      placeMachineBtn.style.display = "";
-      moveMachineBtn.style.display = "none";
-      machineHintCard.style.display = "none";
-      machineNote.style.display = "none";
+  function renderBottleMachineCard() {
+    if (!econ.bottleMachineOwned) {
+      bottleMachineStatusLine.textContent = "Satın alınmadı \u00B7 $" + BOTTLE_MACHINE_COST + " (tek seferlik)";
+      buyBottleMachineBtn.style.display = "";
+      placeBottleMachineBtn.style.display = "none";
+      moveBottleMachineBtn.style.display = "none";
+      bottleMachineHintCard.style.display = "none";
+      buyBottleMachineBtn.disabled = econ.budget < BOTTLE_MACHINE_COST;
+      bottleMachineNote.style.display = econ.budget < BOTTLE_MACHINE_COST ? "block" : "none";
+      bottleMachineNote.textContent = "Yetersiz bütçe";
+    } else if (!econ.bottleMachinePlaced) {
+      bottleMachineStatusLine.textContent = "Satın alındı \u00B7 sahada yerleştirilmeyi bekliyor";
+      buyBottleMachineBtn.style.display = "none";
+      placeBottleMachineBtn.style.display = "";
+      moveBottleMachineBtn.style.display = "none";
+      bottleMachineHintCard.style.display = "none";
+      bottleMachineNote.style.display = "none";
     } else {
-      machineStatusLine.textContent = "Yerleştirildi \u00B7 çalışır durumda";
-      buyMachineBtn.style.display = "none";
-      placeMachineBtn.style.display = "none";
-      moveMachineBtn.style.display = "";
-      machineHintCard.style.display = "block";
-      machineNote.style.display = "none";
+      bottleMachineStatusLine.textContent = "Yerleştirildi \u00B7 çalışır durumda";
+      buyBottleMachineBtn.style.display = "none";
+      placeBottleMachineBtn.style.display = "none";
+      moveBottleMachineBtn.style.display = "";
+      bottleMachineHintCard.style.display = "block";
+      bottleMachineNote.style.display = "none";
     }
+  }
+
+  function renderWaterMachineCard() {
+    if (!econ.waterMachineOwned) {
+      waterMachineStatusLine.textContent = "Satın alınmadı \u00B7 $" + WATER_MACHINE_COST + " (tek seferlik)";
+      buyWaterMachineBtn.style.display = "";
+      placeWaterMachineBtn.style.display = "none";
+      moveWaterMachineBtn.style.display = "none";
+      waterMachineHintCard.style.display = "none";
+      buyWaterMachineBtn.disabled = econ.budget < WATER_MACHINE_COST;
+      waterMachineNote.style.display = econ.budget < WATER_MACHINE_COST ? "block" : "none";
+      waterMachineNote.textContent = "Yetersiz bütçe";
+    } else if (!econ.waterMachinePlaced) {
+      waterMachineStatusLine.textContent = "Satın alındı \u00B7 sahada yerleştirilmeyi bekliyor";
+      buyWaterMachineBtn.style.display = "none";
+      placeWaterMachineBtn.style.display = "";
+      moveWaterMachineBtn.style.display = "none";
+      waterMachineHintCard.style.display = "none";
+      waterMachineNote.style.display = "none";
+    } else {
+      waterMachineStatusLine.textContent = "Yerleştirildi \u00B7 çalışır durumda";
+      buyWaterMachineBtn.style.display = "none";
+      placeWaterMachineBtn.style.display = "none";
+      moveWaterMachineBtn.style.display = "";
+      waterMachineHintCard.style.display = "block";
+      waterMachineNote.style.display = "none";
+    }
+  }
+
+  function renderWaterResourceCard() {
+    waterLevelLine.textContent = "Depoda: " + econ.waterML + " ML";
+    var cost = (selectedWaterMl / 1000) * WATER_PRICE_PER_1000ML;
+    waterCostLine.textContent = "Maliyet: $" + cost;
+    buyWaterBtn.disabled = econ.budget < cost;
   }
 
   function renderProductionCard() {
@@ -1416,18 +1717,24 @@
     }
   }
 
-  function openProducts() {
-    tabletHomeView.classList.remove("active");
-    tabletProductsView.classList.add("active");
+  openMachinesBtn.addEventListener("click", function () {
+    showTabletView("tabletCategoriesView");
     renderBudget();
-    renderMachineCard();
-  }
-  function goHome() {
-    tabletProductsView.classList.remove("active");
-    tabletHomeView.classList.add("active");
-  }
-  openProductsBtn.addEventListener("click", openProducts);
-  tpBackBtn.addEventListener("click", goHome);
+  });
+  catBackBtn.addEventListener("click", function () { showTabletView("tabletHomeView"); });
+  catBottleBtn.addEventListener("click", function () {
+    showTabletView("tabletBottleView");
+    renderBudget();
+    renderBottleMachineCard();
+  });
+  catWaterBtn.addEventListener("click", function () {
+    showTabletView("tabletWaterView");
+    renderBudget();
+    renderWaterMachineCard();
+    renderWaterResourceCard();
+  });
+  bottleBackBtn.addEventListener("click", function () { showTabletView("tabletCategoriesView"); });
+  waterBackBtn.addEventListener("click", function () { showTabletView("tabletCategoriesView"); });
 
   qtyButtons.forEach(function (btn) {
     btn.addEventListener("click", function () {
@@ -1438,24 +1745,57 @@
     });
   });
 
-  buyMachineBtn.addEventListener("click", function () {
-    if (econ.budget < MACHINE_COST || econ.machineOwned) return;
-    econ.budget -= MACHINE_COST;
-    econ.machineOwned = true;
+  waterQtyButtons.forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      selectedWaterMl = parseInt(btn.getAttribute("data-ml"), 10);
+      waterQtyButtons.forEach(function (b) { b.classList.toggle("selected", b === btn); });
+      renderWaterResourceCard();
+    });
+  });
+
+  buyWaterBtn.addEventListener("click", function () {
+    var cost = (selectedWaterMl / 1000) * WATER_PRICE_PER_1000ML;
+    if (econ.budget < cost) return;
+    econ.budget -= cost;
+    econ.waterML += selectedWaterMl;
     renderBudget();
-    renderMachineCard();
+    renderWaterResourceCard();
   });
 
-  placeMachineBtn.addEventListener("click", function () {
-    if (!econ.machineOwned || econ.machinePlaced) return;
+  buyBottleMachineBtn.addEventListener("click", function () {
+    if (econ.budget < BOTTLE_MACHINE_COST || econ.bottleMachineOwned) return;
+    econ.budget -= BOTTLE_MACHINE_COST;
+    econ.bottleMachineOwned = true;
+    renderBudget();
+    renderBottleMachineCard();
+  });
+  placeBottleMachineBtn.addEventListener("click", function () {
+    if (!econ.bottleMachineOwned || econ.bottleMachinePlaced) return;
     closeTablet();
-    enterPlacementMode();
+    enterPlacementMode("bottle");
+  });
+  moveBottleMachineBtn.addEventListener("click", function () {
+    if (!econ.bottleMachinePlaced) return;
+    closeTablet();
+    enterPlacementMode("bottle");
   });
 
-  moveMachineBtn.addEventListener("click", function () {
-    if (!econ.machinePlaced) return;
+  buyWaterMachineBtn.addEventListener("click", function () {
+    if (econ.budget < WATER_MACHINE_COST || econ.waterMachineOwned) return;
+    econ.budget -= WATER_MACHINE_COST;
+    econ.waterMachineOwned = true;
+    renderBudget();
+    renderWaterMachineCard();
+  });
+  placeWaterMachineBtn.addEventListener("click", function () {
+    if (!econ.waterMachineOwned || econ.waterMachinePlaced) return;
     closeTablet();
-    enterPlacementMode();
+    enterPlacementMode("water");
+  });
+  moveWaterMachineBtn.addEventListener("click", function () {
+    if (!econ.waterMachinePlaced) return;
+    closeTablet();
+    enterPlacementMode("water");
   });
 
   startProductionBtn.addEventListener("click", function () {
@@ -1466,13 +1806,13 @@
   });
 
   // -----------------------------------------------------------------
-  // Production panel: opened by walking up to the placed machine and
-  // tapping the interact prompt (not from the shop tablet anymore).
+  // Production panel: opened by walking up to the placed bottle
+  // machine and tapping the interact prompt (not from the shop tablet).
   // -----------------------------------------------------------------
   var productionOpen = false;
 
   function openProductionPanel() {
-    if (!econ.machinePlaced || placementMode) return;
+    if (!econ.bottleMachinePlaced || placementMode) return;
     productionOpen = true;
     productionOverlay.classList.add("visible");
     renderBudget();
@@ -1482,7 +1822,6 @@
     productionOpen = false;
     productionOverlay.classList.remove("visible");
   }
-  machineInteractBtn.addEventListener("click", openProductionPanel);
   productionCloseBtn.addEventListener("click", closeProductionPanel);
   productionOverlay.addEventListener("click", function (e) {
     if (e.target === productionOverlay) closeProductionPanel();
@@ -1494,8 +1833,10 @@
   // looking, so walking/turning moves it; the rotate buttons spin it
   // in place. Confirm locks it in; cancel restores the previous spot
   // (or removes it entirely if it had never been placed before).
+  // Generalised over both machine kinds via the `machines` registry.
   // -----------------------------------------------------------------
   var placementMode = false;
+  var activePlacementKind = null;
   var placementYaw = 0;
   var placementOriginalPos = null;
   var placementOriginalRot = 0;
@@ -1523,45 +1864,47 @@
     });
   }
 
-  function enterPlacementMode() {
+  function enterPlacementMode(kind) {
     if (placementMode) return;
-    if (!machineGroup) {
-      machineGroup = buildMachine();
-      machineGroup.position.copy(machinePosition);
-      scene.add(machineGroup);
+    var m = machines[kind];
+    if (!m.group) {
+      m.group = m.build();
+      m.group.position.copy(m.position);
+      scene.add(m.group);
     }
+    activePlacementKind = kind;
     placementMode = true;
-    placementOriginalPos = machineGroup.position.clone();
-    placementOriginalRot = machineGroup.rotation.y;
-    placementYaw = machineGroup.rotation.y;
-    setPlacementGhostVisual(machineGroup, true);
+    placementOriginalPos = m.group.position.clone();
+    placementOriginalRot = m.group.rotation.y;
+    placementYaw = m.group.rotation.y;
+    setPlacementGhostVisual(m.group, true);
     placementControls.classList.add("visible");
     machineInteractBtn.classList.remove("visible");
   }
 
   function exitPlacementMode(confirmed) {
+    var kind = activePlacementKind;
+    var m = machines[kind];
     placementMode = false;
     rotateHoldDir = 0;
     placementControls.classList.remove("visible");
-    setPlacementGhostVisual(machineGroup, false);
+    setPlacementGhostVisual(m.group, false);
     if (confirmed) {
-      machinePosition.copy(machineGroup.position);
-      var wasAlreadyPlaced = econ.machinePlaced;
-      econ.machinePlaced = true;
-      if (!wasAlreadyPlaced) renderMachineCard();
+      m.position.copy(m.group.position);
+      var wasAlreadyPlaced = econ[m.placedKey];
+      econ[m.placedKey] = true;
+      if (!wasAlreadyPlaced) m.onPlaced();
     } else {
-      machineGroup.position.copy(placementOriginalPos);
-      machineGroup.rotation.y = placementOriginalRot;
-      machinePosition.copy(placementOriginalPos);
-      if (!econ.machinePlaced) {
-        scene.remove(machineGroup);
-        machineGroup.traverse(function (o) {
-          if (o.geometry) o.geometry.dispose();
-          if (o.material) o.material.dispose();
-        });
-        machineGroup = null;
+      m.group.position.copy(placementOriginalPos);
+      m.group.rotation.y = placementOriginalRot;
+      m.position.copy(placementOriginalPos);
+      if (!econ[m.placedKey]) {
+        scene.remove(m.group);
+        m.group.traverse(disposeObj);
+        m.group = null;
       }
     }
+    activePlacementKind = null;
   }
 
   confirmPlaceBtn.addEventListener("click", function () { exitPlacementMode(true); });
@@ -1580,8 +1923,12 @@
   bindHold(rotateLeftBtn, 1);
   bindHold(rotateRightBtn, -1);
 
+  var placementForward = new THREE.Vector3();
+
   function updatePlacement(dt) {
-    if (!placementMode || !machineGroup) return;
+    if (!placementMode || !activePlacementKind) return;
+    var group = machines[activePlacementKind].group;
+    if (!group) return;
     camera.getWorldDirection(placementForward);
     placementForward.y = 0;
     if (placementForward.lengthSq() < 1e-6) placementForward.set(0, 0, -1);
@@ -1590,39 +1937,75 @@
     var pz = yawObject.position.z + placementForward.z * PLACEMENT_DISTANCE;
     px = THREE.MathUtils.clamp(px, -GROUND_HALF, GROUND_HALF);
     pz = THREE.MathUtils.clamp(pz, -GROUND_HALF, GROUND_HALF);
-    machineGroup.position.set(px, 0, pz);
+    group.position.set(px, 0, pz);
     if (rotateHoldDir !== 0) placementYaw += rotateHoldDir * ROTATE_SPEED * dt;
-    machineGroup.rotation.y = placementYaw;
+    group.rotation.y = placementYaw;
   }
-  var placementForward = new THREE.Vector3();
 
   // -----------------------------------------------------------------
-  // Proximity: show the in-world "ÜRETİM MENÜSÜ" prompt only while the
-  // player is standing close to the placed machine, and auto-close the
-  // production panel if they wander off.
+  // Proximity: shows a single contextual interact prompt depending on
+  // what the player is near and what they're carrying --
+  //   - near the bottle machine, empty-handed, pile has bottles -> pick up
+  //   - near the bottle machine, empty-handed, pile is empty    -> open shop menu
+  //   - carrying a bottle, near the water machine                -> feed it in
   // -----------------------------------------------------------------
   var PROXIMITY_RADIUS = 3.2;
-  var nearMachine = false;
+  var currentInteractMode = null;
+
+  function distXZ(a, b) {
+    var dx = a.x - b.x, dz = a.z - b.z;
+    return Math.sqrt(dx * dx + dz * dz);
+  }
 
   function updateMachineProximity() {
-    if (!econ.machinePlaced || !machineGroup || placementMode) {
-      if (nearMachine) {
-        nearMachine = false;
-        machineInteractBtn.classList.remove("visible");
-      }
+    if (placementMode) {
+      currentInteractMode = null;
+      machineInteractBtn.classList.remove("visible");
       return;
     }
-    var dx = yawObject.position.x - machineGroup.position.x;
-    var dz = yawObject.position.z - machineGroup.position.z;
-    var dist = Math.sqrt(dx * dx + dz * dz);
-    var isNear = dist <= PROXIMITY_RADIUS;
-    if (isNear !== nearMachine) {
-      nearMachine = isNear;
-      if (nearMachine && !productionOpen) machineInteractBtn.classList.add("visible");
-      else machineInteractBtn.classList.remove("visible");
+
+    var mode = null;
+    var label = "";
+
+    if (carriedBottleMesh) {
+      if (econ.waterMachinePlaced && machines.water.group) {
+        if (distXZ(yawObject.position, machines.water.group.position) <= PROXIMITY_RADIUS) {
+          mode = "insertBottle";
+          label = "ŞİŞEYİ MAKİNEYE KOY";
+        }
+      }
+    } else if (econ.bottleMachinePlaced && machines.bottle.group) {
+      if (distXZ(yawObject.position, machines.bottle.group.position) <= PROXIMITY_RADIUS) {
+        if (bottlePile.liveBottles.length > 0) {
+          mode = "pickupEmpty";
+          label = "ŞİŞE AL";
+        } else {
+          mode = "bottleMenu";
+          label = "ÜRETİM MENÜSÜ";
+        }
+      }
     }
-    if (!isNear && productionOpen) closeProductionPanel();
+
+    currentInteractMode = mode;
+    if (mode && !productionOpen) {
+      machineInteractBtn.classList.add("visible");
+      machineInteractLabel.textContent = label;
+    } else {
+      machineInteractBtn.classList.remove("visible");
+    }
+
+    if (productionOpen) {
+      var stillNear = econ.bottleMachinePlaced && machines.bottle.group &&
+        distXZ(yawObject.position, machines.bottle.group.position) <= PROXIMITY_RADIUS;
+      if (!stillNear) closeProductionPanel();
+    }
   }
+
+  machineInteractBtn.addEventListener("click", function () {
+    if (currentInteractMode === "bottleMenu") openProductionPanel();
+    else if (currentInteractMode === "pickupEmpty") pickUpEmptyBottle();
+    else if (currentInteractMode === "insertBottle") insertCarriedBottleIntoWaterMachine();
+  });
 
   function runProductionBatch(qty) {
     econ.producing = true;
@@ -1637,7 +2020,7 @@
       econ.budget -= BOTTLE_COST;
       produced += 1;
       renderBudget();
-      spawnBottle();
+      spawnBottleInto(bottlePile, machines.bottle.group, false);
       productionProgressFill.style.width = Math.round((produced / qty) * 100) + "%";
       productionStatusLine.textContent = "Üretiliyor: " + produced + " / " + qty;
       if (produced >= qty) {
@@ -1661,16 +2044,16 @@
 
   // ---------------------------------------------------------------------
   // Machine + bottle 3D representation (simple, clean primitives; no
-  // external assets). Placed a short walk from spawn, well clear of the
-  // joystick/tablet controls which are screen-space UI, not world objects.
+  // external assets). Two machine kinds share the same placement /
+  // proximity plumbing above through the `machines` registry below.
   // ---------------------------------------------------------------------
-  var machineGroup = null;
-  var machinePosition = new THREE.Vector3(4.2, 0, 1.5);
-  var bottleAnims = [];
-  var liveBottles = [];
-  var trayBottleCount = 0;
+  var bottlePile = { liveBottles: [], anims: [], trayCount: 0 };
+  var filledPile = { liveBottles: [], anims: [], trayCount: 0 };
+  var waterQueue = 0;
+  var waterProcessing = false;
+  var carriedBottleMesh = null;
 
-  function buildMachine() {
+  function buildBottleMachine() {
     var group = new THREE.Group();
     var bodyMat = new THREE.MeshStandardMaterial({ color: 0xdedfe0, metalness: 0.65, roughness: 0.3 });
     var darkMat = new THREE.MeshStandardMaterial({ color: 0x2b2d30, metalness: 0.4, roughness: 0.5 });
@@ -1678,9 +2061,6 @@
     var footMat = new THREE.MeshStandardMaterial({ color: 0x1c1d1f, metalness: 0.3, roughness: 0.6 });
     var stripeMat = new THREE.MeshStandardMaterial({ color: 0x2f6f8a, metalness: 0.3, roughness: 0.4 });
 
-    // Scaled up ~1.5x from the original prototype block-out, plus a
-    // hopper, feet and a pipe so it reads as a real bottling machine
-    // rather than a plain box.
     var footGeo = new THREE.CylinderGeometry(0.07, 0.09, 0.14, 10);
     var footOffsets = [[-0.62, -0.34], [0.62, -0.34], [-0.62, 0.34], [0.62, 0.34]];
     footOffsets.forEach(function (o) {
@@ -1708,7 +2088,6 @@
     stripe.position.y = bodyBottomY + 0.32;
     group.add(stripe);
 
-    // Hopper feeding the body from above, tapering down like a funnel.
     var hopper = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.55, 0.55, 16), accentMat);
     hopper.position.y = bodyBottomY + bodyHeight + 0.24;
     hopper.castShadow = true;
@@ -1729,7 +2108,6 @@
     screen.position.set(0, panelY + 0.1, 0.545);
     group.add(screen);
 
-    // A row of small control buttons under the screen for detail.
     var btnGeo = new THREE.CylinderGeometry(0.028, 0.028, 0.02, 10);
     for (var i = -1; i <= 1; i++) {
       var cbtn = new THREE.Mesh(btnGeo, accentMat);
@@ -1745,7 +2123,6 @@
     statusLight.position.set(0, panelY + 0.36, 0.545);
     group.add(statusLight);
 
-    // Pipe running from the body out to the dispensing nozzle.
     var nozzleY = bodyBottomY + 0.62;
     var pipe = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.4, 12), darkMat);
     pipe.rotation.z = Math.PI / 2;
@@ -1758,8 +2135,6 @@
     nozzle.castShadow = true;
     group.add(nozzle);
 
-    // A low collection platform out front where finished bottles land
-    // and pile up.
     var platform = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.05, 1.3), darkMat);
     platform.position.set(1.6, 0.025, 0);
     platform.receiveShadow = true;
@@ -1771,103 +2146,270 @@
     return group;
   }
 
-  function buildBottle() {
+  function buildWaterMachine() {
+    var group = new THREE.Group();
+    var bodyMat = new THREE.MeshStandardMaterial({ color: 0xdfe9ec, metalness: 0.6, roughness: 0.3 });
+    var darkMat = new THREE.MeshStandardMaterial({ color: 0x22343a, metalness: 0.4, roughness: 0.5 });
+    var accentMat = new THREE.MeshStandardMaterial({ color: 0x2f8fd4, metalness: 0.4, roughness: 0.25 });
+    var footMat = new THREE.MeshStandardMaterial({ color: 0x1c1d1f, metalness: 0.3, roughness: 0.6 });
+    var tankMat = new THREE.MeshStandardMaterial({ color: 0x8fd0ea, transparent: true, opacity: 0.55, roughness: 0.1, metalness: 0 });
+
+    var footGeo = new THREE.CylinderGeometry(0.07, 0.09, 0.14, 10);
+    var footOffsets = [[-0.62, -0.34], [0.62, -0.34], [-0.62, 0.34], [0.62, 0.34]];
+    footOffsets.forEach(function (o) {
+      var foot = new THREE.Mesh(footGeo, footMat);
+      foot.position.set(o[0], 0.07, o[1]);
+      foot.castShadow = true;
+      group.add(foot);
+    });
+
+    var base = new THREE.Mesh(new THREE.BoxGeometry(1.7, 0.16, 1.15), darkMat);
+    base.position.y = 0.14 + 0.08;
+    base.castShadow = true;
+    base.receiveShadow = true;
+    group.add(base);
+
+    var bodyBottomY = 0.22;
+    var bodyHeight = 1.65;
+    var body = new THREE.Mesh(new THREE.BoxGeometry(1.5, bodyHeight, 1.0), bodyMat);
+    body.position.y = bodyBottomY + bodyHeight / 2;
+    body.castShadow = true;
+    body.receiveShadow = true;
+    group.add(body);
+
+    var stripe = new THREE.Mesh(new THREE.BoxGeometry(1.52, 0.12, 1.02), accentMat);
+    stripe.position.y = bodyBottomY + 0.32;
+    group.add(stripe);
+
+    var tank = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.42, 0.85, 18), tankMat);
+    tank.position.y = bodyBottomY + bodyHeight + 0.42;
+    tank.castShadow = true;
+    group.add(tank);
+    var tankCap = new THREE.Mesh(new THREE.CylinderGeometry(0.44, 0.44, 0.08, 18), darkMat);
+    tankCap.position.y = bodyBottomY + bodyHeight + 0.85;
+    group.add(tankCap);
+
+    var panelY = bodyBottomY + bodyHeight - 0.5;
+    var panel = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.5, 0.05), darkMat);
+    panel.position.set(0, panelY, 0.51);
+    group.add(panel);
+
+    var screen = new THREE.Mesh(
+      new THREE.BoxGeometry(0.5, 0.24, 0.02),
+      new THREE.MeshStandardMaterial({ color: 0x0c1f2a, emissive: 0x1c6bab, emissiveIntensity: 0.55, roughness: 0.4 })
+    );
+    screen.position.set(0, panelY + 0.08, 0.545);
+    group.add(screen);
+
+    var statusLight = new THREE.Mesh(
+      new THREE.SphereGeometry(0.05, 12, 12),
+      new THREE.MeshStandardMaterial({ color: 0x2e6b3a, emissive: 0x123314, emissiveIntensity: 0.6 })
+    );
+    statusLight.position.set(0, panelY + 0.3, 0.545);
+    group.add(statusLight);
+
+    var nozzleY = bodyBottomY + 0.55;
+    var pipe = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.4, 12), darkMat);
+    pipe.rotation.z = Math.PI / 2;
+    pipe.position.set(0.95, nozzleY, 0);
+    group.add(pipe);
+
+    var nozzle = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.12, 0.22, 16), accentMat);
+    nozzle.rotation.z = Math.PI / 2;
+    nozzle.position.set(1.18, nozzleY - 0.06, 0);
+    nozzle.castShadow = true;
+    group.add(nozzle);
+
+    var platform = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.05, 1.3), darkMat);
+    platform.position.set(1.6, 0.025, 0);
+    platform.receiveShadow = true;
+    group.add(platform);
+
+    group.userData.statusLight = statusLight;
+    group.userData.nozzleOffset = new THREE.Vector3(1.18, nozzleY - 0.06, 0);
+    group.userData.pileOffset = new THREE.Vector3(1.6, 0.05, 0);
+    return group;
+  }
+
+  function buildBottle(filled) {
     var group = new THREE.Group();
     var bodyMat = new THREE.MeshStandardMaterial({
-      color: 0xbfe3ea, transparent: true, opacity: 0.72, roughness: 0.15, metalness: 0
+      color: filled ? 0x9fd3e6 : 0xd7eef2, transparent: true, opacity: 0.72, roughness: 0.15, metalness: 0
     });
     var capMat = new THREE.MeshStandardMaterial({ color: 0x2f6f8a, roughness: 0.4 });
     var body = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.05, 0.13, 12), bodyMat);
     body.position.y = 0.065;
     body.castShadow = true;
     group.add(body);
+    if (filled) {
+      var water = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.04, 0.045, 0.1, 12),
+        new THREE.MeshStandardMaterial({ color: 0x2f8fd4, transparent: true, opacity: 0.85, roughness: 0.1 })
+      );
+      water.position.y = 0.06;
+      group.add(water);
+    }
     var neck = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.03, 0.04, 10), bodyMat);
     neck.position.y = 0.15;
     group.add(neck);
-    var cap = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.025, 10), capMat);
-    cap.position.y = 0.18;
-    group.add(cap);
+    if (filled) {
+      var cap = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.025, 10), capMat);
+      cap.position.y = 0.18;
+      group.add(cap);
+    }
+    group.userData.filled = !!filled;
     return group;
   }
 
-  function placeMachineInWorld() {
-    if (machineGroup) return;
-    machineGroup = buildMachine();
-    machineGroup.position.copy(machinePosition);
-    scene.add(machineGroup);
+  function buildCarriedBottleVisual() {
+    var b = buildBottle(false);
+    b.scale.set(1.5, 1.5, 1.5);
+    b.position.set(0.3, -0.24, -0.55);
+    b.rotation.set(0.15, 0.4, 0.1);
+    return b;
   }
 
   // Every produced bottle gets its own, ever-increasing spot on the
-  // collection platform -- radius and layer only ever grow with
-  // trayBottleCount, so nothing is ever reused or overwritten the way
-  // the old fixed 6x4 grid could be, and it reads as a pile that keeps
-  // growing rather than a slot that gets revisited out of order.
+  // collection platform so the pile keeps growing instead of reusing
+  // slots out of order.
   var PILE_PER_LAYER = 10;
   var PILE_MAX_RADIUS = 0.55;
-  var BOTTLE_REST_HEIGHT = 0.09; // half the bottle's resting height
+  var BOTTLE_REST_HEIGHT = 0.09;
   var BOTTLE_LAYER_HEIGHT = 0.16;
 
-  function pileSpotLocal(index) {
+  function pileSpotLocal(group, index) {
     var layer = Math.floor(index / PILE_PER_LAYER);
     var slot = index % PILE_PER_LAYER;
-    // Golden-angle spiral so bottles within a layer scatter naturally
-    // instead of lining up in a visible grid.
     var angle = slot * 2.4;
     var radius = Math.min(PILE_MAX_RADIUS, 0.08 + slot * 0.05);
-    var local = machineGroup.userData.pileOffset.clone();
+    var local = group.userData.pileOffset.clone();
     local.x += Math.cos(angle) * radius;
     local.z += Math.sin(angle) * radius;
     local.y = BOTTLE_REST_HEIGHT + layer * BOTTLE_LAYER_HEIGHT;
     return local;
   }
 
-  function spawnBottle() {
-    if (!machineGroup) return;
-    var bottle = buildBottle();
-    var startPos = machineGroup.localToWorld(machineGroup.userData.nozzleOffset.clone());
-    var endPos = machineGroup.localToWorld(pileSpotLocal(trayBottleCount));
-    trayBottleCount++;
+  function spawnBottleInto(pileCtx, group, filled) {
+    if (!group) return;
+    var bottle = buildBottle(filled);
+    var startPos = group.localToWorld(group.userData.nozzleOffset.clone());
+    var endPos = group.localToWorld(pileSpotLocal(group, pileCtx.trayCount));
+    pileCtx.trayCount++;
 
     bottle.position.copy(startPos);
     bottle.rotation.y = Math.random() * Math.PI * 2;
     scene.add(bottle);
 
-    if (machineGroup.userData.statusLight) {
-      machineGroup.userData.statusLight.material.emissiveIntensity = 1.5;
+    if (group.userData.statusLight) {
+      group.userData.statusLight.material.emissiveIntensity = 1.5;
     }
 
-    bottleAnims.push({ mesh: bottle, from: startPos, to: endPos, elapsed: 0, duration: 0.55 });
+    pileCtx.anims.push({ mesh: bottle, from: startPos, to: endPos, elapsed: 0, duration: 0.55 });
 
-    liveBottles.push(bottle);
-    if (liveBottles.length > MAX_VISIBLE_BOTTLES) {
-      var old = liveBottles.shift();
+    pileCtx.liveBottles.push(bottle);
+    if (pileCtx.liveBottles.length > MAX_VISIBLE_BOTTLES) {
+      var old = pileCtx.liveBottles.shift();
       scene.remove(old);
-      old.traverse(function (o) {
-        if (o.geometry) o.geometry.dispose();
-        if (o.material) o.material.dispose();
-      });
+      old.traverse(disposeObj);
     }
   }
 
   function updateBottleAnims(dt) {
-    for (var i = bottleAnims.length - 1; i >= 0; i--) {
-      var a = bottleAnims[i];
-      a.elapsed += dt;
-      var t = Math.min(a.elapsed / a.duration, 1);
-      // Horizontal drift eases out (quick then settling); vertical
-      // motion eases in (slow then speeding up) so it reads as gravity
-      // pulling the bottle down out of the nozzle, not a straight fly-over.
-      var tHoriz = 1 - Math.pow(1 - t, 2);
-      var tVert = t * t;
-      a.mesh.position.x = a.from.x + (a.to.x - a.from.x) * tHoriz;
-      a.mesh.position.z = a.from.z + (a.to.z - a.from.z) * tHoriz;
-      a.mesh.position.y = a.from.y + (a.to.y - a.from.y) * tVert;
-      if (t >= 1) bottleAnims.splice(i, 1);
+    [bottlePile, filledPile].forEach(function (pileCtx) {
+      for (var i = pileCtx.anims.length - 1; i >= 0; i--) {
+        var a = pileCtx.anims[i];
+        a.elapsed += dt;
+        var t = Math.min(a.elapsed / a.duration, 1);
+        var tHoriz = 1 - Math.pow(1 - t, 2);
+        var tVert = t * t;
+        a.mesh.position.x = a.from.x + (a.to.x - a.from.x) * tHoriz;
+        a.mesh.position.z = a.from.z + (a.to.z - a.from.z) * tHoriz;
+        a.mesh.position.y = a.from.y + (a.to.y - a.from.y) * tVert;
+        if (t >= 1) pileCtx.anims.splice(i, 1);
+      }
+    });
+    if (machines.bottle.group && machines.bottle.group.userData.statusLight && !econ.producing) {
+      machines.bottle.group.userData.statusLight.material.emissiveIntensity = 0.6;
     }
-    if (machineGroup && machineGroup.userData.statusLight && !econ.producing) {
-      machineGroup.userData.statusLight.material.emissiveIntensity = 0.6;
+    if (machines.water.group && machines.water.group.userData.statusLight && !waterProcessing) {
+      machines.water.group.userData.statusLight.material.emissiveIntensity = 0.6;
     }
   }
+
+  // -----------------------------------------------------------------
+  // Carrying & feeding: pick an empty bottle up from the bottle
+  // machine's pile one at a time, carry it (attached to the camera),
+  // and feed it into the water machine. If there isn't enough water,
+  // the bottle stays in hand and nothing is consumed.
+  // -----------------------------------------------------------------
+  function updateCarryChip() {
+    carryChip.classList.toggle("visible", !!carriedBottleMesh);
+  }
+
+  function pickUpEmptyBottle() {
+    if (carriedBottleMesh) return;
+    if (bottlePile.liveBottles.length === 0) return;
+    var mesh = bottlePile.liveBottles.pop();
+    scene.remove(mesh);
+    mesh.traverse(disposeObj);
+    carriedBottleMesh = buildCarriedBottleVisual();
+    camera.add(carriedBottleMesh);
+    updateCarryChip();
+  }
+
+  function runWaterProcessing() {
+    if (waterProcessing) return;
+    waterProcessing = true;
+    if (machines.water.group && machines.water.group.userData.statusLight) {
+      machines.water.group.userData.statusLight.material.emissiveIntensity = 1.5;
+    }
+    function tick() {
+      if (waterQueue <= 0) { waterProcessing = false; return; }
+      setTimeout(function () {
+        waterQueue--;
+        spawnBottleInto(filledPile, machines.water.group, true);
+        tick();
+      }, WATER_FILL_TIME_MS);
+    }
+    tick();
+  }
+
+  function insertCarriedBottleIntoWaterMachine() {
+    if (!carriedBottleMesh) return;
+    if (econ.waterML < BOTTLE_VOLUME_ML) {
+      flashWorldToast("Yetersiz su! Tabletten su satın al.");
+      return;
+    }
+    econ.waterML -= BOTTLE_VOLUME_ML;
+    camera.remove(carriedBottleMesh);
+    carriedBottleMesh.traverse(disposeObj);
+    carriedBottleMesh = null;
+    updateCarryChip();
+    renderWaterResourceCard();
+    waterQueue++;
+    runWaterProcessing();
+  }
+
+  // -----------------------------------------------------------------
+  // Machine registry: ties economy state, 3D group, default spawn
+  // position and placement callbacks together for both machine kinds.
+  // -----------------------------------------------------------------
+  var machines = {
+    bottle: {
+      group: null,
+      position: new THREE.Vector3(4.2, 0, 1.5),
+      build: buildBottleMachine,
+      placedKey: "bottleMachinePlaced",
+      onPlaced: renderBottleMachineCard
+    },
+    water: {
+      group: null,
+      position: new THREE.Vector3(-4.2, 0, 1.5),
+      build: buildWaterMachine,
+      placedKey: "waterMachinePlaced",
+      onPlaced: renderWaterMachineCard
+    }
+  };
 
   // ---------------------------------------------------------------------
   // Touch controls
@@ -2000,9 +2542,6 @@
   var upVec = new THREE.Vector3(0, 1, 0);
 
   function updateMovement(dt) {
-    // Direction is derived straight from where the camera is actually
-    // looking, so it stays correct no matter how much the player has
-    // turned (no manual yaw bookkeeping that could drift or invert).
     camera.getWorldDirection(forwardVec);
     forwardVec.y = 0;
     if (forwardVec.lengthSq() < 1e-6) {
@@ -2027,12 +2566,9 @@
       }
     }
 
-    // Keep the player within the visible grass field.
     yawObject.position.x = THREE.MathUtils.clamp(yawObject.position.x, -GROUND_HALF, GROUND_HALF);
     yawObject.position.z = THREE.MathUtils.clamp(yawObject.position.z, -GROUND_HALF, GROUND_HALF);
 
-    // Simple, robust grounding (flat terrain today; ready for uneven
-    // terrain later without changing the control code above it).
     var groundY = 0;
     velocityY -= GRAVITY * dt;
     yawObject.position.y += velocityY * dt;
