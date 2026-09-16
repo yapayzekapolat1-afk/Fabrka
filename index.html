@@ -503,6 +503,181 @@
     color: rgba(235, 238, 240, 0.6);
     text-align: center;
   }
+
+  /* -------------------------------------------------------------- */
+  /* Machine placement controls (shown while positioning the machine) */
+  /* -------------------------------------------------------------- */
+  #placementControls {
+    position: fixed;
+    left: 50%;
+    bottom: max(28px, env(safe-area-inset-bottom));
+    transform: translateX(-50%);
+    z-index: 60;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    touch-action: manipulation;
+  }
+  #placementControls.visible { display: flex; }
+  .placement-hint {
+    padding: 6px 14px;
+    border-radius: 20px;
+    background: rgba(18, 20, 22, 0.6);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: rgba(235, 238, 240, 0.75);
+    white-space: nowrap;
+  }
+  .placement-btn-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .placement-round-btn {
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+    cursor: pointer;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    background: rgba(18, 20, 22, 0.62);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    touch-action: manipulation;
+  }
+  .placement-round-btn:active { background: rgba(255, 255, 255, 0.18); }
+  .placement-round-btn svg { width: 24px; height: 24px; }
+  .placement-btn {
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+    cursor: pointer;
+    font: inherit;
+    padding: 15px 22px;
+    border: none;
+    border-radius: 12px;
+    background: #e9ecee;
+    color: #101112;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    touch-action: manipulation;
+  }
+  .placement-btn.secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: #e9ecee;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  /* -------------------------------------------------------------- */
+  /* Machine interact prompt (shown when standing near the machine)  */
+  /* -------------------------------------------------------------- */
+  #machineInteractBtn {
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+    cursor: pointer;
+    font: inherit;
+    position: fixed;
+    left: 50%;
+    bottom: max(28px, env(safe-area-inset-bottom));
+    transform: translateX(-50%);
+    z-index: 55;
+    display: none;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 20px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    background: rgba(18, 20, 22, 0.68);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #e9ecee;
+    touch-action: manipulation;
+  }
+  #machineInteractBtn.visible { display: flex; }
+  #machineInteractBtn svg { width: 18px; height: 18px; }
+
+  /* -------------------------------------------------------------- */
+  /* Production panel (docked to the machine, opened via interact)   */
+  /* -------------------------------------------------------------- */
+  #productionOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(ellipse at center, rgba(20, 22, 24, 0.86) 0%, rgba(6, 7, 8, 0.94) 100%);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    touch-action: manipulation;
+    padding: max(14px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right))
+             max(14px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+    box-sizing: border-box;
+  }
+  #productionOverlay.visible { display: flex; }
+  .production-panel {
+    position: relative;
+    width: min(420px, 92vw);
+    box-sizing: border-box;
+    padding: 18px;
+    border-radius: 20px;
+    background: linear-gradient(155deg, #2a2c2f 0%, #17181a 55%, #0e0f10 100%);
+    box-shadow:
+      0 30px 70px rgba(0, 0, 0, 0.55),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.06),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .production-panel-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(235, 238, 240, 0.85);
+    text-align: center;
+  }
+  #productionCloseBtn {
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+  }
+  #productionCloseBtn svg { width: 15px; height: 15px; }
 </style>
 </head>
 <body>
@@ -540,7 +715,7 @@
               <rect x="4" y="7" width="16" height="13" rx="1.6"></rect>
               <path d="M8 7V5.6C8 4.2 9.3 3 11 3h2c1.7 0 3 1.2 3 2.6V7"></path>
             </svg>
-            <span>ÜRÜNLER / ÜRETİM</span>
+            <span>MAKİNE</span>
           </button>
         </div>
 
@@ -552,7 +727,7 @@
               </svg>
               <span>GERİ</span>
             </button>
-            <div class="tp-title">ÜRÜNLER</div>
+            <div class="tp-title">MAKİNE</div>
             <div class="tp-budget">
               <svg viewBox="0 0 24 24" fill="none" stroke="#e9ecee" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="9"></circle>
@@ -595,20 +770,12 @@
             </div>
             <button id="buyMachineBtn" class="tp-btn" type="button">MAKİNEYİ SATIN AL &mdash; $50</button>
             <button id="placeMachineBtn" class="tp-btn secondary" type="button" style="display:none;">MAKİNEYİ YERLEŞTİR</button>
+            <button id="moveMachineBtn" class="tp-btn secondary" type="button" style="display:none;">MAKİNEYİ TAŞI</button>
             <div id="machineNote" class="tp-note" style="display:none;"></div>
           </div>
 
-          <div class="tp-card" id="productionCard" style="display:none;">
-            <div class="tp-card-title">ÜRETİM</div>
-            <div class="tp-qty-row">
-              <button class="tp-qty-btn selected" data-qty="1" type="button">1 ADET</button>
-              <button class="tp-qty-btn" data-qty="10" type="button">10 ADET</button>
-              <button class="tp-qty-btn" data-qty="20" type="button">20 ADET</button>
-            </div>
-            <div class="tp-card-sub" id="productionCostLine">Toplam maliyet: $1 &middot; Süre: ~2 sn</div>
-            <button id="startProductionBtn" class="tp-btn" type="button">ÜRETİMİ BAŞLAT</button>
-            <div class="tp-progress-track"><div class="tp-progress-fill" id="productionProgressFill"></div></div>
-            <div class="tp-status-line" id="productionStatusLine">&nbsp;</div>
+          <div class="tp-card" id="machineHintCard" style="display:none;">
+            <div class="tp-card-sub" style="margin-top:0; text-align:center;">Üretim menüsüne makinenin yanına gidince erişebilirsin.</div>
           </div>
 
         </div>
@@ -630,6 +797,70 @@
     <rect x="7" y="2" width="10" height="20" rx="2"></rect>
     <line x1="7" y1="18" x2="17" y2="18"></line>
   </svg>
+</div>
+
+<div id="placementControls">
+  <div class="placement-hint">Baktığın yöne taşınır &middot; oklarla döndür</div>
+  <div class="placement-btn-row">
+    <button id="rotateLeftBtn" class="placement-round-btn" type="button" aria-label="sola döndür">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#e9ecee" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 9a8 8 0 1 1 1.2 7.4"></path>
+        <polyline points="4 4 4 9 9 9"></polyline>
+      </svg>
+    </button>
+    <button id="cancelPlaceBtn" class="placement-btn secondary" type="button">İPTAL</button>
+    <button id="confirmPlaceBtn" class="placement-btn" type="button">YERLEŞTİR</button>
+    <button id="rotateRightBtn" class="placement-round-btn" type="button" aria-label="sağa döndür">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#e9ecee" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 9a8 8 0 1 0-1.2 7.4"></path>
+        <polyline points="20 4 20 9 15 9"></polyline>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<button id="machineInteractBtn" type="button">
+  <svg viewBox="0 0 24 24" fill="none" stroke="#e9ecee" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="4" y="8" width="16" height="12" rx="1.4"></rect>
+    <rect x="8" y="4" width="8" height="4" rx="1"></rect>
+  </svg>
+  <span>ÜRETİM MENÜSÜ</span>
+</button>
+
+<div id="productionOverlay">
+  <div class="production-panel">
+    <button id="productionCloseBtn" type="button" aria-label="close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#e9ecee" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="5" x2="19" y2="19"></line>
+        <line x1="19" y1="5" x2="5" y2="19"></line>
+      </svg>
+    </button>
+    <div class="production-panel-title">ÜRETİM</div>
+    <div class="tp-card" style="padding:0; border:none; background:none;">
+      <div class="tp-card-row">
+        <div class="tp-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#e9ecee" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10 2h4"></path>
+            <path d="M10 2v3.4c0 .5-.2 1-.5 1.4L8 8.6c-.6.7-.9 1.6-.9 2.5V20a1.6 1.6 0 0 0 1.6 1.6h6.6A1.6 1.6 0 0 0 17 20v-8.9c0-.9-.3-1.8-.9-2.5l-1.5-1.8c-.3-.4-.5-.9-.5-1.4V2"></path>
+            <line x1="7.3" y1="13.5" x2="16.7" y2="13.5"></line>
+          </svg>
+        </div>
+        <div>
+          <div class="tp-card-title">250 ML PET ŞİŞE</div>
+          <div class="tp-card-sub">Üretim maliyeti: $1 / adet &middot; ~2 sn / adet</div>
+        </div>
+      </div>
+    </div>
+    <div class="tp-qty-row">
+      <button class="tp-qty-btn selected" data-qty="1" type="button">1 ADET</button>
+      <button class="tp-qty-btn" data-qty="10" type="button">10 ADET</button>
+      <button class="tp-qty-btn" data-qty="20" type="button">20 ADET</button>
+    </div>
+    <div class="tp-card-sub" id="productionCostLine" style="text-align:center;">Toplam maliyet: $1 &middot; Süre: ~2 sn</div>
+    <button id="startProductionBtn" class="tp-btn" type="button">ÜRETİMİ BAŞLAT</button>
+    <div class="tp-progress-track"><div class="tp-progress-fill" id="productionProgressFill"></div></div>
+    <div class="tp-status-line" id="productionStatusLine">&nbsp;</div>
+  </div>
 </div>
 
 <div id="startGate">
@@ -1023,7 +1254,13 @@
   var MACHINE_COST = 50;
   var BOTTLE_COST = 1;
   var BOTTLE_TIME_MS = 2000;
-  var MAX_VISIBLE_BOTTLES = 24;
+  // Bottles now pile up on the platform instead of flying to a fixed
+  // tray grid, so keep far more of them around before culling the
+  // oldest -- the old cap of 24 was low enough that a single "20 ADET"
+  // batch on top of an existing pile would start deleting bottles
+  // almost immediately, making it look like fewer came out than were
+  // actually produced.
+  var MAX_VISIBLE_BOTTLES = 200;
 
   var econ = {
     budget: 100,
@@ -1040,14 +1277,23 @@
   var tabletProductsView = document.getElementById("tabletProductsView");
   var buyMachineBtn = document.getElementById("buyMachineBtn");
   var placeMachineBtn = document.getElementById("placeMachineBtn");
+  var moveMachineBtn = document.getElementById("moveMachineBtn");
   var machineStatusLine = document.getElementById("machineStatusLine");
   var machineNote = document.getElementById("machineNote");
-  var productionCard = document.getElementById("productionCard");
+  var machineHintCard = document.getElementById("machineHintCard");
   var qtyButtons = Array.prototype.slice.call(document.querySelectorAll(".tp-qty-btn"));
   var startProductionBtn = document.getElementById("startProductionBtn");
   var productionCostLine = document.getElementById("productionCostLine");
   var productionProgressFill = document.getElementById("productionProgressFill");
   var productionStatusLine = document.getElementById("productionStatusLine");
+  var productionOverlay = document.getElementById("productionOverlay");
+  var productionCloseBtn = document.getElementById("productionCloseBtn");
+  var machineInteractBtn = document.getElementById("machineInteractBtn");
+  var placementControls = document.getElementById("placementControls");
+  var rotateLeftBtn = document.getElementById("rotateLeftBtn");
+  var rotateRightBtn = document.getElementById("rotateRightBtn");
+  var confirmPlaceBtn = document.getElementById("confirmPlaceBtn");
+  var cancelPlaceBtn = document.getElementById("cancelPlaceBtn");
 
   var selectedQty = 1;
 
@@ -1062,7 +1308,8 @@
       machineStatusLine.textContent = "Satın alınmadı \u00B7 $" + MACHINE_COST + " (tek seferlik)";
       buyMachineBtn.style.display = "";
       placeMachineBtn.style.display = "none";
-      productionCard.style.display = "none";
+      moveMachineBtn.style.display = "none";
+      machineHintCard.style.display = "none";
       buyMachineBtn.disabled = econ.budget < MACHINE_COST;
       machineNote.style.display = econ.budget < MACHINE_COST ? "block" : "none";
       machineNote.textContent = "Yetersiz bütçe";
@@ -1070,15 +1317,16 @@
       machineStatusLine.textContent = "Satın alındı \u00B7 sahada yerleştirilmeyi bekliyor";
       buyMachineBtn.style.display = "none";
       placeMachineBtn.style.display = "";
-      productionCard.style.display = "none";
+      moveMachineBtn.style.display = "none";
+      machineHintCard.style.display = "none";
       machineNote.style.display = "none";
     } else {
       machineStatusLine.textContent = "Yerleştirildi \u00B7 çalışır durumda";
       buyMachineBtn.style.display = "none";
       placeMachineBtn.style.display = "none";
-      productionCard.style.display = "flex";
+      moveMachineBtn.style.display = "";
+      machineHintCard.style.display = "block";
       machineNote.style.display = "none";
-      renderProductionCard();
     }
   }
 
@@ -1126,9 +1374,14 @@
 
   placeMachineBtn.addEventListener("click", function () {
     if (!econ.machineOwned || econ.machinePlaced) return;
-    placeMachineInWorld();
-    econ.machinePlaced = true;
-    renderMachineCard();
+    closeTablet();
+    enterPlacementMode();
+  });
+
+  moveMachineBtn.addEventListener("click", function () {
+    if (!econ.machinePlaced) return;
+    closeTablet();
+    enterPlacementMode();
   });
 
   startProductionBtn.addEventListener("click", function () {
@@ -1137,6 +1390,165 @@
     if (econ.budget < totalCost) { renderProductionCard(); return; }
     runProductionBatch(selectedQty);
   });
+
+  // -----------------------------------------------------------------
+  // Production panel: opened by walking up to the placed machine and
+  // tapping the interact prompt (not from the shop tablet anymore).
+  // -----------------------------------------------------------------
+  var productionOpen = false;
+
+  function openProductionPanel() {
+    if (!econ.machinePlaced || placementMode) return;
+    productionOpen = true;
+    productionOverlay.classList.add("visible");
+    renderBudget();
+    renderProductionCard();
+  }
+  function closeProductionPanel() {
+    productionOpen = false;
+    productionOverlay.classList.remove("visible");
+  }
+  machineInteractBtn.addEventListener("click", openProductionPanel);
+  productionCloseBtn.addEventListener("click", closeProductionPanel);
+  productionOverlay.addEventListener("click", function (e) {
+    if (e.target === productionOverlay) closeProductionPanel();
+  });
+
+  // -----------------------------------------------------------------
+  // Machine placement mode: the machine (ghosted, semi-transparent)
+  // follows a point on the ground in front of wherever the player is
+  // looking, so walking/turning moves it; the rotate buttons spin it
+  // in place. Confirm locks it in; cancel restores the previous spot
+  // (or removes it entirely if it had never been placed before).
+  // -----------------------------------------------------------------
+  var placementMode = false;
+  var placementYaw = 0;
+  var placementOriginalPos = null;
+  var placementOriginalRot = 0;
+  var rotateHoldDir = 0;
+  var PLACEMENT_DISTANCE = 2.9;
+  var ROTATE_SPEED = 1.9; // radians / second while a rotate button is held
+
+  function setPlacementGhostVisual(group, ghosting) {
+    group.traverse(function (o) {
+      if (o.material) {
+        if (ghosting) {
+          if (o.userData.origOpacity === undefined) {
+            o.userData.origOpacity = o.material.opacity;
+            o.userData.origTransparent = o.material.transparent;
+          }
+          o.material.transparent = true;
+          o.material.opacity = 0.5;
+          o.material.depthWrite = false;
+        } else if (o.userData.origOpacity !== undefined) {
+          o.material.opacity = o.userData.origOpacity;
+          o.material.transparent = o.userData.origTransparent;
+          o.material.depthWrite = true;
+        }
+      }
+    });
+  }
+
+  function enterPlacementMode() {
+    if (placementMode) return;
+    if (!machineGroup) {
+      machineGroup = buildMachine();
+      machineGroup.position.copy(machinePosition);
+      scene.add(machineGroup);
+    }
+    placementMode = true;
+    placementOriginalPos = machineGroup.position.clone();
+    placementOriginalRot = machineGroup.rotation.y;
+    placementYaw = machineGroup.rotation.y;
+    setPlacementGhostVisual(machineGroup, true);
+    placementControls.classList.add("visible");
+    machineInteractBtn.classList.remove("visible");
+  }
+
+  function exitPlacementMode(confirmed) {
+    placementMode = false;
+    rotateHoldDir = 0;
+    placementControls.classList.remove("visible");
+    setPlacementGhostVisual(machineGroup, false);
+    if (confirmed) {
+      machinePosition.copy(machineGroup.position);
+      var wasAlreadyPlaced = econ.machinePlaced;
+      econ.machinePlaced = true;
+      if (!wasAlreadyPlaced) renderMachineCard();
+    } else {
+      machineGroup.position.copy(placementOriginalPos);
+      machineGroup.rotation.y = placementOriginalRot;
+      machinePosition.copy(placementOriginalPos);
+      if (!econ.machinePlaced) {
+        scene.remove(machineGroup);
+        machineGroup.traverse(function (o) {
+          if (o.geometry) o.geometry.dispose();
+          if (o.material) o.material.dispose();
+        });
+        machineGroup = null;
+      }
+    }
+  }
+
+  confirmPlaceBtn.addEventListener("click", function () { exitPlacementMode(true); });
+  cancelPlaceBtn.addEventListener("click", function () { exitPlacementMode(false); });
+
+  function bindHold(btn, dir) {
+    function start(e) { e.preventDefault(); rotateHoldDir = dir; }
+    function stop() { rotateHoldDir = 0; }
+    btn.addEventListener("touchstart", start, { passive: false });
+    btn.addEventListener("touchend", stop, { passive: true });
+    btn.addEventListener("touchcancel", stop, { passive: true });
+    btn.addEventListener("mousedown", start);
+    btn.addEventListener("mouseup", stop);
+    btn.addEventListener("mouseleave", stop);
+  }
+  bindHold(rotateLeftBtn, 1);
+  bindHold(rotateRightBtn, -1);
+
+  function updatePlacement(dt) {
+    if (!placementMode || !machineGroup) return;
+    camera.getWorldDirection(placementForward);
+    placementForward.y = 0;
+    if (placementForward.lengthSq() < 1e-6) placementForward.set(0, 0, -1);
+    else placementForward.normalize();
+    var px = yawObject.position.x + placementForward.x * PLACEMENT_DISTANCE;
+    var pz = yawObject.position.z + placementForward.z * PLACEMENT_DISTANCE;
+    px = THREE.MathUtils.clamp(px, -GROUND_HALF, GROUND_HALF);
+    pz = THREE.MathUtils.clamp(pz, -GROUND_HALF, GROUND_HALF);
+    machineGroup.position.set(px, 0, pz);
+    if (rotateHoldDir !== 0) placementYaw += rotateHoldDir * ROTATE_SPEED * dt;
+    machineGroup.rotation.y = placementYaw;
+  }
+  var placementForward = new THREE.Vector3();
+
+  // -----------------------------------------------------------------
+  // Proximity: show the in-world "ÜRETİM MENÜSÜ" prompt only while the
+  // player is standing close to the placed machine, and auto-close the
+  // production panel if they wander off.
+  // -----------------------------------------------------------------
+  var PROXIMITY_RADIUS = 3.2;
+  var nearMachine = false;
+
+  function updateMachineProximity() {
+    if (!econ.machinePlaced || !machineGroup || placementMode) {
+      if (nearMachine) {
+        nearMachine = false;
+        machineInteractBtn.classList.remove("visible");
+      }
+      return;
+    }
+    var dx = yawObject.position.x - machineGroup.position.x;
+    var dz = yawObject.position.z - machineGroup.position.z;
+    var dist = Math.sqrt(dx * dx + dz * dz);
+    var isNear = dist <= PROXIMITY_RADIUS;
+    if (isNear !== nearMachine) {
+      nearMachine = isNear;
+      if (nearMachine && !productionOpen) machineInteractBtn.classList.add("visible");
+      else machineInteractBtn.classList.remove("visible");
+    }
+    if (!isNear && productionOpen) closeProductionPanel();
+  }
 
   function runProductionBatch(qty) {
     econ.producing = true;
@@ -1183,50 +1595,105 @@
   var bottleAnims = [];
   var liveBottles = [];
   var trayBottleCount = 0;
-  var TRAY_COLS = 6;
 
   function buildMachine() {
     var group = new THREE.Group();
     var bodyMat = new THREE.MeshStandardMaterial({ color: 0xdedfe0, metalness: 0.65, roughness: 0.3 });
     var darkMat = new THREE.MeshStandardMaterial({ color: 0x2b2d30, metalness: 0.4, roughness: 0.5 });
     var accentMat = new THREE.MeshStandardMaterial({ color: 0x9fb6c2, metalness: 0.5, roughness: 0.25 });
+    var footMat = new THREE.MeshStandardMaterial({ color: 0x1c1d1f, metalness: 0.3, roughness: 0.6 });
+    var stripeMat = new THREE.MeshStandardMaterial({ color: 0x2f6f8a, metalness: 0.3, roughness: 0.4 });
 
-    var base = new THREE.Mesh(new THREE.BoxGeometry(1.3, 0.18, 0.9), darkMat);
-    base.position.y = 0.09;
+    // Scaled up ~1.5x from the original prototype block-out, plus a
+    // hopper, feet and a pipe so it reads as a real bottling machine
+    // rather than a plain box.
+    var footGeo = new THREE.CylinderGeometry(0.07, 0.09, 0.14, 10);
+    var footOffsets = [[-0.62, -0.34], [0.62, -0.34], [-0.62, 0.34], [0.62, 0.34]];
+    footOffsets.forEach(function (o) {
+      var foot = new THREE.Mesh(footGeo, footMat);
+      foot.position.set(o[0], 0.07, o[1]);
+      foot.castShadow = true;
+      group.add(foot);
+    });
+
+    var base = new THREE.Mesh(new THREE.BoxGeometry(1.7, 0.16, 1.15), darkMat);
+    base.position.y = 0.14 + 0.08;
     base.castShadow = true;
     base.receiveShadow = true;
     group.add(base);
 
-    var body = new THREE.Mesh(new THREE.BoxGeometry(1.1, 1.5, 0.75), bodyMat);
-    body.position.y = 0.18 + 0.75;
+    var bodyBottomY = 0.22;
+    var bodyHeight = 2.05;
+    var body = new THREE.Mesh(new THREE.BoxGeometry(1.5, bodyHeight, 1.0), bodyMat);
+    body.position.y = bodyBottomY + bodyHeight / 2;
     body.castShadow = true;
     body.receiveShadow = true;
     group.add(body);
 
-    var panel = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.5, 0.04), darkMat);
-    panel.position.set(0, 1.35, 0.4);
+    var stripe = new THREE.Mesh(new THREE.BoxGeometry(1.52, 0.12, 1.02), stripeMat);
+    stripe.position.y = bodyBottomY + 0.32;
+    group.add(stripe);
+
+    // Hopper feeding the body from above, tapering down like a funnel.
+    var hopper = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.55, 0.55, 16), accentMat);
+    hopper.position.y = bodyBottomY + bodyHeight + 0.24;
+    hopper.castShadow = true;
+    group.add(hopper);
+    var hopperRim = new THREE.Mesh(new THREE.CylinderGeometry(0.58, 0.58, 0.08, 16), darkMat);
+    hopperRim.position.y = bodyBottomY + bodyHeight + 0.5;
+    group.add(hopperRim);
+
+    var panelY = bodyBottomY + bodyHeight - 0.55;
+    var panel = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.62, 0.05), darkMat);
+    panel.position.set(0, panelY, 0.51);
     group.add(panel);
 
-    var nozzle = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 0.25, 16), accentMat);
-    nozzle.rotation.z = Math.PI / 2;
-    nozzle.position.set(0.65, 0.55, 0.2);
-    group.add(nozzle);
+    var screen = new THREE.Mesh(
+      new THREE.BoxGeometry(0.5, 0.28, 0.02),
+      new THREE.MeshStandardMaterial({ color: 0x0c2a1f, emissive: 0x1c6b3f, emissiveIntensity: 0.55, roughness: 0.4 })
+    );
+    screen.position.set(0, panelY + 0.1, 0.545);
+    group.add(screen);
+
+    // A row of small control buttons under the screen for detail.
+    var btnGeo = new THREE.CylinderGeometry(0.028, 0.028, 0.02, 10);
+    for (var i = -1; i <= 1; i++) {
+      var cbtn = new THREE.Mesh(btnGeo, accentMat);
+      cbtn.rotation.x = Math.PI / 2;
+      cbtn.position.set(i * 0.13, panelY - 0.16, 0.545);
+      group.add(cbtn);
+    }
 
     var statusLight = new THREE.Mesh(
-      new THREE.SphereGeometry(0.045, 12, 12),
+      new THREE.SphereGeometry(0.05, 12, 12),
       new THREE.MeshStandardMaterial({ color: 0x2e6b3a, emissive: 0x123314, emissiveIntensity: 0.6 })
     );
-    statusLight.position.set(0, 1.35, 0.43);
+    statusLight.position.set(0, panelY + 0.36, 0.545);
     group.add(statusLight);
 
-    var tray = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.04, 0.5), darkMat);
-    tray.position.set(0.95, 0.2, 0.2);
-    tray.receiveShadow = true;
-    group.add(tray);
+    // Pipe running from the body out to the dispensing nozzle.
+    var nozzleY = bodyBottomY + 0.62;
+    var pipe = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.4, 12), darkMat);
+    pipe.rotation.z = Math.PI / 2;
+    pipe.position.set(0.95, nozzleY, 0);
+    group.add(pipe);
+
+    var nozzle = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.12, 0.22, 16), accentMat);
+    nozzle.rotation.z = Math.PI / 2;
+    nozzle.position.set(1.18, nozzleY - 0.06, 0);
+    nozzle.castShadow = true;
+    group.add(nozzle);
+
+    // A low collection platform out front where finished bottles land
+    // and pile up.
+    var platform = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.05, 1.3), darkMat);
+    platform.position.set(1.6, 0.025, 0);
+    platform.receiveShadow = true;
+    group.add(platform);
 
     group.userData.statusLight = statusLight;
-    group.userData.nozzleOffset = new THREE.Vector3(0.65, 0.55, 0.2);
-    group.userData.trayOffset = new THREE.Vector3(0.95, 0.24, 0.2);
+    group.userData.nozzleOffset = new THREE.Vector3(1.18, nozzleY - 0.06, 0);
+    group.userData.pileOffset = new THREE.Vector3(1.6, 0.05, 0);
     return group;
   }
 
@@ -1256,26 +1723,46 @@
     scene.add(machineGroup);
   }
 
+  // Every produced bottle gets its own, ever-increasing spot on the
+  // collection platform -- radius and layer only ever grow with
+  // trayBottleCount, so nothing is ever reused or overwritten the way
+  // the old fixed 6x4 grid could be, and it reads as a pile that keeps
+  // growing rather than a slot that gets revisited out of order.
+  var PILE_PER_LAYER = 10;
+  var PILE_MAX_RADIUS = 0.55;
+  var BOTTLE_REST_HEIGHT = 0.09; // half the bottle's resting height
+  var BOTTLE_LAYER_HEIGHT = 0.16;
+
+  function pileSpotLocal(index) {
+    var layer = Math.floor(index / PILE_PER_LAYER);
+    var slot = index % PILE_PER_LAYER;
+    // Golden-angle spiral so bottles within a layer scatter naturally
+    // instead of lining up in a visible grid.
+    var angle = slot * 2.4;
+    var radius = Math.min(PILE_MAX_RADIUS, 0.08 + slot * 0.05);
+    var local = machineGroup.userData.pileOffset.clone();
+    local.x += Math.cos(angle) * radius;
+    local.z += Math.sin(angle) * radius;
+    local.y = BOTTLE_REST_HEIGHT + layer * BOTTLE_LAYER_HEIGHT;
+    return local;
+  }
+
   function spawnBottle() {
     if (!machineGroup) return;
     var bottle = buildBottle();
-    var startPos = machinePosition.clone().add(machineGroup.userData.nozzleOffset);
-    var col = trayBottleCount % TRAY_COLS;
-    var row = Math.floor(trayBottleCount / TRAY_COLS) % 4;
-    var trayOffset = machineGroup.userData.trayOffset.clone();
-    trayOffset.x += col * 0.11;
-    trayOffset.z += (row - 1.5) * 0.09;
-    var endPos = machinePosition.clone().add(trayOffset);
+    var startPos = machineGroup.localToWorld(machineGroup.userData.nozzleOffset.clone());
+    var endPos = machineGroup.localToWorld(pileSpotLocal(trayBottleCount));
     trayBottleCount++;
 
     bottle.position.copy(startPos);
+    bottle.rotation.y = Math.random() * Math.PI * 2;
     scene.add(bottle);
 
     if (machineGroup.userData.statusLight) {
       machineGroup.userData.statusLight.material.emissiveIntensity = 1.5;
     }
 
-    bottleAnims.push({ mesh: bottle, from: startPos, to: endPos, elapsed: 0, duration: 0.45 });
+    bottleAnims.push({ mesh: bottle, from: startPos, to: endPos, elapsed: 0, duration: 0.55 });
 
     liveBottles.push(bottle);
     if (liveBottles.length > MAX_VISIBLE_BOTTLES) {
@@ -1293,8 +1780,14 @@
       var a = bottleAnims[i];
       a.elapsed += dt;
       var t = Math.min(a.elapsed / a.duration, 1);
-      var ease = 1 - Math.pow(1 - t, 3);
-      a.mesh.position.lerpVectors(a.from, a.to, ease);
+      // Horizontal drift eases out (quick then settling); vertical
+      // motion eases in (slow then speeding up) so it reads as gravity
+      // pulling the bottle down out of the nozzle, not a straight fly-over.
+      var tHoriz = 1 - Math.pow(1 - t, 2);
+      var tVert = t * t;
+      a.mesh.position.x = a.from.x + (a.to.x - a.from.x) * tHoriz;
+      a.mesh.position.z = a.from.z + (a.to.z - a.from.z) * tHoriz;
+      a.mesh.position.y = a.from.y + (a.to.y - a.from.y) * tVert;
       if (t >= 1) bottleAnims.splice(i, 1);
     }
     if (machineGroup && machineGroup.userData.statusLight && !econ.producing) {
@@ -1488,6 +1981,8 @@
     var dt = Math.min(clock.getDelta(), MAX_DT);
     updateMovement(dt);
     updateBottleAnims(dt);
+    updatePlacement(dt);
+    updateMachineProximity();
     renderer.render(scene, camera);
   }
 
