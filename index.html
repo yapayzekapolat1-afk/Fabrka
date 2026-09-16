@@ -280,6 +280,33 @@
   }
 
   /* -------------------------------------------------------------- */
+  /* Temporary on-screen debug log for the fullscreen/orientation    */
+  /* diagnosis -- shows what tryFullscreen()/tryLockLandscape() saw  */
+  /* on-device, since a phone browser has no visible console.        */
+  /* -------------------------------------------------------------- */
+  #debugHud {
+    position: fixed;
+    left: 6px;
+    top: max(6px, env(safe-area-inset-top));
+    z-index: 20000;
+    max-width: 94vw;
+    max-height: 40vh;
+    overflow-y: auto;
+    padding: 6px 8px;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.72);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    font-family: monospace;
+    font-size: 10px;
+    line-height: 1.4;
+    color: #7CFC9A;
+    white-space: pre-wrap;
+    word-break: break-word;
+    pointer-events: none;
+  }
+  #debugHud:empty { display: none; }
+
+  /* -------------------------------------------------------------- */
   /* Budget chip (top-left HUD, unobtrusive)                         */
   /* -------------------------------------------------------------- */
   #budgetChip {
@@ -871,6 +898,8 @@
   <span>BAŞLAMAK İÇİN DOKUN</span>
 </div>
 
+<div id="debugHud"></div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 (function () {
@@ -1101,6 +1130,18 @@
   // ---------------------------------------------------------------------
   var rotatePromptEl = document.getElementById("rotatePrompt");
 
+  // Temporary: mirrors console.warn/log onto an on-screen HUD too, since
+  // a phone browser gives no way to see devtools console output.
+  var debugHudEl = document.getElementById("debugHud");
+  function logDebug(msg) {
+    console.warn(msg);
+    if (debugHudEl) {
+      var line = document.createElement("div");
+      line.textContent = msg;
+      debugHudEl.appendChild(line);
+    }
+  }
+
   function isPortrait() {
     return window.innerHeight > window.innerWidth;
   }
@@ -1115,18 +1156,23 @@
   });
 
   function tryLockLandscape() {
+    logDebug("[immersive] tryLockLandscape() called. screen.orientation=" + !!(screen.orientation) + ", lock fn=" + !!(screen.orientation && screen.orientation.lock));
     try {
       if (screen.orientation && screen.orientation.lock) {
-        screen.orientation.lock("landscape").catch(function (err) {
+        screen.orientation.lock("landscape").then(function () {
+          logDebug("[immersive] orientation lock SUCCEEDED.");
+        }).catch(function (err) {
           // On Android Chrome this reliably rejects with a SecurityError
           // unless the document is already fullscreen -- that's why this
           // is only called from the fullscreenchange handler below, after
           // fullscreen has actually engaged, not before requesting it.
-          console.warn("[immersive] orientation lock rejected:", err && err.message);
+          logDebug("[immersive] orientation lock REJECTED: " + (err && err.name) + " - " + (err && err.message));
         });
+      } else {
+        logDebug("[immersive] orientation lock API not present on this browser.");
       }
     } catch (e) {
-      console.warn("[immersive] orientation lock threw:", e && e.message);
+      logDebug("[immersive] orientation lock threw: " + (e && e.message));
     }
   }
 
@@ -1147,7 +1193,7 @@
                            el.mozRequestFullScreen || el.msRequestFullscreen);
     fullscreenSupported = !!(enabled && hasRequestFn);
     if (!fullscreenSupported) {
-      console.warn(
+      logDebug(
         "[immersive] Fullscreen API unavailable. " +
         "document.fullscreenEnabled=" + enabled + ", requestFullscreen present=" + hasRequestFn + ". " +
         "Most common cause: the page is embedded in an iframe that lacks " +
@@ -1157,30 +1203,35 @@
         "the largest usable viewport either way."
       );
     } else {
-      console.log("[immersive] Fullscreen API available.");
+      logDebug("[immersive] Fullscreen API available. enabled=" + enabled + " hasRequestFn=" + hasRequestFn);
     }
     return fullscreenSupported;
   }
   checkFullscreenSupport();
 
   function tryFullscreen() {
+    logDebug("[immersive] tryFullscreen() called.");
     if (!checkFullscreenSupport()) return;
     try {
       var el = document.documentElement;
       var alreadyFullscreen = document.fullscreenElement || document.webkitFullscreenElement;
-      if (alreadyFullscreen) return;
+      if (alreadyFullscreen) { logDebug("[immersive] already fullscreen, skipping request."); return; }
       var request = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen || el.msRequestFullscreen;
       var result = request.call(el);
-      if (result && result.catch) {
-        result.catch(function (err) {
+      if (result && result.then) {
+        result.then(function () {
+          logDebug("[immersive] requestFullscreen SUCCEEDED.");
+        }).catch(function (err) {
           // Real cause lands here instead of being swallowed -- typically
           // "not allowed" because the call wasn't inside a genuine user
           // gesture handler, or a Permissions-Policy blocking it.
-          console.warn("[immersive] requestFullscreen rejected:", err && err.name, err && err.message);
+          logDebug("[immersive] requestFullscreen REJECTED: " + (err && err.name) + " - " + (err && err.message));
         });
+      } else {
+        logDebug("[immersive] requestFullscreen called (no promise returned by this browser -- check fullscreenchange event / on-screen result).");
       }
     } catch (e) {
-      console.warn("[immersive] requestFullscreen threw:", e && e.message);
+      logDebug("[immersive] requestFullscreen threw: " + (e && e.message));
     }
   }
 
@@ -1201,6 +1252,7 @@
   // browsers that support it.
   var startGateEl = document.getElementById("startGate");
   function dismissStartGate() {
+    logDebug("[immersive] start gate tapped, requesting immersive mode...");
     requestImmersiveMode();
     startGateEl.classList.add("hidden");
   }
@@ -1209,6 +1261,7 @@
 
   ["fullscreenchange", "webkitfullscreenchange"].forEach(function (evName) {
     document.addEventListener(evName, function () {
+      logDebug("[immersive] " + evName + " fired. fullscreenElement=" + !!(document.fullscreenElement || document.webkitFullscreenElement));
       if (document.fullscreenElement || document.webkitFullscreenElement) {
         tryLockLandscape();
       }
