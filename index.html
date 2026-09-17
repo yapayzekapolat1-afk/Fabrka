@@ -4,7 +4,22 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>İOZ Drink Company</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
+  :root {
+    --font-display: "Baloo 2", "Segoe UI", sans-serif;
+    --font-body: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --accent: #2dd6c4;
+    --accent-dark: #17b3a3;
+    --accent-ink: #062824;
+    --gold: #ffc94d;
+    --gold-ink: #3d2900;
+    --panel-bg: rgba(255, 255, 255, 0.05);
+    --panel-border: rgba(45, 214, 196, 0.22);
+    --ink-soft: rgba(235, 240, 240, 0.62);
+  }
   html, body {
     margin: 0;
     padding: 0;
@@ -202,18 +217,19 @@
   }
 
   .tablet-wordmark {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    font-size: clamp(15px, 2.6vw, 22px);
-    font-weight: 600;
-    letter-spacing: 0.34em;
-    color: rgba(235, 238, 240, 0.82);
+    font-family: var(--font-display);
+    font-size: clamp(17px, 2.9vw, 24px);
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    color: var(--accent);
     text-transform: uppercase;
   }
 
   .tablet-wordmark-rule {
     width: 46px;
-    height: 1px;
-    background: rgba(255, 255, 255, 0.18);
+    height: 3px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--gold));
   }
 
   .tablet-home-indicator {
@@ -271,7 +287,7 @@
     opacity: 0.85;
   }
   #startGate span {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: var(--font-body);
     font-size: 13px;
     font-weight: 600;
     letter-spacing: 0.22em;
@@ -328,12 +344,12 @@
     -webkit-backdrop-filter: blur(6px);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
     z-index: 40;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    color: #e9ecee;
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--gold);
   }
-  #budgetChip svg { width: 16px; height: 16px; flex: none; }
+  #budgetChip svg { width: 16px; height: 16px; flex: none; stroke: var(--gold); }
 
   /* -------------------------------------------------------------- */
   /* Tablet: home / products views                                   */
@@ -346,23 +362,24 @@
     appearance: none;
     outline: none;
     cursor: pointer;
-    font: inherit;
+    font-family: var(--font-display);
     margin-top: 4px;
     display: flex;
     align-items: center;
     gap: 9px;
-    padding: 11px 20px;
-    border: 1px solid rgba(255, 255, 255, 0.22);
+    padding: 12px 22px;
+    border: none;
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.06);
-    color: #e9ecee;
-    font-size: 12px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    box-shadow: 0 6px 16px rgba(23, 179, 163, 0.35);
+    color: var(--accent-ink);
+    font-size: 13px;
     font-weight: 700;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     touch-action: manipulation;
   }
-  .tablet-nav-btn svg { width: 16px; height: 16px; }
+  .tablet-nav-btn svg { width: 16px; height: 16px; stroke: var(--accent-ink); }
 
   #tabletCategoriesView,
   #tabletBottleView,
@@ -394,20 +411,21 @@
     gap: 12px;
     touch-action: manipulation;
   }
-  .tp-nav-card:active { background: rgba(255, 255, 255, 0.09); }
+  .tp-nav-card:active { background: rgba(45, 214, 196, 0.1); }
   .tp-nav-card-text { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0; }
   .tp-nav-card-title {
-    font-size: 13px;
-    font-weight: 800;
-    letter-spacing: 0.04em;
-    color: #e9ecee;
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    color: rgba(235, 240, 240, 0.94);
   }
   .tp-nav-card-sub {
-    font-size: 11px;
-    color: rgba(235, 238, 240, 0.55);
+    font-size: 11.5px;
+    color: var(--ink-soft);
   }
-  .tp-nav-card-arrow { flex: none; opacity: 0.5; }
-  .tp-nav-card-arrow svg { width: 16px; height: 16px; }
+  .tp-nav-card-arrow { flex: none; opacity: 0.85; }
+  .tp-nav-card-arrow svg { width: 16px; height: 16px; stroke: var(--accent); }
 
   #crosshair {
     position: fixed;
@@ -438,7 +456,7 @@
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
     z-index: 40;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: var(--font-body);
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.04em;
@@ -461,7 +479,7 @@
     -webkit-backdrop-filter: blur(6px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     z-index: 56;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: var(--font-body);
     font-size: 12px;
     font-weight: 700;
     color: #e9ecee;
@@ -481,45 +499,50 @@
     appearance: none;
     outline: none;
     cursor: pointer;
-    font: inherit;
+    font-family: var(--font-display);
     display: flex;
     align-items: center;
     gap: 6px;
-    padding: 7px 10px 7px 6px;
-    border: none;
-    background: none;
-    color: rgba(235, 238, 240, 0.75);
-    font-size: 11px;
+    padding: 8px 14px 8px 10px;
+    border: 1px solid var(--panel-border);
+    border-radius: 20px;
+    background: rgba(45, 214, 196, 0.12);
+    color: var(--accent);
+    font-size: 11.5px;
     font-weight: 700;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     touch-action: manipulation;
+    min-height: 34px;
   }
-  .tp-back-btn svg { width: 15px; height: 15px; }
+  .tp-back-btn:active { background: rgba(45, 214, 196, 0.24); }
+  .tp-back-btn svg { width: 15px; height: 15px; stroke: var(--accent); }
   .tp-title {
-    font-size: 12px;
+    font-family: var(--font-display);
+    font-size: 13px;
     font-weight: 700;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: rgba(235, 238, 240, 0.85);
+    color: rgba(235, 240, 240, 0.9);
   }
   .tp-budget {
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 13px;
+    font-family: var(--font-display);
+    font-size: 14px;
     font-weight: 700;
-    color: #e9ecee;
+    color: var(--gold);
   }
-  .tp-budget svg { width: 14px; height: 14px; }
+  .tp-budget svg { width: 14px; height: 14px; stroke: var(--gold); }
 
   .tp-card {
     width: 100%;
     box-sizing: border-box;
     padding: 16px;
     border-radius: 14px;
-    background: rgba(255, 255, 255, 0.045);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--panel-bg);
+    border: 1px solid var(--panel-border);
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -534,21 +557,22 @@
     height: 44px;
     flex: none;
     border-radius: 10px;
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(45, 214, 196, 0.14);
     display: flex;
     align-items: center;
     justify-content: center;
   }
-  .tp-card-icon svg { width: 24px; height: 24px; }
+  .tp-card-icon svg { width: 24px; height: 24px; stroke: var(--accent); }
   .tp-card-title {
-    font-size: 13px;
+    font-family: var(--font-display);
+    font-size: 14px;
     font-weight: 700;
-    color: #e9ecee;
-    letter-spacing: 0.02em;
+    color: rgba(235, 240, 240, 0.95);
+    letter-spacing: 0.01em;
   }
   .tp-card-sub {
     font-size: 11.5px;
-    color: rgba(235, 238, 240, 0.55);
+    color: var(--ink-soft);
     margin-top: 2px;
   }
   .tp-btn {
@@ -556,32 +580,35 @@
     appearance: none;
     outline: none;
     cursor: pointer;
-    font: inherit;
+    font-family: var(--font-display);
     width: 100%;
-    padding: 12px;
+    padding: 13px;
     border: none;
-    border-radius: 10px;
-    background: #e9ecee;
-    color: #101112;
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 0.1em;
+    border-radius: 11px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    box-shadow: 0 6px 16px rgba(23, 179, 163, 0.32);
+    color: var(--accent-ink);
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     touch-action: manipulation;
   }
   .tp-btn:disabled {
     background: rgba(255, 255, 255, 0.09);
+    box-shadow: none;
     color: rgba(235, 238, 240, 0.35);
     cursor: not-allowed;
   }
   .tp-btn.secondary {
-    background: rgba(255, 255, 255, 0.09);
-    color: #e9ecee;
-    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: none;
+    color: rgba(235, 240, 240, 0.9);
+    border: 1px solid var(--panel-border);
   }
   .tp-note {
     font-size: 11px;
-    color: rgba(235, 238, 240, 0.45);
+    color: #ff9d7a;
     text-align: center;
   }
 
@@ -594,21 +621,53 @@
     appearance: none;
     outline: none;
     cursor: pointer;
-    font: inherit;
+    font-family: var(--font-display);
     flex: 1;
     padding: 10px 0;
     border-radius: 9px;
-    border: 1px solid rgba(255, 255, 255, 0.16);
+    border: 1px solid var(--panel-border);
     background: rgba(255, 255, 255, 0.05);
-    color: rgba(235, 238, 240, 0.75);
+    color: rgba(235, 240, 240, 0.75);
     font-size: 12.5px;
     font-weight: 700;
     touch-action: manipulation;
   }
   .tp-qty-btn.selected {
-    background: #e9ecee;
-    color: #101112;
-    border-color: #e9ecee;
+    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    color: var(--accent-ink);
+    border-color: var(--accent);
+  }
+
+  .tp-stepper-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+  }
+  .tp-stepper-btn {
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+    cursor: pointer;
+    font-family: var(--font-display);
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid var(--panel-border);
+    background: rgba(45, 214, 196, 0.12);
+    color: var(--accent);
+    font-size: 20px;
+    font-weight: 700;
+    touch-action: manipulation;
+  }
+  .tp-stepper-btn:active { background: rgba(45, 214, 196, 0.26); }
+  .tp-stepper-value {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--gold);
+    min-width: 64px;
+    text-align: center;
   }
 
   .tp-progress-track {
@@ -621,7 +680,7 @@
   .tp-progress-fill {
     height: 100%;
     width: 0%;
-    background: #e9ecee;
+    background: linear-gradient(90deg, var(--accent), var(--gold));
     transition: width 0.18s linear;
   }
   .tp-status-line {
@@ -653,7 +712,7 @@
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
     border: 1px solid rgba(255, 255, 255, 0.18);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: var(--font-body);
     font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.05em;
@@ -690,20 +749,22 @@
     appearance: none;
     outline: none;
     cursor: pointer;
-    font: inherit;
+    font-family: var(--font-display);
     padding: 15px 22px;
     border: none;
     border-radius: 12px;
-    background: #e9ecee;
-    color: #101112;
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 0.1em;
+    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    box-shadow: 0 6px 16px rgba(23, 179, 163, 0.35);
+    color: var(--accent-ink);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     touch-action: manipulation;
   }
   .placement-btn.secondary {
     background: rgba(255, 255, 255, 0.1);
+    box-shadow: none;
     color: #e9ecee;
     border: 1px solid rgba(255, 255, 255, 0.2);
   }
@@ -732,15 +793,17 @@
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 0.08em;
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: #e9ecee;
+    color: var(--accent);
     touch-action: manipulation;
   }
+  #machineInteractBtn { border-color: var(--panel-border); }
   #machineInteractBtn.visible { display: flex; }
-  #machineInteractBtn svg { width: 18px; height: 18px; }
+  #machineInteractBtn svg { width: 18px; height: 18px; stroke: var(--accent); }
 
   /* -------------------------------------------------------------- */
   /* Production panel (docked to the machine, opened via interact)   */
@@ -838,7 +901,7 @@
 </div>
 
 <div id="crosshair"></div>
-<div id="carryChip"><span>Elimde boş şişe var</span></div>
+<div id="carryChip"><span id="carryChipLabel">Elimde boş şişe var</span></div>
 <div id="worldToast"></div>
 
 <div id="tabletOverlay">
@@ -904,6 +967,26 @@
             <div class="tp-nav-card-text">
               <div class="tp-nav-card-title">ÜRETİM MAKİNELERİ</div>
               <div class="tp-nav-card-sub">Şişeleri içecekle doldurur</div>
+            </div>
+            <div class="tp-nav-card-arrow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#e9ecee" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 5 16 12 9 19"></polyline>
+              </svg>
+            </div>
+          </button>
+
+          <button id="catDeskBtn" class="tp-nav-card" type="button">
+            <div class="tp-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#e9ecee" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 10h18l-1.4 9.2a1.6 1.6 0 0 1-1.6 1.4H6a1.6 1.6 0 0 1-1.6-1.4L3 10z"></path>
+                <path d="M6 10V7a6 6 0 0 1 12 0v3"></path>
+                <line x1="9" y1="14" x2="9" y2="17"></line>
+                <line x1="15" y1="14" x2="15" y2="17"></line>
+              </svg>
+            </div>
+            <div class="tp-nav-card-text">
+              <div class="tp-nav-card-title">SATIŞ MASASI</div>
+              <div class="tp-nav-card-sub">Müşterilere içecek satar</div>
             </div>
             <div class="tp-nav-card-arrow">
               <svg viewBox="0 0 24 24" fill="none" stroke="#e9ecee" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -1033,6 +1116,73 @@
 
           <div class="tp-card" id="waterMachineHintCard" style="display:none;">
             <div class="tp-card-sub" style="margin-top:0; text-align:center;">Boş bir şişeyi alıp makinenin yanına getir; su varsa otomatik doldursun.</div>
+          </div>
+        </div>
+
+        <div id="tabletDeskView" class="tablet-view">
+          <div class="tp-header">
+            <button id="deskBackBtn" class="tp-back-btn" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 5 8 12 15 19"></polyline>
+              </svg>
+              <span>GERİ</span>
+            </button>
+            <div class="tp-title">SATIŞ MASASI</div>
+            <div class="tp-budget">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#e9ecee" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M9.2 15.2c0 1.1 1.1 2 2.8 2s2.8-.8 2.8-1.9c0-3-5.6-1.5-5.6-4.4 0-1.1 1.1-1.9 2.8-1.9s2.8.9 2.8 2"></path>
+              </svg>
+              <span class="tp-budget-value">$100</span>
+            </div>
+          </div>
+
+          <div class="tp-card">
+            <div class="tp-card-row">
+              <div class="tp-card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#e9ecee" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 10h18l-1.4 9.2a1.6 1.6 0 0 1-1.6 1.4H6a1.6 1.6 0 0 1-1.6-1.4L3 10z"></path>
+                  <path d="M6 10V7a6 6 0 0 1 12 0v3"></path>
+                </svg>
+              </div>
+              <div>
+                <div class="tp-card-title">SATIŞ MASASI</div>
+                <div class="tp-card-sub" id="deskMachineStatusLine">Satın alınmadı &middot; $40 (tek seferlik)</div>
+              </div>
+            </div>
+            <button id="buyDeskBtn" class="tp-btn" type="button">MASAYI SATIN AL &mdash; $40</button>
+            <button id="placeDeskBtn" class="tp-btn secondary" type="button" style="display:none;">MASAYI YERLEŞTİR</button>
+            <button id="moveDeskBtn" class="tp-btn secondary" type="button" style="display:none;">MASAYI TAŞİ</button>
+            <div id="deskMachineNote" class="tp-note" style="display:none;"></div>
+          </div>
+
+          <div class="tp-card" id="deskPriceCard" style="display:none;">
+            <div class="tp-card-title" style="text-align:center;">ŞİŞE SATIŞ FİYATI</div>
+            <div class="tp-stepper-row">
+              <button id="deskPriceMinusBtn" class="tp-stepper-btn" type="button">&minus;</button>
+              <div class="tp-stepper-value" id="deskPriceValue">$3</div>
+              <button id="deskPricePlusBtn" class="tp-stepper-btn" type="button">&plus;</button>
+            </div>
+            <div class="tp-card-sub" style="text-align:center; margin-top:0;">Müşteriler bu fiyattan bir şişe içecek alır.</div>
+          </div>
+
+          <div class="tp-card" id="deskStockCard" style="display:none;">
+            <div class="tp-card-row">
+              <div class="tp-card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#e9ecee" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M10 2h4"></path>
+                  <path d="M10 2v3.4c0 .5-.2 1-.5 1.4L8 8.6c-.6.7-.9 1.6-.9 2.5V20a1.6 1.6 0 0 0 1.6 1.6h6.6A1.6 1.6 0 0 0 17 20v-8.9c0-.9-.3-1.8-.9-2.5l-1.5-1.8c-.3-.4-.5-.9-.5-1.4V2"></path>
+                </svg>
+              </div>
+              <div>
+                <div class="tp-card-title">MASADAKİ STOK</div>
+                <div class="tp-card-sub" id="deskStockLine">Masada: 0 / 20 şişe</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tp-card" id="deskMachineHintCard" style="display:none;">
+            <div class="tp-card-sub" style="margin-top:0; text-align:center;">Dolu bir şişeyi alıp masanın yanına getir, bırak; müşteriler gelip satın alsın.</div>
           </div>
         </div>
 
@@ -1561,6 +1711,15 @@
   // grid, so keep far more of them around before culling the oldest.
   var MAX_VISIBLE_BOTTLES = 200;
 
+  // Sales desk: sells filled bottles to walk-up customers. Capacity is
+  // intentionally modest (a real countertop, not a warehouse) so the
+  // player has to keep restocking it by hand.
+  var DESK_COST = 40;
+  var DESK_CAPACITY = 20;
+  var DESK_MIN_PRICE = 1;
+  var DESK_MAX_PRICE = 10;
+  var DESK_DEFAULT_PRICE = 3;
+
   var econ = {
     budget: 100,
     bottleMachineOwned: false,
@@ -1568,7 +1727,11 @@
     waterMachineOwned: false,
     waterMachinePlaced: false,
     producing: false,
-    waterML: 0
+    waterML: 0,
+    deskOwned: false,
+    deskPlaced: false,
+    deskStock: 0,
+    deskPrice: DESK_DEFAULT_PRICE
   };
 
   function disposeObj(o) {
@@ -1585,6 +1748,8 @@
   var catWaterBtn = document.getElementById("catWaterBtn");
   var bottleBackBtn = document.getElementById("bottleBackBtn");
   var waterBackBtn = document.getElementById("waterBackBtn");
+  var catDeskBtn = document.getElementById("catDeskBtn");
+  var deskBackBtn = document.getElementById("deskBackBtn");
 
   var tabletViews = Array.prototype.slice.call(document.querySelectorAll(".tablet-view"));
   function showTabletView(id) {
@@ -1610,6 +1775,20 @@
   var buyWaterBtn = document.getElementById("buyWaterBtn");
   var waterQtyButtons = Array.prototype.slice.call(document.querySelectorAll(".tp-water-qty-btn"));
   var selectedWaterMl = 1000;
+
+  var buyDeskBtn = document.getElementById("buyDeskBtn");
+  var placeDeskBtn = document.getElementById("placeDeskBtn");
+  var moveDeskBtn = document.getElementById("moveDeskBtn");
+  var deskMachineStatusLine = document.getElementById("deskMachineStatusLine");
+  var deskMachineNote = document.getElementById("deskMachineNote");
+  var deskMachineHintCard = document.getElementById("deskMachineHintCard");
+  var deskPriceCard = document.getElementById("deskPriceCard");
+  var deskStockCard = document.getElementById("deskStockCard");
+  var deskPriceValue = document.getElementById("deskPriceValue");
+  var deskPriceMinusBtn = document.getElementById("deskPriceMinusBtn");
+  var deskPricePlusBtn = document.getElementById("deskPricePlusBtn");
+  var deskStockLine = document.getElementById("deskStockLine");
+  var carryChipLabel = document.getElementById("carryChipLabel");
 
   var qtyButtons = Array.prototype.slice.call(document.querySelectorAll(".tp-qty-btn:not(.tp-water-qty-btn)"));
   var startProductionBtn = document.getElementById("startProductionBtn");
@@ -1698,6 +1877,51 @@
     }
   }
 
+  function renderDeskCard() {
+    if (!econ.deskOwned) {
+      deskMachineStatusLine.textContent = "Satın alınmadı \u00B7 $" + DESK_COST + " (tek seferlik)";
+      buyDeskBtn.style.display = "";
+      placeDeskBtn.style.display = "none";
+      moveDeskBtn.style.display = "none";
+      deskPriceCard.style.display = "none";
+      deskStockCard.style.display = "none";
+      deskMachineHintCard.style.display = "none";
+      buyDeskBtn.disabled = econ.budget < DESK_COST;
+      deskMachineNote.style.display = econ.budget < DESK_COST ? "block" : "none";
+      deskMachineNote.textContent = "Yetersiz bütçe";
+    } else if (!econ.deskPlaced) {
+      deskMachineStatusLine.textContent = "Satın alındı \u00B7 sahada yerleştirilmeyi bekliyor";
+      buyDeskBtn.style.display = "none";
+      placeDeskBtn.style.display = "";
+      moveDeskBtn.style.display = "none";
+      deskPriceCard.style.display = "block";
+      deskStockCard.style.display = "none";
+      deskMachineHintCard.style.display = "none";
+      deskMachineNote.style.display = "none";
+    } else {
+      deskMachineStatusLine.textContent = "Yerleştirildi \u00B7 çalışır durumda";
+      buyDeskBtn.style.display = "none";
+      placeDeskBtn.style.display = "none";
+      moveDeskBtn.style.display = "";
+      deskPriceCard.style.display = "block";
+      deskStockCard.style.display = "block";
+      deskMachineHintCard.style.display = "block";
+      deskMachineNote.style.display = "none";
+    }
+    renderDeskPriceCard();
+    renderDeskStockCard();
+  }
+
+  function renderDeskPriceCard() {
+    deskPriceValue.textContent = "$" + econ.deskPrice;
+    deskPriceMinusBtn.disabled = econ.deskPrice <= DESK_MIN_PRICE;
+    deskPricePlusBtn.disabled = econ.deskPrice >= DESK_MAX_PRICE;
+  }
+
+  function renderDeskStockCard() {
+    deskStockLine.textContent = "Masada: " + econ.deskStock + " / " + DESK_CAPACITY + " şişe";
+  }
+
   function renderWaterResourceCard() {
     waterLevelLine.textContent = "Depoda: " + econ.waterML + " ML";
     var cost = (selectedWaterMl / 1000) * WATER_PRICE_PER_1000ML;
@@ -1735,6 +1959,12 @@
   });
   bottleBackBtn.addEventListener("click", function () { showTabletView("tabletCategoriesView"); });
   waterBackBtn.addEventListener("click", function () { showTabletView("tabletCategoriesView"); });
+  catDeskBtn.addEventListener("click", function () {
+    showTabletView("tabletDeskView");
+    renderBudget();
+    renderDeskCard();
+  });
+  deskBackBtn.addEventListener("click", function () { showTabletView("tabletCategoriesView"); });
 
   qtyButtons.forEach(function (btn) {
     btn.addEventListener("click", function () {
@@ -1796,6 +2026,34 @@
     if (!econ.waterMachinePlaced) return;
     closeTablet();
     enterPlacementMode("water");
+  });
+
+  buyDeskBtn.addEventListener("click", function () {
+    if (econ.budget < DESK_COST || econ.deskOwned) return;
+    econ.budget -= DESK_COST;
+    econ.deskOwned = true;
+    renderBudget();
+    renderDeskCard();
+  });
+  placeDeskBtn.addEventListener("click", function () {
+    if (!econ.deskOwned || econ.deskPlaced) return;
+    closeTablet();
+    enterPlacementMode("desk");
+  });
+  moveDeskBtn.addEventListener("click", function () {
+    if (!econ.deskPlaced) return;
+    closeTablet();
+    enterPlacementMode("desk");
+  });
+  deskPriceMinusBtn.addEventListener("click", function () {
+    if (econ.deskPrice <= DESK_MIN_PRICE) return;
+    econ.deskPrice -= 1;
+    renderDeskPriceCard();
+  });
+  deskPricePlusBtn.addEventListener("click", function () {
+    if (econ.deskPrice >= DESK_MAX_PRICE) return;
+    econ.deskPrice += 1;
+    renderDeskPriceCard();
   });
 
   startProductionBtn.addEventListener("click", function () {
@@ -1904,6 +2162,17 @@
         m.group = null;
       }
     }
+    if (kind === "desk") {
+      // Stock bottles are placed at absolute world positions when they're
+      // set down, so any move/cancel needs to redraw them relative to
+      // wherever the desk group ended up (or clear them if it's gone).
+      deskBottleMeshes.forEach(function (mesh) {
+        scene.remove(mesh);
+        mesh.traverse(disposeObj);
+      });
+      deskBottleMeshes = [];
+      renderDeskStockVisual();
+    }
     activePlacementKind = null;
   }
 
@@ -1968,22 +2237,37 @@
     var label = "";
 
     if (carriedBottleMesh) {
-      if (econ.waterMachinePlaced && machines.water.group) {
+      if (carriedBottleFilled) {
+        if (econ.deskPlaced && machines.desk.group &&
+            distXZ(yawObject.position, machines.desk.group.position) <= PROXIMITY_RADIUS) {
+          if (econ.deskStock < DESK_CAPACITY) {
+            mode = "placeOnDesk";
+            label = "ŞİŞEYİ MASAYA BIRAK";
+          } else {
+            mode = "deskFull";
+            label = "MASA DOLU";
+          }
+        }
+      } else if (econ.waterMachinePlaced && machines.water.group) {
         if (distXZ(yawObject.position, machines.water.group.position) <= PROXIMITY_RADIUS) {
           mode = "insertBottle";
           label = "ŞİŞEYİ MAKİNEYE KOY";
         }
       }
-    } else if (econ.bottleMachinePlaced && machines.bottle.group) {
-      if (distXZ(yawObject.position, machines.bottle.group.position) <= PROXIMITY_RADIUS) {
-        if (bottlePile.liveBottles.length > 0) {
-          mode = "pickupEmpty";
-          label = "ŞİŞE AL";
-        } else {
-          mode = "bottleMenu";
-          label = "ÜRETİM MENÜSÜ";
-        }
+    } else if (econ.bottleMachinePlaced && machines.bottle.group &&
+        distXZ(yawObject.position, machines.bottle.group.position) <= PROXIMITY_RADIUS) {
+      if (bottlePile.liveBottles.length > 0) {
+        mode = "pickupEmpty";
+        label = "ŞİŞE AL";
+      } else {
+        mode = "bottleMenu";
+        label = "ÜRETİM MENÜSÜ";
       }
+    } else if (econ.waterMachinePlaced && machines.water.group &&
+        distXZ(yawObject.position, machines.water.group.position) <= PROXIMITY_RADIUS &&
+        filledPile.liveBottles.length > 0) {
+      mode = "pickupFilled";
+      label = "DOLU ŞİŞE AL";
     }
 
     currentInteractMode = mode;
@@ -2005,6 +2289,8 @@
     if (currentInteractMode === "bottleMenu") openProductionPanel();
     else if (currentInteractMode === "pickupEmpty") pickUpEmptyBottle();
     else if (currentInteractMode === "insertBottle") insertCarriedBottleIntoWaterMachine();
+    else if (currentInteractMode === "pickupFilled") pickUpFilledBottle();
+    else if (currentInteractMode === "placeOnDesk") placeBottleOnDesk();
   });
 
   function runProductionBatch(qty) {
@@ -2052,6 +2338,7 @@
   var waterQueue = 0;
   var waterProcessing = false;
   var carriedBottleMesh = null;
+  var carriedBottleFilled = false;
 
   function buildBottleMachine() {
     var group = new THREE.Group();
@@ -2231,6 +2518,62 @@
     return group;
   }
 
+  function buildSalesDesk() {
+    var group = new THREE.Group();
+    var woodMat = new THREE.MeshStandardMaterial({ color: 0x8a5a34, roughness: 0.75 });
+    var darkWoodMat = new THREE.MeshStandardMaterial({ color: 0x50311a, roughness: 0.75 });
+    var counterMat = new THREE.MeshStandardMaterial({ color: 0xf3e6cb, roughness: 0.5 });
+    var accentMat = new THREE.MeshStandardMaterial({ color: 0x2dd6c4, roughness: 0.4 });
+    var poleMat = new THREE.MeshStandardMaterial({ color: 0x3a3a3a, metalness: 0.3, roughness: 0.5 });
+    var canopyMat = new THREE.MeshStandardMaterial({ color: 0xff6b5b, roughness: 0.6, side: THREE.DoubleSide });
+    var canopyRimMat = new THREE.MeshStandardMaterial({ color: 0xfff4e6, roughness: 0.6 });
+
+    var legGeo = new THREE.BoxGeometry(0.1, 0.75, 0.1);
+    var legOffsets = [[-0.78, -0.32], [0.78, -0.32], [-0.78, 0.32], [0.78, 0.32]];
+    legOffsets.forEach(function (o) {
+      var leg = new THREE.Mesh(legGeo, darkWoodMat);
+      leg.position.set(o[0], 0.375, o[1]);
+      leg.castShadow = true;
+      group.add(leg);
+    });
+
+    var frontPanel = new THREE.Mesh(new THREE.BoxGeometry(1.76, 0.58, 0.06), woodMat);
+    frontPanel.position.set(0, 0.46, 0.35);
+    frontPanel.castShadow = true;
+    group.add(frontPanel);
+
+    var stripe = new THREE.Mesh(new THREE.BoxGeometry(1.78, 0.1, 0.07), accentMat);
+    stripe.position.set(0, 0.64, 0.355);
+    group.add(stripe);
+
+    var top = new THREE.Mesh(new THREE.BoxGeometry(1.86, 0.06, 0.82), counterMat);
+    top.position.set(0, 0.78, 0);
+    top.castShadow = true;
+    top.receiveShadow = true;
+    group.add(top);
+
+    var pole = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 1.55, 10), poleMat);
+    pole.position.set(-0.62, 1.58, 0);
+    pole.castShadow = true;
+    group.add(pole);
+
+    var canopy = new THREE.Mesh(new THREE.ConeGeometry(0.95, 0.55, 10), canopyMat);
+    canopy.position.set(-0.62, 2.48, 0);
+    canopy.castShadow = true;
+    group.add(canopy);
+
+    var canopyRim = new THREE.Mesh(new THREE.TorusGeometry(0.95, 0.03, 8, 20), canopyRimMat);
+    canopyRim.rotation.x = Math.PI / 2;
+    canopyRim.position.set(-0.62, 2.22, 0);
+    group.add(canopyRim);
+
+    // Surface where stocked bottles sit, and the grid origin used to
+    // lay them out in neat rows instead of stacking them all at once.
+    group.userData.pileOffset = new THREE.Vector3(0, 0.81, 0);
+    group.userData.stockOrigin = new THREE.Vector3(-0.68, 0.81, -0.24);
+    return group;
+  }
+
   function buildBottle(filled) {
     var group = new THREE.Group();
     var bodyMat = new THREE.MeshStandardMaterial({
@@ -2261,8 +2604,8 @@
     return group;
   }
 
-  function buildCarriedBottleVisual() {
-    var b = buildBottle(false);
+  function buildCarriedBottleVisual(filled) {
+    var b = buildBottle(!!filled);
     b.scale.set(1.5, 1.5, 1.5);
     b.position.set(0.3, -0.24, -0.55);
     b.rotation.set(0.15, 0.4, 0.1);
@@ -2337,6 +2680,224 @@
   }
 
   // -----------------------------------------------------------------
+  // Sales desk stock: unlike the piles above (which just grow), the
+  // desk holds a capped, discrete inventory arranged in a tidy grid
+  // on the countertop, and shrinks by one every time a customer buys.
+  // -----------------------------------------------------------------
+  var DESK_GRID_COLS = 5;
+  var DESK_GRID_SPACING_X = 0.27;
+  var DESK_GRID_SPACING_Z = 0.22;
+  var deskBottleMeshes = [];
+
+  function deskSlotLocal(index) {
+    var col = index % DESK_GRID_COLS;
+    var row = Math.floor(index / DESK_GRID_COLS);
+    var origin = machines.desk.group.userData.stockOrigin;
+    return new THREE.Vector3(
+      origin.x + col * DESK_GRID_SPACING_X,
+      origin.y,
+      origin.z + row * DESK_GRID_SPACING_Z
+    );
+  }
+
+  function renderDeskStockVisual() {
+    if (!machines.desk.group) return;
+    var group = machines.desk.group;
+    var target = Math.min(econ.deskStock, DESK_CAPACITY);
+    while (deskBottleMeshes.length < target) {
+      var idx = deskBottleMeshes.length;
+      var bottle = buildBottle(true);
+      bottle.scale.set(1.3, 1.3, 1.3);
+      bottle.position.copy(group.localToWorld(deskSlotLocal(idx)));
+      bottle.rotation.y = Math.random() * Math.PI * 2;
+      scene.add(bottle);
+      deskBottleMeshes.push(bottle);
+    }
+    while (deskBottleMeshes.length > target) {
+      var mesh = deskBottleMeshes.pop();
+      scene.remove(mesh);
+      mesh.traverse(disposeObj);
+    }
+  }
+
+  // -----------------------------------------------------------------
+  // Customers: simple blocky (Minecraft-style) characters that queue
+  // up at the sales desk, buy one bottle each at the current price,
+  // then walk off. Entirely self-contained -- reads econ.deskStock /
+  // econ.deskPrice and the desk's world position, nothing else.
+  // -----------------------------------------------------------------
+  var CUSTOMER_VARIANTS = [
+    { skin: 0xffd9b3, shirt: 0xef5350, pants: 0x37474f, hair: 0x3e2723 },
+    { skin: 0xf1c27d, shirt: 0x42a5f5, pants: 0x263238, hair: 0x1b1b1b },
+    { skin: 0xffe0b2, shirt: 0x66bb6a, pants: 0x4e342e, hair: 0xffca28 },
+    { skin: 0xd8a878, shirt: 0xab47bc, pants: 0x212121, hair: 0x212121 },
+    { skin: 0xfff0e0, shirt: 0xffa726, pants: 0x455a64, hair: 0x795548 },
+    { skin: 0xc68863, shirt: 0x26c6da, pants: 0x33691e, hair: 0x000000 }
+  ];
+
+  function buildCustomer(variant) {
+    var group = new THREE.Group();
+    var skinMat = new THREE.MeshStandardMaterial({ color: variant.skin, roughness: 0.85 });
+    var shirtMat = new THREE.MeshStandardMaterial({ color: variant.shirt, roughness: 0.7 });
+    var pantsMat = new THREE.MeshStandardMaterial({ color: variant.pants, roughness: 0.7 });
+    var hairMat = new THREE.MeshStandardMaterial({ color: variant.hair, roughness: 0.9 });
+
+    var LEG_H = 0.5, TORSO_H = 0.5, HEAD_S = 0.32, ARM_H = 0.46;
+
+    var legs = new THREE.Mesh(new THREE.BoxGeometry(0.34, LEG_H, 0.18), pantsMat);
+    legs.position.y = LEG_H / 2;
+    legs.castShadow = true;
+    group.add(legs);
+
+    var torso = new THREE.Mesh(new THREE.BoxGeometry(0.36, TORSO_H, 0.2), shirtMat);
+    torso.position.y = LEG_H + TORSO_H / 2;
+    torso.castShadow = true;
+    group.add(torso);
+
+    var armGeo = new THREE.BoxGeometry(0.12, ARM_H, 0.12);
+    var armL = new THREE.Mesh(armGeo, shirtMat);
+    armL.position.set(-0.24, LEG_H + TORSO_H - ARM_H / 2 + 0.02, 0);
+    armL.castShadow = true;
+    group.add(armL);
+    var armR = new THREE.Mesh(armGeo, shirtMat);
+    armR.position.set(0.24, LEG_H + TORSO_H - ARM_H / 2 + 0.02, 0);
+    armR.castShadow = true;
+    group.add(armR);
+
+    var head = new THREE.Mesh(new THREE.BoxGeometry(HEAD_S, HEAD_S, HEAD_S), skinMat);
+    head.position.y = LEG_H + TORSO_H + HEAD_S / 2;
+    head.castShadow = true;
+    group.add(head);
+
+    var hair = new THREE.Mesh(new THREE.BoxGeometry(HEAD_S * 1.05, HEAD_S * 0.34, HEAD_S * 1.05), hairMat);
+    hair.position.y = LEG_H + TORSO_H + HEAD_S - HEAD_S * 0.17;
+    group.add(hair);
+
+    group.scale.set(1.18, 1.18, 1.18);
+    return group;
+  }
+
+  var customers = [];
+  var MAX_CUSTOMERS = 4;
+  var customerSpawnTimer = 4;
+  var CUSTOMER_SPEED = 1.25;
+  var QUEUE_BASE_DIST = 1.6;
+  var QUEUE_SPACING = 0.85;
+  var CUSTOMER_PATIENCE = 12;
+  var CUSTOMER_SERVE_TIME = 1.3;
+  var CUSTOMER_EXIT_DIST = 8;
+
+  function deskForwardVec() {
+    var v = new THREE.Vector3(0, 0, 1);
+    if (machines.desk.group) v.applyQuaternion(machines.desk.group.quaternion);
+    v.y = 0;
+    if (v.lengthSq() < 1e-6) v.set(0, 0, 1);
+    else v.normalize();
+    return v;
+  }
+
+  function moveCustomerTowards(group, target, dt) {
+    var dx = target.x - group.position.x;
+    var dz = target.z - group.position.z;
+    var dist = Math.sqrt(dx * dx + dz * dz);
+    if (dist < 1e-4) return dist;
+    var step = Math.min(dist, CUSTOMER_SPEED * dt);
+    group.position.x += (dx / dist) * step;
+    group.position.z += (dz / dist) * step;
+    group.rotation.y = Math.atan2(dx, dz);
+    return dist - step;
+  }
+
+  function spawnCustomer() {
+    var variant = CUSTOMER_VARIANTS[Math.floor(Math.random() * CUSTOMER_VARIANTS.length)];
+    var group = buildCustomer(variant);
+    var deskPos = machines.desk.group.position;
+    var fwd = deskForwardVec();
+    var right = new THREE.Vector3(-fwd.z, 0, fwd.x);
+    var spawnDist = 7 + Math.random() * 3;
+    var lateral = (Math.random() - 0.5) * 4.5;
+    var spawnPos = deskPos.clone().addScaledVector(fwd, spawnDist).addScaledVector(right, lateral);
+    spawnPos.x = THREE.MathUtils.clamp(spawnPos.x, -GROUND_HALF, GROUND_HALF);
+    spawnPos.z = THREE.MathUtils.clamp(spawnPos.z, -GROUND_HALF, GROUND_HALF);
+    group.position.set(spawnPos.x, 0, spawnPos.z);
+    scene.add(group);
+    customers.push({ group: group, state: "walkingIn", patience: CUSTOMER_PATIENCE, serveTimer: 0 });
+  }
+
+  function queueTargetForIndex(i) {
+    var deskPos = machines.desk.group.position;
+    var fwd = deskForwardVec();
+    return deskPos.clone().addScaledVector(fwd, QUEUE_BASE_DIST + i * QUEUE_SPACING);
+  }
+
+  function updateCustomers(dt) {
+    if (econ.deskPlaced && machines.desk.group) {
+      customerSpawnTimer -= dt;
+      if (customerSpawnTimer <= 0 && customers.length < MAX_CUSTOMERS) {
+        spawnCustomer();
+        customerSpawnTimer = 5 + Math.random() * 7;
+      }
+    }
+
+    if (machines.desk.group) {
+      var queueList = customers.filter(function (c) {
+        return c.state === "walkingIn" || c.state === "queue" || c.state === "buying";
+      });
+
+      for (var qi = 0; qi < queueList.length; qi++) {
+        var c = queueList[qi];
+        if (c.state === "buying") continue;
+        var target = queueTargetForIndex(qi);
+        var remaining = moveCustomerTowards(c.group, target, dt);
+        if (remaining < 0.12) {
+          c.state = "queue";
+          if (qi === 0) {
+            if (econ.deskStock > 0) {
+              c.state = "buying";
+              c.serveTimer = CUSTOMER_SERVE_TIME;
+            } else {
+              c.patience -= dt;
+              if (c.patience <= 0) c.state = "leaving";
+            }
+          }
+        }
+      }
+
+      for (var bi = 0; bi < queueList.length; bi++) {
+        var cb = queueList[bi];
+        if (cb.state !== "buying") continue;
+        cb.serveTimer -= dt;
+        if (cb.serveTimer <= 0) {
+          if (econ.deskStock > 0) {
+            econ.deskStock--;
+            econ.budget += econ.deskPrice;
+            renderBudget();
+            renderDeskStockVisual();
+            renderDeskStockCard();
+            flashWorldToast("Satış! +$" + econ.deskPrice);
+          }
+          cb.state = "leaving";
+        }
+      }
+    }
+
+    for (var i = customers.length - 1; i >= 0; i--) {
+      var cust = customers[i];
+      if (cust.state !== "leaving") continue;
+      var fwd = deskForwardVec();
+      if (!cust.exitTarget) {
+        cust.exitTarget = cust.group.position.clone().addScaledVector(fwd, CUSTOMER_EXIT_DIST);
+      }
+      var left = moveCustomerTowards(cust.group, cust.exitTarget, dt);
+      if (left < 0.3) {
+        scene.remove(cust.group);
+        cust.group.traverse(disposeObj);
+        customers.splice(i, 1);
+      }
+    }
+  }
+
+  // -----------------------------------------------------------------
   // Carrying & feeding: pick an empty bottle up from the bottle
   // machine's pile one at a time, carry it (attached to the camera),
   // and feed it into the water machine. If there isn't enough water,
@@ -2344,6 +2905,9 @@
   // -----------------------------------------------------------------
   function updateCarryChip() {
     carryChip.classList.toggle("visible", !!carriedBottleMesh);
+    if (carriedBottleMesh) {
+      carryChipLabel.textContent = carriedBottleFilled ? "Elimde dolu şişe var" : "Elimde boş şişe var";
+    }
   }
 
   function pickUpEmptyBottle() {
@@ -2352,9 +2916,39 @@
     var mesh = bottlePile.liveBottles.pop();
     scene.remove(mesh);
     mesh.traverse(disposeObj);
-    carriedBottleMesh = buildCarriedBottleVisual();
+    carriedBottleFilled = false;
+    carriedBottleMesh = buildCarriedBottleVisual(false);
     camera.add(carriedBottleMesh);
     updateCarryChip();
+  }
+
+  function pickUpFilledBottle() {
+    if (carriedBottleMesh) return;
+    if (filledPile.liveBottles.length === 0) return;
+    var mesh = filledPile.liveBottles.pop();
+    scene.remove(mesh);
+    mesh.traverse(disposeObj);
+    carriedBottleFilled = true;
+    carriedBottleMesh = buildCarriedBottleVisual(true);
+    camera.add(carriedBottleMesh);
+    updateCarryChip();
+  }
+
+  function placeBottleOnDesk() {
+    if (!carriedBottleMesh || !carriedBottleFilled) return;
+    if (!machines.desk.group) return;
+    if (econ.deskStock >= DESK_CAPACITY) {
+      flashWorldToast("Masa dolu!");
+      return;
+    }
+    camera.remove(carriedBottleMesh);
+    carriedBottleMesh.traverse(disposeObj);
+    carriedBottleMesh = null;
+    carriedBottleFilled = false;
+    updateCarryChip();
+    econ.deskStock++;
+    renderDeskStockVisual();
+    renderDeskStockCard();
   }
 
   function runWaterProcessing() {
@@ -2375,7 +2969,7 @@
   }
 
   function insertCarriedBottleIntoWaterMachine() {
-    if (!carriedBottleMesh) return;
+    if (!carriedBottleMesh || carriedBottleFilled) return;
     if (econ.waterML < BOTTLE_VOLUME_ML) {
       flashWorldToast("Yetersiz su! Tabletten su satın al.");
       return;
@@ -2384,6 +2978,7 @@
     camera.remove(carriedBottleMesh);
     carriedBottleMesh.traverse(disposeObj);
     carriedBottleMesh = null;
+    carriedBottleFilled = false;
     updateCarryChip();
     renderWaterResourceCard();
     waterQueue++;
@@ -2408,6 +3003,13 @@
       build: buildWaterMachine,
       placedKey: "waterMachinePlaced",
       onPlaced: renderWaterMachineCard
+    },
+    desk: {
+      group: null,
+      position: new THREE.Vector3(0, 0, 6.5),
+      build: buildSalesDesk,
+      placedKey: "deskPlaced",
+      onPlaced: renderDeskCard
     }
   };
 
@@ -2527,7 +3129,14 @@
   appEl.addEventListener("touchcancel", handleTouchEnd, { passive: true });
 
   // Prevent any residual page scroll/bounce on the whole document.
-  document.addEventListener("touchmove", function (e) { e.preventDefault(); }, { passive: false });
+  // Any element that needs native scrolling (tablet menu, production
+  // panel) is opted out of the blanket preventDefault below so both
+  // overflow-y scrolling and taps on buttons inside them keep working.
+  var NO_SCROLL_BLOCK_SELECTOR = "#tabletOverlay, #productionOverlay";
+  document.addEventListener("touchmove", function (e) {
+    if (e.target && e.target.closest && e.target.closest(NO_SCROLL_BLOCK_SELECTOR)) return;
+    e.preventDefault();
+  }, { passive: false });
 
   // ---------------------------------------------------------------------
   // Movement / physics
@@ -2593,6 +3202,7 @@
     updateBottleAnims(dt);
     updatePlacement(dt);
     updateMachineProximity();
+    updateCustomers(dt);
     renderer.render(scene, camera);
   }
 
