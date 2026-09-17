@@ -269,8 +269,56 @@
   }
 
   /* -------------------------------------------------------------- */
-  /* Start gate -- the one unavoidable tap that a browser requires   */
-  /* before it will grant fullscreen + orientation lock              */
+  /* Loading screen -- shown first, purely a first-impression beat   */
+  /* (all assets here are local/procedural, nothing real to await)   */
+  /* -------------------------------------------------------------- */
+  #loadingScreen {
+    position: fixed;
+    inset: 0;
+    z-index: 10001;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 22px;
+    background: radial-gradient(120% 140% at 50% 20%, #12312c 0%, #050605 62%);
+  }
+  #loadingScreen.hidden { display: none; }
+  .loading-logo {
+    font-family: var(--font-display);
+    font-size: clamp(20px, 5vw, 30px);
+    font-weight: 700;
+    letter-spacing: 0.24em;
+    color: var(--accent);
+    text-transform: uppercase;
+    text-shadow: 0 0 22px rgba(45, 214, 196, 0.45);
+  }
+  .loading-bar-track {
+    width: min(280px, 60vw);
+    height: 8px;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+  }
+  .loading-bar-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 5px;
+    background: linear-gradient(90deg, var(--accent), var(--gold));
+  }
+  .loading-tip {
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+  }
+
+  /* -------------------------------------------------------------- */
+  /* Start gate -- name the factory, then the one unavoidable tap    */
+  /* that a browser requires before granting fullscreen + landscape  */
+  /* lock. Naming and starting/fullscreen are the same single tap.   */
   /* -------------------------------------------------------------- */
   #startGate {
     position: fixed;
@@ -280,23 +328,76 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 14px;
-    background: #050605;
+    gap: 22px;
+    padding: 24px;
+    box-sizing: border-box;
+    background: radial-gradient(120% 140% at 50% 20%, #12312c 0%, #050605 62%);
     touch-action: manipulation;
   }
   #startGate.hidden { display: none; }
-  #startGate svg {
-    width: 40px;
-    height: 40px;
-    opacity: 0.85;
-  }
-  #startGate span {
+  .gate-eyebrow {
     font-family: var(--font-body);
-    font-size: 13px;
+    font-size: 11.5px;
     font-weight: 600;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.26em;
     text-transform: uppercase;
-    color: rgba(235, 238, 240, 0.82);
+    color: var(--ink-soft);
+  }
+  .gate-title {
+    font-family: var(--font-display);
+    font-size: clamp(19px, 4.6vw, 27px);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #f2f5f4;
+    text-align: center;
+    max-width: 480px;
+  }
+  #factoryNameInput {
+    width: min(340px, 78vw);
+    box-sizing: border-box;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid var(--panel-border);
+    background: rgba(255, 255, 255, 0.06);
+    color: #f2f5f4;
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-align: center;
+    outline: none;
+    touch-action: manipulation;
+  }
+  #factoryNameInput::placeholder { color: rgba(235, 240, 240, 0.35); }
+  #factoryNameInput:focus { border-color: var(--accent); background: rgba(45, 214, 196, 0.08); }
+  #startGameBtn {
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+    cursor: pointer;
+    font-family: var(--font-display);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 34px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    box-shadow: 0 8px 22px rgba(23, 179, 163, 0.4);
+    color: var(--accent-ink);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    touch-action: manipulation;
+  }
+  #startGameBtn svg { width: 20px; height: 20px; stroke: var(--accent-ink); }
+  .gate-hint {
+    font-family: var(--font-body);
+    font-size: 11px;
+    color: rgba(235, 240, 240, 0.4);
+    text-align: center;
   }
 
   /* -------------------------------------------------------------- */
@@ -908,7 +1009,7 @@
     <line x1="12" y1="6.6" x2="12" y2="8"></line>
     <line x1="12" y1="16" x2="12" y2="17.4"></line>
   </svg>
-  <span id="budgetChipValue">$100</span>
+  <span id="budgetChipValue">₺1M</span>
 </div>
 
 <div id="crosshair"></div>
@@ -946,7 +1047,7 @@
                 <circle cx="12" cy="12" r="9"></circle>
                 <path d="M9.2 15.2c0 1.1 1.1 2 2.8 2s2.8-.8 2.8-1.9c0-3-5.6-1.5-5.6-4.4 0-1.1 1.1-1.9 2.8-1.9s2.8.9 2.8 2"></path>
               </svg>
-              <span class="tp-budget-value">$100</span>
+              <span class="tp-budget-value">₺1M</span>
             </div>
           </div>
 
@@ -1021,7 +1122,7 @@
                 <circle cx="12" cy="12" r="9"></circle>
                 <path d="M9.2 15.2c0 1.1 1.1 2 2.8 2s2.8-.8 2.8-1.9c0-3-5.6-1.5-5.6-4.4 0-1.1 1.1-1.9 2.8-1.9s2.8.9 2.8 2"></path>
               </svg>
-              <span class="tp-budget-value">$100</span>
+              <span class="tp-budget-value">₺1M</span>
             </div>
           </div>
 
@@ -1036,7 +1137,7 @@
               </div>
               <div>
                 <div class="tp-card-title">250 ML PET ŞİŞE</div>
-                <div class="tp-card-sub">Üretim maliyeti: $1 / adet &middot; ~2 sn / adet</div>
+                <div class="tp-card-sub">Üretim maliyeti: ₺1K / adet &middot; ~2 sn / adet</div>
               </div>
             </div>
           </div>
@@ -1053,10 +1154,10 @@
               </div>
               <div>
                 <div class="tp-card-title">ŞİŞE MAKİNESİ</div>
-                <div class="tp-card-sub" id="bottleMachineStatusLine">Satın alınmadı &middot; $30 (tek seferlik)</div>
+                <div class="tp-card-sub" id="bottleMachineStatusLine">Satın alınmadı &middot; ₺30K (tek seferlik)</div>
               </div>
             </div>
-            <button id="buyBottleMachineBtn" class="tp-btn" type="button">MAKİNEYİ SATIN AL &mdash; $30</button>
+            <button id="buyBottleMachineBtn" class="tp-btn" type="button">MAKİNEYİ SATIN AL &mdash; ₺30K</button>
             <button id="placeBottleMachineBtn" class="tp-btn secondary" type="button" style="display:none;">MAKİNEYİ YERLEŞTİR</button>
             <button id="moveBottleMachineBtn" class="tp-btn secondary" type="button" style="display:none;">MAKİNEYİ TAŞİ</button>
             <div id="bottleMachineNote" class="tp-note" style="display:none;"></div>
@@ -1081,7 +1182,7 @@
                 <circle cx="12" cy="12" r="9"></circle>
                 <path d="M9.2 15.2c0 1.1 1.1 2 2.8 2s2.8-.8 2.8-1.9c0-3-5.6-1.5-5.6-4.4 0-1.1 1.1-1.9 2.8-1.9s2.8.9 2.8 2"></path>
               </svg>
-              <span class="tp-budget-value">$100</span>
+              <span class="tp-budget-value">₺1M</span>
             </div>
           </div>
 
@@ -1095,10 +1196,10 @@
               </div>
               <div>
                 <div class="tp-card-title">SU DOLUM MAKİNESİ</div>
-                <div class="tp-card-sub" id="waterMachineStatusLine">Satın alınmadı &middot; $50 (tek seferlik)</div>
+                <div class="tp-card-sub" id="waterMachineStatusLine">Satın alınmadı &middot; ₺50K (tek seferlik)</div>
               </div>
             </div>
-            <button id="buyWaterMachineBtn" class="tp-btn" type="button">MAKİNEYİ SATIN AL &mdash; $50</button>
+            <button id="buyWaterMachineBtn" class="tp-btn" type="button">MAKİNEYİ SATIN AL &mdash; ₺50K</button>
             <button id="placeWaterMachineBtn" class="tp-btn secondary" type="button" style="display:none;">MAKİNEYİ YERLEŞTİR</button>
             <button id="moveWaterMachineBtn" class="tp-btn secondary" type="button" style="display:none;">MAKİNEYİ TAŞİ</button>
             <div id="waterMachineNote" class="tp-note" style="display:none;"></div>
@@ -1121,7 +1222,7 @@
               <button class="tp-water-qty-btn tp-qty-btn" data-ml="5000" type="button">5000 ML</button>
               <button class="tp-water-qty-btn tp-qty-btn" data-ml="10000" type="button">10000 ML</button>
             </div>
-            <div class="tp-card-sub" id="waterCostLine" style="text-align:center;">Maliyet: $2</div>
+            <div class="tp-card-sub" id="waterCostLine" style="text-align:center;">Maliyet: ₺2K</div>
             <button id="buyWaterBtn" class="tp-btn secondary" type="button">SU SATIN AL</button>
           </div>
 
@@ -1144,7 +1245,7 @@
                 <circle cx="12" cy="12" r="9"></circle>
                 <path d="M9.2 15.2c0 1.1 1.1 2 2.8 2s2.8-.8 2.8-1.9c0-3-5.6-1.5-5.6-4.4 0-1.1 1.1-1.9 2.8-1.9s2.8.9 2.8 2"></path>
               </svg>
-              <span class="tp-budget-value">$100</span>
+              <span class="tp-budget-value">₺1M</span>
             </div>
           </div>
 
@@ -1158,10 +1259,10 @@
               </div>
               <div>
                 <div class="tp-card-title">SATIŞ MASASI</div>
-                <div class="tp-card-sub" id="deskMachineStatusLine">Satın alınmadı &middot; $40 (tek seferlik)</div>
+                <div class="tp-card-sub" id="deskMachineStatusLine">Satın alınmadı &middot; ₺40K (tek seferlik)</div>
               </div>
             </div>
-            <button id="buyDeskBtn" class="tp-btn" type="button">MASAYI SATIN AL &mdash; $40</button>
+            <button id="buyDeskBtn" class="tp-btn" type="button">MASAYI SATIN AL &mdash; ₺40K</button>
             <button id="placeDeskBtn" class="tp-btn secondary" type="button" style="display:none;">MASAYI YERLEŞTİR</button>
             <button id="moveDeskBtn" class="tp-btn secondary" type="button" style="display:none;">MASAYI TAŞİ</button>
             <div id="deskMachineNote" class="tp-note" style="display:none;"></div>
@@ -1171,7 +1272,7 @@
             <div class="tp-card-title" style="text-align:center;">ŞİŞE SATIŞ FİYATI</div>
             <div class="tp-stepper-row">
               <button id="deskPriceMinusBtn" class="tp-stepper-btn" type="button">&minus;</button>
-              <div class="tp-stepper-value" id="deskPriceValue">$3</div>
+              <div class="tp-stepper-value" id="deskPriceValue">₺3K</div>
               <button id="deskPricePlusBtn" class="tp-stepper-btn" type="button">&plus;</button>
             </div>
             <div class="tp-card-sub" style="text-align:center; margin-top:0;">Müşteriler bu fiyattan bir şişe içecek alır.</div>
@@ -1264,7 +1365,7 @@
         </div>
         <div>
           <div class="tp-card-title">250 ML PET ŞİŞE</div>
-          <div class="tp-card-sub">Üretim maliyeti: $1 / adet &middot; ~2 sn / adet</div>
+          <div class="tp-card-sub">Üretim maliyeti: ₺1K / adet &middot; ~2 sn / adet</div>
         </div>
       </div>
     </div>
@@ -1273,19 +1374,30 @@
       <button class="tp-qty-btn" data-qty="10" type="button">10 ADET</button>
       <button class="tp-qty-btn" data-qty="20" type="button">20 ADET</button>
     </div>
-    <div class="tp-card-sub" id="productionCostLine" style="text-align:center;">Toplam maliyet: $1 &middot; Süre: ~2 sn</div>
+    <div class="tp-card-sub" id="productionCostLine" style="text-align:center;">Toplam maliyet: ₺1K &middot; Süre: ~2 sn</div>
     <button id="startProductionBtn" class="tp-btn" type="button">ÜRETİMİ BAŞLAT</button>
     <div class="tp-progress-track"><div class="tp-progress-fill" id="productionProgressFill"></div></div>
     <div class="tp-status-line" id="productionStatusLine">&nbsp;</div>
   </div>
 </div>
 
-<div id="startGate">
-  <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="7" y="2" width="10" height="20" rx="2"></rect>
-    <line x1="7" y1="18" x2="17" y2="18"></line>
-  </svg>
-  <span>BAŞLAMAK İÇİN DOKUN</span>
+<div id="loadingScreen">
+  <div class="loading-logo">İOZ DRINK CO.</div>
+  <div class="loading-bar-track"><div class="loading-bar-fill" id="loadingBarFill"></div></div>
+  <div class="loading-tip">Şişeler diziliyor&hellip;</div>
+</div>
+
+<div id="startGate" class="hidden">
+  <div class="gate-eyebrow">İOZ DRINK CO. SUNAR</div>
+  <div class="gate-title">İçecek fabrikana bir isim ver</div>
+  <input id="factoryNameInput" type="text" maxlength="24" placeholder="İOZ Drink Company" autocomplete="off" autocapitalize="words" />
+  <button id="startGameBtn" type="button">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polygon points="6 3 20 12 6 21 6 3"></polygon>
+    </svg>
+    <span>OYUNA BAŞLA</span>
+  </button>
+  <div class="gate-hint">Tam ekran bu düğmeyle birlikte açılır</div>
 </div>
 
 <button id="fullscreenToggleBtn" type="button" aria-label="tam ekran">
@@ -1650,21 +1762,55 @@
     }
   });
 
+  var startGateEl = document.getElementById("startGate");
+
+  // Loading screen: everything here is local/procedural (no real assets
+  // to fetch), so this is a deliberate first-impression beat rather than
+  // a real progress bar -- it fills over a fixed short duration, then
+  // hands off to the naming screen.
+  var loadingScreenEl = document.getElementById("loadingScreen");
+  var loadingBarFill = document.getElementById("loadingBarFill");
+  var LOADING_DURATION_MS = 1300;
+  var loadingStartedAt = null;
+  function tickLoading(now) {
+    if (loadingStartedAt === null) loadingStartedAt = now;
+    var pct = Math.min(100, ((now - loadingStartedAt) / LOADING_DURATION_MS) * 100);
+    loadingBarFill.style.width = pct + "%";
+    if (pct < 100) {
+      requestAnimationFrame(tickLoading);
+    } else {
+      loadingScreenEl.classList.add("hidden");
+      startGateEl.classList.remove("hidden");
+    }
+  }
+  requestAnimationFrame(tickLoading);
+
+  // Factory naming: the tablet wordmark and the page title both take on
+  // whatever the player names their factory, so it actually feels like
+  // theirs rather than a fixed brand.
+  var factoryName = "İOZ Drink Company";
+  var factoryNameInput = document.getElementById("factoryNameInput");
+  var tabletWordmarkEl = document.querySelector(".tablet-wordmark");
+  function commitFactoryName() {
+    var v = factoryNameInput.value.trim();
+    if (v) factoryName = v.slice(0, 24);
+    if (tabletWordmarkEl) tabletWordmarkEl.textContent = factoryName.toUpperCase();
+    document.title = factoryName;
+  }
+
   // Browsers will never grant fullscreen without a genuine, direct user
   // gesture -- there is no way around that from script, on any platform.
-  // Rather than rely on an implicit "first touch anywhere", a dedicated
-  // start-gate makes that one required tap explicit: the same tap both
-  // dismisses the gate and (synchronously, inside the real event handler)
-  // requests fullscreen, which in turn lets the landscape lock succeed on
-  // browsers that support it.
-  var startGateEl = document.getElementById("startGate");
+  // Rather than a separate "tap anywhere" gate, the same "OYUNA BAŞLA"
+  // tap both commits the factory name AND (synchronously, inside the
+  // real event handler) requests fullscreen -- one button, two jobs.
+  var startGameBtn = document.getElementById("startGameBtn");
   function dismissStartGate() {
-    logDebug("[immersive] start gate tapped, requesting immersive mode...");
+    logDebug("[immersive] start button tapped, committing name + requesting immersive mode...");
+    commitFactoryName();
     requestImmersiveMode();
     startGateEl.classList.add("hidden");
   }
-  startGateEl.addEventListener("touchstart", dismissStartGate, { once: true, passive: true });
-  startGateEl.addEventListener("click", dismissStartGate, { once: true });
+  startGameBtn.addEventListener("click", dismissStartGate);
 
   ["fullscreenchange", "webkitfullscreenchange"].forEach(function (evName) {
     document.addEventListener(evName, function () {
@@ -1711,12 +1857,12 @@
   //   Entirely additive -- does not touch movement, camera, joystick,
   //   grass, lighting, or the tablet open/close logic above.
   // ---------------------------------------------------------------------
-  var BOTTLE_MACHINE_COST = 30;
-  var WATER_MACHINE_COST = 50;
-  var BOTTLE_COST = 1;
+  var BOTTLE_MACHINE_COST = 30000;
+  var WATER_MACHINE_COST = 50000;
+  var BOTTLE_COST = 1000;
   var BOTTLE_TIME_MS = 2000;
   var BOTTLE_VOLUME_ML = 250;
-  var WATER_PRICE_PER_1000ML = 2;
+  var WATER_PRICE_PER_1000ML = 2000;
   var WATER_FILL_TIME_MS = 3000;
   // Bottles pile up on the platform instead of flying to a fixed tray
   // grid, so keep far more of them around before culling the oldest.
@@ -1725,14 +1871,37 @@
   // Sales desk: sells filled bottles to walk-up customers. Capacity is
   // intentionally modest (a real countertop, not a warehouse) so the
   // player has to keep restocking it by hand.
-  var DESK_COST = 40;
+  var DESK_COST = 40000;
   var DESK_CAPACITY = 20;
-  var DESK_MIN_PRICE = 1;
-  var DESK_MAX_PRICE = 10;
-  var DESK_DEFAULT_PRICE = 3;
+  var DESK_MIN_PRICE = 1000;
+  var DESK_MAX_PRICE = 10000;
+  var DESK_PRICE_STEP = 500;
+  var DESK_DEFAULT_PRICE = 3000;
+
+  // Currency: Turkish Lira, always shown abbreviated (K / M) once the
+  // number gets large -- this is a drink-factory tycoon, not a bank
+  // statement, so "1.2M" reads far better than "1200000".
+  var CURRENCY_SYMBOL = "\u20BA";
+  function formatMoney(amount) {
+    var n = Math.round(amount);
+    var sign = n < 0 ? "-" : "";
+    n = Math.abs(n);
+    var out;
+    if (n >= 1000000) {
+      var m = n / 1000000;
+      out = (Math.round(m * 10) / 10) + "M";
+    } else if (n >= 1000) {
+      var k = n / 1000;
+      out = (Math.round(k * 10) / 10) + "K";
+    } else {
+      out = String(n);
+    }
+    out = out.replace(/\.0([KM])?$/, "$1");
+    return sign + CURRENCY_SYMBOL + out;
+  }
 
   var econ = {
-    budget: 100,
+    budget: 1000000,
     bottleMachineOwned: false,
     bottleMachinePlaced: false,
     waterMachineOwned: false,
@@ -1829,14 +1998,14 @@
   var selectedQty = 1;
 
   function renderBudget() {
-    var text = "$" + econ.budget;
+    var text = formatMoney(econ.budget);
     budgetChipValue.textContent = text;
     tpBudgetValueEls.forEach(function (el) { el.textContent = text; });
   }
 
   function renderBottleMachineCard() {
     if (!econ.bottleMachineOwned) {
-      bottleMachineStatusLine.textContent = "Satın alınmadı \u00B7 $" + BOTTLE_MACHINE_COST + " (tek seferlik)";
+      bottleMachineStatusLine.textContent = "Satın alınmadı \u00B7 " + formatMoney(BOTTLE_MACHINE_COST) + " (tek seferlik)";
       buyBottleMachineBtn.style.display = "";
       placeBottleMachineBtn.style.display = "none";
       moveBottleMachineBtn.style.display = "none";
@@ -1863,7 +2032,7 @@
 
   function renderWaterMachineCard() {
     if (!econ.waterMachineOwned) {
-      waterMachineStatusLine.textContent = "Satın alınmadı \u00B7 $" + WATER_MACHINE_COST + " (tek seferlik)";
+      waterMachineStatusLine.textContent = "Satın alınmadı \u00B7 " + formatMoney(WATER_MACHINE_COST) + " (tek seferlik)";
       buyWaterMachineBtn.style.display = "";
       placeWaterMachineBtn.style.display = "none";
       moveWaterMachineBtn.style.display = "none";
@@ -1890,7 +2059,7 @@
 
   function renderDeskCard() {
     if (!econ.deskOwned) {
-      deskMachineStatusLine.textContent = "Satın alınmadı \u00B7 $" + DESK_COST + " (tek seferlik)";
+      deskMachineStatusLine.textContent = "Satın alınmadı \u00B7 " + formatMoney(DESK_COST) + " (tek seferlik)";
       buyDeskBtn.style.display = "";
       placeDeskBtn.style.display = "none";
       moveDeskBtn.style.display = "none";
@@ -1924,7 +2093,7 @@
   }
 
   function renderDeskPriceCard() {
-    deskPriceValue.textContent = "$" + econ.deskPrice;
+    deskPriceValue.textContent = formatMoney(econ.deskPrice);
     deskPriceMinusBtn.disabled = econ.deskPrice <= DESK_MIN_PRICE;
     deskPricePlusBtn.disabled = econ.deskPrice >= DESK_MAX_PRICE;
   }
@@ -1936,14 +2105,14 @@
   function renderWaterResourceCard() {
     waterLevelLine.textContent = "Depoda: " + econ.waterML + " ML";
     var cost = (selectedWaterMl / 1000) * WATER_PRICE_PER_1000ML;
-    waterCostLine.textContent = "Maliyet: $" + cost;
+    waterCostLine.textContent = "Maliyet: " + formatMoney(cost);
     buyWaterBtn.disabled = econ.budget < cost;
   }
 
   function renderProductionCard() {
     var totalCost = selectedQty * BOTTLE_COST;
     var totalTime = (selectedQty * BOTTLE_TIME_MS / 1000).toFixed(0);
-    productionCostLine.textContent = "Toplam maliyet: $" + totalCost + " \u00B7 Süre: ~" + totalTime + " sn";
+    productionCostLine.textContent = "Toplam maliyet: " + formatMoney(totalCost) + " \u00B7 Süre: ~" + totalTime + " sn";
     var canAfford = econ.budget >= totalCost;
     startProductionBtn.disabled = econ.producing || !canAfford;
     startProductionBtn.textContent = econ.producing ? "ÜRETİLİYOR..." : "ÜRETİMİ BAŞLAT";
@@ -2058,12 +2227,12 @@
   });
   deskPriceMinusBtn.addEventListener("click", function () {
     if (econ.deskPrice <= DESK_MIN_PRICE) return;
-    econ.deskPrice -= 1;
+    econ.deskPrice -= DESK_PRICE_STEP;
     renderDeskPriceCard();
   });
   deskPricePlusBtn.addEventListener("click", function () {
     if (econ.deskPrice >= DESK_MAX_PRICE) return;
-    econ.deskPrice += 1;
+    econ.deskPrice += DESK_PRICE_STEP;
     renderDeskPriceCard();
   });
 
@@ -2231,6 +2400,7 @@
   // -----------------------------------------------------------------
   var PROXIMITY_RADIUS = 3.2;
   var currentInteractMode = null;
+  var currentInteractTier = 0;
 
   function distXZ(a, b) {
     var dx = a.x - b.x, dz = a.z - b.z;
@@ -2246,6 +2416,7 @@
 
     var mode = null;
     var label = "";
+    var tier = 0;
 
     if (carriedBottleMesh) {
       if (carriedBottleFilled) {
@@ -2253,7 +2424,7 @@
             distXZ(yawObject.position, machines.desk.group.position) <= PROXIMITY_RADIUS) {
           if (econ.deskStock < DESK_CAPACITY) {
             mode = "placeOnDesk";
-            label = "ŞİŞEYİ MASAYA BIRAK";
+            label = carriedBottleCount > 1 ? (carriedBottleCount + "x MASAYA BIRAK") : "ŞİŞEYİ MASAYA BIRAK";
           } else {
             mode = "deskFull";
             label = "MASA DOLU";
@@ -2262,14 +2433,19 @@
       } else if (econ.waterMachinePlaced && machines.water.group) {
         if (distXZ(yawObject.position, machines.water.group.position) <= PROXIMITY_RADIUS) {
           mode = "insertBottle";
-          label = "ŞİŞEYİ MAKİNEYE KOY";
+          label = carriedBottleCount > 1 ? (carriedBottleCount + "x MAKİNEYE KOY") : "ŞİŞEYİ MAKİNEYE KOY";
         }
+      }
+      if (!mode) {
+        mode = "dropBottle";
+        label = carriedBottleCount > 1 ? (carriedBottleCount + "x ŞİŞEYİ BIRAK") : "ŞİŞEYİ BIRAK";
       }
     } else if (econ.bottleMachinePlaced && machines.bottle.group &&
         distXZ(yawObject.position, machines.bottle.group.position) <= PROXIMITY_RADIUS) {
       if (bottlePile.liveBottles.length > 0) {
+        tier = bulkTierFor(bottlePile.liveBottles.length);
         mode = "pickupEmpty";
-        label = "ŞİŞE AL";
+        label = tier > 1 ? (tier + "x TOPLA") : "ŞİŞE AL";
       } else {
         mode = "bottleMenu";
         label = "ÜRETİM MENÜSÜ";
@@ -2277,11 +2453,13 @@
     } else if (econ.waterMachinePlaced && machines.water.group &&
         distXZ(yawObject.position, machines.water.group.position) <= PROXIMITY_RADIUS &&
         filledPile.liveBottles.length > 0) {
+      tier = bulkTierFor(filledPile.liveBottles.length);
       mode = "pickupFilled";
-      label = "DOLU ŞİŞE AL";
+      label = tier > 1 ? (tier + "x TOPLA") : "DOLU ŞİŞE AL";
     }
 
     currentInteractMode = mode;
+    currentInteractTier = tier;
     if (mode && !productionOpen) {
       machineInteractBtn.classList.add("visible");
       machineInteractLabel.textContent = label;
@@ -2298,10 +2476,11 @@
 
   machineInteractBtn.addEventListener("click", function () {
     if (currentInteractMode === "bottleMenu") openProductionPanel();
-    else if (currentInteractMode === "pickupEmpty") pickUpEmptyBottle();
+    else if (currentInteractMode === "pickupEmpty") pickUpEmptyBottle(currentInteractTier);
     else if (currentInteractMode === "insertBottle") insertCarriedBottleIntoWaterMachine();
-    else if (currentInteractMode === "pickupFilled") pickUpFilledBottle();
+    else if (currentInteractMode === "pickupFilled") pickUpFilledBottle(currentInteractTier);
     else if (currentInteractMode === "placeOnDesk") placeBottleOnDesk();
+    else if (currentInteractMode === "dropBottle") dropCarriedBottle();
   });
 
   function runProductionBatch(qty) {
@@ -2350,14 +2529,15 @@
   var waterProcessing = false;
   var carriedBottleMesh = null;
   var carriedBottleFilled = false;
+  var carriedBottleCount = 0;
 
   function buildBottleMachine() {
     var group = new THREE.Group();
-    var bodyMat = new THREE.MeshStandardMaterial({ color: 0xdedfe0, metalness: 0.65, roughness: 0.3 });
-    var darkMat = new THREE.MeshStandardMaterial({ color: 0x2b2d30, metalness: 0.4, roughness: 0.5 });
-    var accentMat = new THREE.MeshStandardMaterial({ color: 0x9fb6c2, metalness: 0.5, roughness: 0.25 });
-    var footMat = new THREE.MeshStandardMaterial({ color: 0x1c1d1f, metalness: 0.3, roughness: 0.6 });
-    var stripeMat = new THREE.MeshStandardMaterial({ color: 0x2f6f8a, metalness: 0.3, roughness: 0.4 });
+    var bodyMat = new THREE.MeshStandardMaterial({ color: 0xf0f3f1, metalness: 0.04, roughness: 0.55 });
+    var darkMat = new THREE.MeshStandardMaterial({ color: 0x22242a, metalness: 0.12, roughness: 0.6 });
+    var accentMat = new THREE.MeshStandardMaterial({ color: 0x2dd6c4, metalness: 0.08, roughness: 0.4 });
+    var footMat = new THREE.MeshStandardMaterial({ color: 0x17181a, metalness: 0.1, roughness: 0.7 });
+    var stripeMat = new THREE.MeshStandardMaterial({ color: 0x2dd6c4, metalness: 0.05, roughness: 0.45 });
 
     var footGeo = new THREE.CylinderGeometry(0.07, 0.09, 0.14, 10);
     var footOffsets = [[-0.62, -0.34], [0.62, -0.34], [-0.62, 0.34], [0.62, 0.34]];
@@ -2382,26 +2562,42 @@
     body.receiveShadow = true;
     group.add(body);
 
+    // Thin dark seams along the body's vertical edges -- without these
+    // a single flat-colored box reads as a cardboard cutout instead of
+    // a manufactured cabinet with actual panel lines.
+    var seamGeo = new THREE.BoxGeometry(0.02, bodyHeight, 0.02);
+    [[-0.75, -0.5], [0.75, -0.5], [-0.75, 0.5], [0.75, 0.5]].forEach(function (o) {
+      var seam = new THREE.Mesh(seamGeo, darkMat);
+      seam.position.set(o[0], bodyBottomY + bodyHeight / 2, o[1]);
+      group.add(seam);
+    });
+
     var stripe = new THREE.Mesh(new THREE.BoxGeometry(1.52, 0.12, 1.02), stripeMat);
     stripe.position.y = bodyBottomY + 0.32;
     group.add(stripe);
 
-    var hopper = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.55, 0.55, 16), accentMat);
+    // Brand plaque: a small raised accent card on the front face, the
+    // same role a vinyl logo sticker plays on a real vending machine.
+    var plaque = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.16, 0.02), accentMat);
+    plaque.position.set(0, bodyBottomY + bodyHeight - 0.18, 0.51);
+    group.add(plaque);
+
+    var hopper = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.55, 0.55, 16), darkMat);
     hopper.position.y = bodyBottomY + bodyHeight + 0.24;
     hopper.castShadow = true;
     group.add(hopper);
-    var hopperRim = new THREE.Mesh(new THREE.CylinderGeometry(0.58, 0.58, 0.08, 16), darkMat);
+    var hopperRim = new THREE.Mesh(new THREE.CylinderGeometry(0.58, 0.58, 0.08, 16), accentMat);
     hopperRim.position.y = bodyBottomY + bodyHeight + 0.5;
     group.add(hopperRim);
 
-    var panelY = bodyBottomY + bodyHeight - 0.55;
+    var panelY = bodyBottomY + bodyHeight - 0.75;
     var panel = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.62, 0.05), darkMat);
     panel.position.set(0, panelY, 0.51);
     group.add(panel);
 
     var screen = new THREE.Mesh(
       new THREE.BoxGeometry(0.5, 0.28, 0.02),
-      new THREE.MeshStandardMaterial({ color: 0x0c2a1f, emissive: 0x1c6b3f, emissiveIntensity: 0.55, roughness: 0.4 })
+      new THREE.MeshStandardMaterial({ color: 0x0c2a1f, emissive: 0x1fd6a8, emissiveIntensity: 0.65, roughness: 0.4 })
     );
     screen.position.set(0, panelY + 0.1, 0.545);
     group.add(screen);
@@ -2416,7 +2612,7 @@
 
     var statusLight = new THREE.Mesh(
       new THREE.SphereGeometry(0.05, 12, 12),
-      new THREE.MeshStandardMaterial({ color: 0x2e6b3a, emissive: 0x123314, emissiveIntensity: 0.6 })
+      new THREE.MeshStandardMaterial({ color: 0x2e6b3a, emissive: 0x2ee66a, emissiveIntensity: 0.7 })
     );
     statusLight.position.set(0, panelY + 0.36, 0.545);
     group.add(statusLight);
@@ -2446,11 +2642,11 @@
 
   function buildWaterMachine() {
     var group = new THREE.Group();
-    var bodyMat = new THREE.MeshStandardMaterial({ color: 0xdfe9ec, metalness: 0.6, roughness: 0.3 });
-    var darkMat = new THREE.MeshStandardMaterial({ color: 0x22343a, metalness: 0.4, roughness: 0.5 });
-    var accentMat = new THREE.MeshStandardMaterial({ color: 0x2f8fd4, metalness: 0.4, roughness: 0.25 });
-    var footMat = new THREE.MeshStandardMaterial({ color: 0x1c1d1f, metalness: 0.3, roughness: 0.6 });
-    var tankMat = new THREE.MeshStandardMaterial({ color: 0x8fd0ea, transparent: true, opacity: 0.55, roughness: 0.1, metalness: 0 });
+    var bodyMat = new THREE.MeshStandardMaterial({ color: 0xf0f3f1, metalness: 0.04, roughness: 0.55 });
+    var darkMat = new THREE.MeshStandardMaterial({ color: 0x1c2a30, metalness: 0.12, roughness: 0.6 });
+    var accentMat = new THREE.MeshStandardMaterial({ color: 0x2dd6c4, metalness: 0.08, roughness: 0.4 });
+    var footMat = new THREE.MeshStandardMaterial({ color: 0x17181a, metalness: 0.1, roughness: 0.7 });
+    var tankMat = new THREE.MeshStandardMaterial({ color: 0x7fc9e8, transparent: true, opacity: 0.6, roughness: 0.15, metalness: 0 });
 
     var footGeo = new THREE.CylinderGeometry(0.07, 0.09, 0.14, 10);
     var footOffsets = [[-0.62, -0.34], [0.62, -0.34], [-0.62, 0.34], [0.62, 0.34]];
@@ -2475,9 +2671,20 @@
     body.receiveShadow = true;
     group.add(body);
 
+    var seamGeo = new THREE.BoxGeometry(0.02, bodyHeight, 0.02);
+    [[-0.75, -0.5], [0.75, -0.5], [-0.75, 0.5], [0.75, 0.5]].forEach(function (o) {
+      var seam = new THREE.Mesh(seamGeo, darkMat);
+      seam.position.set(o[0], bodyBottomY + bodyHeight / 2, o[1]);
+      group.add(seam);
+    });
+
     var stripe = new THREE.Mesh(new THREE.BoxGeometry(1.52, 0.12, 1.02), accentMat);
     stripe.position.y = bodyBottomY + 0.32;
     group.add(stripe);
+
+    var plaque = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.16, 0.02), accentMat);
+    plaque.position.set(0, bodyBottomY + bodyHeight - 0.16, 0.51);
+    group.add(plaque);
 
     var tank = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.42, 0.85, 18), tankMat);
     tank.position.y = bodyBottomY + bodyHeight + 0.42;
@@ -2487,21 +2694,21 @@
     tankCap.position.y = bodyBottomY + bodyHeight + 0.85;
     group.add(tankCap);
 
-    var panelY = bodyBottomY + bodyHeight - 0.5;
+    var panelY = bodyBottomY + bodyHeight - 0.68;
     var panel = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.5, 0.05), darkMat);
     panel.position.set(0, panelY, 0.51);
     group.add(panel);
 
     var screen = new THREE.Mesh(
       new THREE.BoxGeometry(0.5, 0.24, 0.02),
-      new THREE.MeshStandardMaterial({ color: 0x0c1f2a, emissive: 0x1c6bab, emissiveIntensity: 0.55, roughness: 0.4 })
+      new THREE.MeshStandardMaterial({ color: 0x0c1f2a, emissive: 0x2fb6e6, emissiveIntensity: 0.65, roughness: 0.4 })
     );
     screen.position.set(0, panelY + 0.08, 0.545);
     group.add(screen);
 
     var statusLight = new THREE.Mesh(
       new THREE.SphereGeometry(0.05, 12, 12),
-      new THREE.MeshStandardMaterial({ color: 0x2e6b3a, emissive: 0x123314, emissiveIntensity: 0.6 })
+      new THREE.MeshStandardMaterial({ color: 0x2e6b3a, emissive: 0x2ee66a, emissiveIntensity: 0.7 })
     );
     statusLight.position.set(0, panelY + 0.3, 0.545);
     group.add(statusLight);
@@ -2535,7 +2742,7 @@
     var darkWoodMat = new THREE.MeshStandardMaterial({ color: 0x50311a, roughness: 0.75 });
     var counterMat = new THREE.MeshStandardMaterial({ color: 0xf3e6cb, roughness: 0.5 });
     var accentMat = new THREE.MeshStandardMaterial({ color: 0x2dd6c4, roughness: 0.4 });
-    var poleMat = new THREE.MeshStandardMaterial({ color: 0x3a3a3a, metalness: 0.3, roughness: 0.5 });
+    var poleMat = new THREE.MeshStandardMaterial({ color: 0x3a3a3a, metalness: 0.15, roughness: 0.6 });
     var canopyMat = new THREE.MeshStandardMaterial({ color: 0xff6b5b, roughness: 0.6, side: THREE.DoubleSide });
     var canopyRimMat = new THREE.MeshStandardMaterial({ color: 0xfff4e6, roughness: 0.6 });
 
@@ -2885,7 +3092,7 @@
             renderBudget();
             renderDeskStockVisual();
             renderDeskStockCard();
-            flashWorldToast("Satış! +$" + econ.deskPrice);
+            flashWorldToast("Satış! +" + formatMoney(econ.deskPrice));
           }
           cb.state = "leaving";
         }
@@ -2917,49 +3124,99 @@
   function updateCarryChip() {
     carryChip.classList.toggle("visible", !!carriedBottleMesh);
     if (carriedBottleMesh) {
-      carryChipLabel.textContent = carriedBottleFilled ? "Elimde dolu şişe var" : "Elimde boş şişe var";
+      var kind = carriedBottleFilled ? "dolu" : "boş";
+      carryChipLabel.textContent = carriedBottleCount > 1
+        ? ("Elimde " + carriedBottleCount + " " + kind + " şişe var")
+        : ("Elimde " + kind + " şişe var");
     }
   }
 
-  function pickUpEmptyBottle() {
+  // Bulk pickup tiers: once enough bottles have piled up, offer to grab
+  // a whole batch in one go instead of one at a time. Capped at 20 --
+  // beyond that it stops mattering and just adds friction.
+  function bulkTierFor(n) {
+    if (n >= 20) return 20;
+    if (n >= 10) return 10;
+    if (n >= 5) return 5;
+    return n > 0 ? 1 : 0;
+  }
+
+  function pickUpEmptyBottle(tier) {
     if (carriedBottleMesh) return;
-    if (bottlePile.liveBottles.length === 0) return;
-    var mesh = bottlePile.liveBottles.pop();
-    scene.remove(mesh);
-    mesh.traverse(disposeObj);
+    var n = Math.min(tier || 1, bottlePile.liveBottles.length);
+    if (n <= 0) return;
+    for (var i = 0; i < n; i++) {
+      var mesh = bottlePile.liveBottles.pop();
+      scene.remove(mesh);
+      mesh.traverse(disposeObj);
+    }
     carriedBottleFilled = false;
+    carriedBottleCount = n;
     carriedBottleMesh = buildCarriedBottleVisual(false);
     camera.add(carriedBottleMesh);
     updateCarryChip();
   }
 
-  function pickUpFilledBottle() {
+  function pickUpFilledBottle(tier) {
     if (carriedBottleMesh) return;
-    if (filledPile.liveBottles.length === 0) return;
-    var mesh = filledPile.liveBottles.pop();
-    scene.remove(mesh);
-    mesh.traverse(disposeObj);
+    var n = Math.min(tier || 1, filledPile.liveBottles.length);
+    if (n <= 0) return;
+    for (var i = 0; i < n; i++) {
+      var mesh = filledPile.liveBottles.pop();
+      scene.remove(mesh);
+      mesh.traverse(disposeObj);
+    }
     carriedBottleFilled = true;
+    carriedBottleCount = n;
     carriedBottleMesh = buildCarriedBottleVisual(true);
     camera.add(carriedBottleMesh);
+    updateCarryChip();
+  }
+
+  // Always-available escape hatch: whatever is in hand, whenever no
+  // machine/desk interaction applies, the player can just set it down
+  // instead of being stuck carrying it forever.
+  function dropCarriedBottle() {
+    if (!carriedBottleMesh) return;
+    var ground = buildBottle(carriedBottleFilled);
+    ground.scale.set(1.3, 1.3, 1.3);
+    var fwd = new THREE.Vector3(0, 0, -1).applyQuaternion(yawObject.quaternion);
+    ground.position.copy(yawObject.position).addScaledVector(fwd, 0.7);
+    ground.position.y = 0;
+    ground.rotation.y = Math.random() * Math.PI * 2;
+    scene.add(ground);
+    camera.remove(carriedBottleMesh);
+    carriedBottleMesh.traverse(disposeObj);
+    carriedBottleMesh = null;
+    carriedBottleFilled = false;
+    carriedBottleCount = 0;
     updateCarryChip();
   }
 
   function placeBottleOnDesk() {
     if (!carriedBottleMesh || !carriedBottleFilled) return;
     if (!machines.desk.group) return;
-    if (econ.deskStock >= DESK_CAPACITY) {
+    var room = DESK_CAPACITY - econ.deskStock;
+    if (room <= 0) {
       flashWorldToast("Masa dolu!");
       return;
     }
-    camera.remove(carriedBottleMesh);
-    carriedBottleMesh.traverse(disposeObj);
-    carriedBottleMesh = null;
-    carriedBottleFilled = false;
-    updateCarryChip();
-    econ.deskStock++;
+    var requested = carriedBottleCount;
+    var n = Math.min(requested, room);
+    econ.deskStock += n;
+    carriedBottleCount = requested - n;
     renderDeskStockVisual();
     renderDeskStockCard();
+    if (carriedBottleCount <= 0) {
+      camera.remove(carriedBottleMesh);
+      carriedBottleMesh.traverse(disposeObj);
+      carriedBottleMesh = null;
+      carriedBottleFilled = false;
+    }
+    updateCarryChip();
+    flashWorldToast(n < requested
+      ? (n + " şişe masaya bırakıldı, masa doldu")
+      : (n > 1 ? (n + " şişe masaya bırakıldı") : "Şişe masaya bırakıldı"));
   }
 
   function runWaterProcessing() {
@@ -2981,19 +3238,28 @@
 
   function insertCarriedBottleIntoWaterMachine() {
     if (!carriedBottleMesh || carriedBottleFilled) return;
-    if (econ.waterML < BOTTLE_VOLUME_ML) {
+    var requested = carriedBottleCount;
+    var maxByWater = Math.floor(econ.waterML / BOTTLE_VOLUME_ML);
+    if (maxByWater <= 0) {
       flashWorldToast("Yetersiz su! Tabletten su satın al.");
       return;
     }
-    econ.waterML -= BOTTLE_VOLUME_ML;
-    camera.remove(carriedBottleMesh);
-    carriedBottleMesh.traverse(disposeObj);
-    carriedBottleMesh = null;
-    carriedBottleFilled = false;
-    updateCarryChip();
+    var n = Math.min(requested, maxByWater);
+    econ.waterML -= n * BOTTLE_VOLUME_ML;
+    carriedBottleCount = requested - n;
     renderWaterResourceCard();
-    waterQueue++;
+    waterQueue += n;
     runWaterProcessing();
+    if (carriedBottleCount <= 0) {
+      camera.remove(carriedBottleMesh);
+      carriedBottleMesh.traverse(disposeObj);
+      carriedBottleMesh = null;
+      carriedBottleFilled = false;
+    }
+    updateCarryChip();
+    flashWorldToast(n < requested
+      ? (n + " şişe makineye kondu, su bitti")
+      : (n > 1 ? (n + " şişe makineye kondu") : "Şişe makineye kondu"));
   }
 
   // -----------------------------------------------------------------
