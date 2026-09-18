@@ -489,7 +489,8 @@
   #tabletCategoriesView,
   #tabletBottleView,
   #tabletWaterView,
-  #tabletDeskView {
+  #tabletDeskView,
+  #tabletStaffView {
     width: min(560px, 92%);
     max-height: 92%;
     overflow-y: auto;
@@ -1106,6 +1107,24 @@
               </svg>
             </div>
           </button>
+
+          <button id="catStaffBtn" class="tp-nav-card" type="button">
+            <div class="tp-card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#e9ecee" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="8" r="3.2"></circle>
+                <path d="M5 20c0-3.9 3.1-7 7-7s7 3.1 7 7"></path>
+              </svg>
+            </div>
+            <div class="tp-nav-card-text">
+              <div class="tp-nav-card-title">PERSONEL</div>
+              <div class="tp-nav-card-sub">Boş şişeleri otomatik taşır</div>
+            </div>
+            <div class="tp-nav-card-arrow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#e9ecee" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 5 16 12 9 19"></polyline>
+              </svg>
+            </div>
+          </button>
         </div>
 
         <div id="tabletBottleView" class="tablet-view">
@@ -1295,6 +1314,52 @@
 
           <div class="tp-card" id="deskMachineHintCard" style="display:none;">
             <div class="tp-card-sub" style="margin-top:0; text-align:center;">Dolu bir şişeyi alıp masanın yanına getir, bırak; müşteriler gelip satın alsın.</div>
+          </div>
+        </div>
+
+        <div id="tabletStaffView" class="tablet-view">
+          <div class="tp-header">
+            <button id="staffBackBtn" class="tp-back-btn" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 5 8 12 15 19"></polyline>
+              </svg>
+              <span>GERİ</span>
+            </button>
+            <div class="tp-title">PERSONEL</div>
+            <div class="tp-budget">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#e9ecee" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M9.2 15.2c0 1.1 1.1 2 2.8 2s2.8-.8 2.8-1.9c0-3-5.6-1.5-5.6-4.4 0-1.1 1.1-1.9 2.8-1.9s2.8.9 2.8 2"></path>
+              </svg>
+              <span class="tp-budget-value">$100</span>
+            </div>
+          </div>
+
+          <div class="tp-card">
+            <div class="tp-card-row">
+              <div class="tp-card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#e9ecee" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="8" r="3.2"></circle>
+                  <path d="M5 20c0-3.9 3.1-7 7-7s7 3.1 7 7"></path>
+                </svg>
+              </div>
+              <div>
+                <div class="tp-card-title">ŞİŞE TAŞIYICI</div>
+                <div class="tp-card-sub" id="staffStatusLine">Kiralanmadı &middot; $130 (tek seferlik)</div>
+              </div>
+            </div>
+            <button id="hireStaffBtn" class="tp-btn" type="button">PERSONEL KİRALA &mdash; $130</button>
+            <div id="staffHireNote" class="tp-note" style="display:none;">Yetersiz bütçe</div>
+          </div>
+
+          <div class="tp-card" id="staffLevelCard" style="display:none;">
+            <div class="tp-card-title" style="text-align:center;">SEVİYE <span id="staffLevelValue">1</span> / 5</div>
+            <div class="tp-card-sub" id="staffCapacityLine" style="text-align:center; margin-top:0;">Taşıma kapasitesi: 2 şişe / sefer</div>
+            <button id="upgradeStaffBtn" class="tp-btn secondary" type="button">SEVİYE ATLA</button>
+          </div>
+
+          <div class="tp-card" id="staffHintCard" style="display:none;">
+            <div class="tp-card-sub" style="margin-top:0; text-align:center;">Şişe makinesi ve su makinesi yerleştirilmişse personel otomatik çalışır.</div>
           </div>
         </div>
 
@@ -1611,6 +1676,47 @@
   scene.add(ground);
 
   // ---------------------------------------------------------------------
+  // Factory plot: machines and the sales desk can only be placed inside
+  // this marked square (customers, in turn, only ever gather here) --
+  // without it nothing stopped the player from scattering machines all
+  // over a 400-unit map, an empty desk with a queue nowhere near it.
+  // The player can still walk anywhere; only *placement* is bounded.
+  // ---------------------------------------------------------------------
+  var PLOT_HALF = 10.5;
+  var plotMat = new THREE.MeshStandardMaterial({ color: 0x5c8f52, roughness: 0.95, metalness: 0 });
+  var plotFloor = new THREE.Mesh(new THREE.PlaneGeometry(PLOT_HALF * 2, PLOT_HALF * 2), plotMat);
+  plotFloor.rotation.x = -Math.PI / 2;
+  plotFloor.position.y = 0.01;
+  plotFloor.receiveShadow = true;
+  scene.add(plotFloor);
+
+  var plotEdgeMat = new THREE.MeshStandardMaterial({ color: 0xf2c94c, roughness: 0.6, metalness: 0.1 });
+  var edgeGeoLong = new THREE.BoxGeometry(PLOT_HALF * 2 + 0.3, 0.12, 0.12);
+  [-PLOT_HALF, PLOT_HALF].forEach(function (z) {
+    var edge = new THREE.Mesh(edgeGeoLong, plotEdgeMat);
+    edge.position.set(0, 0.06, z);
+    scene.add(edge);
+    var edge2 = new THREE.Mesh(edgeGeoLong, plotEdgeMat);
+    edge2.rotation.y = Math.PI / 2;
+    edge2.position.set(z, 0.06, 0);
+    scene.add(edge2);
+  });
+  var postGeo = new THREE.CylinderGeometry(0.09, 0.11, 0.9, 10);
+  [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(function (o) {
+    var post = new THREE.Mesh(postGeo, plotEdgeMat);
+    post.position.set(o[0] * PLOT_HALF, 0.45, o[1] * PLOT_HALF);
+    post.castShadow = true;
+    scene.add(post);
+  });
+
+  function clampToPlot(x, z) {
+    return [
+      THREE.MathUtils.clamp(x, -PLOT_HALF + 1, PLOT_HALF - 1),
+      THREE.MathUtils.clamp(z, -PLOT_HALF + 1, PLOT_HALF - 1)
+    ];
+  }
+
+  // ---------------------------------------------------------------------
   // Resize handling
   // ---------------------------------------------------------------------
   function onResize() {
@@ -1763,6 +1869,7 @@
   });
 
   var startGateEl = document.getElementById("startGate");
+  var hasSavedGame = false; // set once loadSavedState()/applySavedState() run, at script end
 
   // Loading screen: everything here is local/procedural (no real assets
   // to fetch), so this is a deliberate first-impression beat rather than
@@ -1781,6 +1888,19 @@
     } else {
       loadingScreenEl.classList.add("hidden");
       startGateEl.classList.remove("hidden");
+      // A save already restored by the time this fires (it's applied
+      // synchronously at script end, this callback only runs later) --
+      // so the gate becomes a "welcome back" screen instead of asking
+      // the player to name their factory all over again.
+      if (hasSavedGame) {
+        factoryNameInput.value = factoryName;
+        var gateTitleEl = document.querySelector(".gate-title");
+        var gateEyebrowEl = document.querySelector(".gate-eyebrow");
+        var startBtnLabel = startGameBtn.querySelector("span");
+        if (gateEyebrowEl) gateEyebrowEl.textContent = "KALDIĞIN YERDEN DEVAM";
+        if (gateTitleEl) gateTitleEl.textContent = "Fabrikana tekrar hoş geldin";
+        if (startBtnLabel) startBtnLabel.textContent = "DEVAM ET";
+      }
     }
   }
   requestAnimationFrame(tickLoading);
@@ -1808,6 +1928,7 @@
     logDebug("[immersive] start button tapped, committing name + requesting immersive mode...");
     commitFactoryName();
     requestImmersiveMode();
+    ensureAudioCtx(); // this tap is a genuine gesture, so audio unlocks here too
     startGateEl.classList.add("hidden");
   }
   startGameBtn.addEventListener("click", dismissStartGate);
@@ -1857,12 +1978,12 @@
   //   Entirely additive -- does not touch movement, camera, joystick,
   //   grass, lighting, or the tablet open/close logic above.
   // ---------------------------------------------------------------------
-  var BOTTLE_MACHINE_COST = 30000;
-  var WATER_MACHINE_COST = 50000;
-  var BOTTLE_COST = 1000;
+  var BOTTLE_MACHINE_COST = 60;
+  var WATER_MACHINE_COST = 90;
+  var BOTTLE_COST = 1;
   var BOTTLE_TIME_MS = 2000;
   var BOTTLE_VOLUME_ML = 250;
-  var WATER_PRICE_PER_1000ML = 2000;
+  var WATER_PRICE_PER_1000ML = 4;
   var WATER_FILL_TIME_MS = 3000;
   // Bottles pile up on the platform instead of flying to a fixed tray
   // grid, so keep far more of them around before culling the oldest.
@@ -1870,13 +1991,25 @@
 
   // Sales desk: sells filled bottles to walk-up customers. Capacity is
   // intentionally modest (a real countertop, not a warehouse) so the
-  // player has to keep restocking it by hand.
-  var DESK_COST = 40000;
+  // player has to keep restocking it by hand. Cost per filled bottle is
+  // BOTTLE_COST + (BOTTLE_VOLUME_ML/1000)*WATER_PRICE_PER_1000ML = ~2,
+  // so the default sale price gives a sane ~2x markup instead of the
+  // old four-digit "a bottle of water costs a thousand lira" pricing.
+  var DESK_COST = 70;
   var DESK_CAPACITY = 20;
-  var DESK_MIN_PRICE = 1000;
-  var DESK_MAX_PRICE = 10000;
-  var DESK_PRICE_STEP = 500;
-  var DESK_DEFAULT_PRICE = 3000;
+  var DESK_MIN_PRICE = 2;
+  var DESK_MAX_PRICE = 10;
+  var DESK_PRICE_STEP = 1;
+  var DESK_DEFAULT_PRICE = 4;
+
+  // Staff: an automatic worker who shuttles empty bottles from the
+  // bottle machine to the water machine, freeing the player from that
+  // one manual chore. Capacity doubles per level, capped at level 5 so
+  // it never quietly outgrows the desk's own 20-bottle capacity.
+  var STAFF_HIRE_COST = 130;
+  var STAFF_CAPACITY_BASE = 2;
+  var STAFF_MAX_LEVEL = 5;
+  var STAFF_UPGRADE_COSTS = { 1: 80, 2: 140, 3: 220, 4: 320 };
 
   // Currency: Turkish Lira, always shown abbreviated (K / M) once the
   // number gets large -- this is a drink-factory tycoon, not a bank
@@ -1901,7 +2034,7 @@
   }
 
   var econ = {
-    budget: 1000000,
+    budget: 250,
     bottleMachineOwned: false,
     bottleMachinePlaced: false,
     waterMachineOwned: false,
@@ -1911,12 +2044,114 @@
     deskOwned: false,
     deskPlaced: false,
     deskStock: 0,
-    deskPrice: DESK_DEFAULT_PRICE
+    deskPrice: DESK_DEFAULT_PRICE,
+    staffOwned: false,
+    staffLevel: 0
   };
 
   function disposeObj(o) {
     if (o.geometry) o.geometry.dispose();
     if (o.material) o.material.dispose();
+  }
+
+  // ---------------------------------------------------------------------
+  // Autosave: everything that matters (budget, ownership, machine
+  // positions, stock, staff level, factory name) round-trips through
+  // localStorage. Saves happen on a timer plus right after the actions
+  // that actually change something, so progress is never more than a
+  // few seconds old. Every call is wrapped in try/catch -- storage can
+  // be blocked (private browsing, permissions) and that must never
+  // break the game, just silently skip saving.
+  // ---------------------------------------------------------------------
+  var SAVE_KEY = "iozDrinkCompanySave_v1";
+  var saveDebounceTimer = null;
+
+  function serializeState() {
+    var m = {};
+    ["bottle", "water", "desk"].forEach(function (key) {
+      var mm = machines[key];
+      if (mm && mm.group && econ[mm.placedKey]) {
+        m[key] = { x: mm.group.position.x, z: mm.group.position.z, ry: mm.group.rotation.y };
+      } else {
+        m[key] = null;
+      }
+    });
+    return {
+      v: 1,
+      factoryName: factoryName,
+      budget: econ.budget,
+      bottleMachineOwned: econ.bottleMachineOwned,
+      waterMachineOwned: econ.waterMachineOwned,
+      waterML: econ.waterML,
+      deskOwned: econ.deskOwned,
+      deskStock: econ.deskStock,
+      deskPrice: econ.deskPrice,
+      staffOwned: econ.staffOwned,
+      staffLevel: econ.staffLevel,
+      machines: m
+    };
+  }
+
+  function saveGameNow() {
+    try {
+      localStorage.setItem(SAVE_KEY, JSON.stringify(serializeState()));
+    } catch (e) { /* storage unavailable -- nothing else to do */ }
+  }
+
+  function saveGameSoon() {
+    if (saveDebounceTimer) clearTimeout(saveDebounceTimer);
+    saveDebounceTimer = setTimeout(saveGameNow, 600);
+  }
+
+  function loadSavedState() {
+    try {
+      var raw = localStorage.getItem(SAVE_KEY);
+      if (!raw) return null;
+      var data = JSON.parse(raw);
+      if (!data || typeof data !== "object") return null;
+      return data;
+    } catch (e) { return null; }
+  }
+
+  function finalizeMachinePlacement(kind, x, z, ry) {
+    var m = machines[kind];
+    if (!m.group) m.group = m.build();
+    m.group.position.set(x, 0, z);
+    m.group.rotation.y = ry || 0;
+    scene.add(m.group);
+    m.position.set(x, 0, z);
+    econ[m.placedKey] = true;
+    if (m.onPlaced) m.onPlaced();
+  }
+
+  function applySavedState(data) {
+    if (data.factoryName) factoryName = data.factoryName;
+    if (typeof data.budget === "number") econ.budget = data.budget;
+    econ.bottleMachineOwned = !!data.bottleMachineOwned;
+    econ.waterMachineOwned = !!data.waterMachineOwned;
+    if (typeof data.waterML === "number") econ.waterML = data.waterML;
+    econ.deskOwned = !!data.deskOwned;
+    if (typeof data.deskStock === "number") econ.deskStock = data.deskStock;
+    if (typeof data.deskPrice === "number") econ.deskPrice = data.deskPrice;
+    econ.staffOwned = !!data.staffOwned;
+    econ.staffLevel = typeof data.staffLevel === "number" ? data.staffLevel : (econ.staffOwned ? 1 : 0);
+
+    if (data.machines) {
+      ["bottle", "water", "desk"].forEach(function (key) {
+        var md = data.machines[key];
+        if (md && typeof md.x === "number") {
+          econ.bottleMachineOwned = econ.bottleMachineOwned || key === "bottle";
+          econ.waterMachineOwned = econ.waterMachineOwned || key === "water";
+          econ.deskOwned = econ.deskOwned || key === "desk";
+          finalizeMachinePlacement(key, md.x, md.z, md.ry);
+        }
+      });
+    }
+    renderDeskStockVisual();
+    ensureStaffVisual();
+    renderBudget();
+    if (tabletWordmarkEl) tabletWordmarkEl.textContent = factoryName.toUpperCase();
+    document.title = factoryName;
   }
 
   var budgetChipValue = document.getElementById("budgetChipValue");
@@ -1969,6 +2204,17 @@
   var deskPricePlusBtn = document.getElementById("deskPricePlusBtn");
   var deskStockLine = document.getElementById("deskStockLine");
   var carryChipLabel = document.getElementById("carryChipLabel");
+
+  var catStaffBtn = document.getElementById("catStaffBtn");
+  var staffBackBtn = document.getElementById("staffBackBtn");
+  var hireStaffBtn = document.getElementById("hireStaffBtn");
+  var upgradeStaffBtn = document.getElementById("upgradeStaffBtn");
+  var staffStatusLine = document.getElementById("staffStatusLine");
+  var staffHireNote = document.getElementById("staffHireNote");
+  var staffLevelCard = document.getElementById("staffLevelCard");
+  var staffLevelValue = document.getElementById("staffLevelValue");
+  var staffCapacityLine = document.getElementById("staffCapacityLine");
+  var staffHintCard = document.getElementById("staffHintCard");
 
   var qtyButtons = Array.prototype.slice.call(document.querySelectorAll(".tp-qty-btn:not(.tp-water-qty-btn)"));
   var startProductionBtn = document.getElementById("startProductionBtn");
@@ -2054,6 +2300,37 @@
       moveWaterMachineBtn.style.display = "";
       waterMachineHintCard.style.display = "block";
       waterMachineNote.style.display = "none";
+    }
+  }
+
+  function staffCapacity(level) {
+    return STAFF_CAPACITY_BASE * Math.pow(2, level - 1);
+  }
+
+  function renderStaffCard() {
+    if (!econ.staffOwned) {
+      staffStatusLine.textContent = "Kiralanmadı \u00B7 " + formatMoney(STAFF_HIRE_COST) + " (tek seferlik)";
+      hireStaffBtn.style.display = "";
+      staffLevelCard.style.display = "none";
+      staffHintCard.style.display = "none";
+      hireStaffBtn.disabled = econ.budget < STAFF_HIRE_COST;
+      staffHireNote.style.display = econ.budget < STAFF_HIRE_COST ? "block" : "none";
+    } else {
+      hireStaffBtn.style.display = "none";
+      staffLevelCard.style.display = "block";
+      staffHintCard.style.display = "block";
+      var atMax = econ.staffLevel >= STAFF_MAX_LEVEL;
+      staffStatusLine.textContent = "Çalışıyor \u00B7 seviye " + econ.staffLevel + " / " + STAFF_MAX_LEVEL;
+      staffLevelValue.textContent = String(econ.staffLevel);
+      staffCapacityLine.textContent = "Taşıma kapasitesi: " + staffCapacity(econ.staffLevel) + " şişe / sefer";
+      if (atMax) {
+        upgradeStaffBtn.textContent = "MAKSİMUM SEVİYE";
+        upgradeStaffBtn.disabled = true;
+      } else {
+        var cost = STAFF_UPGRADE_COSTS[econ.staffLevel];
+        upgradeStaffBtn.textContent = "SEVİYE ATLA \u2014 " + formatMoney(cost);
+        upgradeStaffBtn.disabled = econ.budget < cost;
+      }
     }
   }
 
@@ -2170,6 +2447,7 @@
     econ.waterML += selectedWaterMl;
     renderBudget();
     renderWaterResourceCard();
+    saveGameSoon();
   });
 
   buyBottleMachineBtn.addEventListener("click", function () {
@@ -2178,6 +2456,7 @@
     econ.bottleMachineOwned = true;
     renderBudget();
     renderBottleMachineCard();
+    saveGameSoon();
   });
   placeBottleMachineBtn.addEventListener("click", function () {
     if (!econ.bottleMachineOwned || econ.bottleMachinePlaced) return;
@@ -2196,6 +2475,7 @@
     econ.waterMachineOwned = true;
     renderBudget();
     renderWaterMachineCard();
+    saveGameSoon();
   });
   placeWaterMachineBtn.addEventListener("click", function () {
     if (!econ.waterMachineOwned || econ.waterMachinePlaced) return;
@@ -2214,6 +2494,7 @@
     econ.deskOwned = true;
     renderBudget();
     renderDeskCard();
+    saveGameSoon();
   });
   placeDeskBtn.addEventListener("click", function () {
     if (!econ.deskOwned || econ.deskPlaced) return;
@@ -2229,11 +2510,40 @@
     if (econ.deskPrice <= DESK_MIN_PRICE) return;
     econ.deskPrice -= DESK_PRICE_STEP;
     renderDeskPriceCard();
+    saveGameSoon();
   });
   deskPricePlusBtn.addEventListener("click", function () {
     if (econ.deskPrice >= DESK_MAX_PRICE) return;
     econ.deskPrice += DESK_PRICE_STEP;
     renderDeskPriceCard();
+    saveGameSoon();
+  });
+
+  catStaffBtn.addEventListener("click", function () {
+    showTabletView("tabletStaffView");
+    renderBudget();
+    renderStaffCard();
+  });
+  staffBackBtn.addEventListener("click", function () { showTabletView("tabletCategoriesView"); });
+
+  hireStaffBtn.addEventListener("click", function () {
+    if (econ.budget < STAFF_HIRE_COST || econ.staffOwned) return;
+    econ.budget -= STAFF_HIRE_COST;
+    econ.staffOwned = true;
+    econ.staffLevel = 1;
+    renderBudget();
+    renderStaffCard();
+    saveGameSoon();
+  });
+  upgradeStaffBtn.addEventListener("click", function () {
+    if (!econ.staffOwned || econ.staffLevel >= STAFF_MAX_LEVEL) return;
+    var cost = STAFF_UPGRADE_COSTS[econ.staffLevel];
+    if (econ.budget < cost) return;
+    econ.budget -= cost;
+    econ.staffLevel++;
+    renderBudget();
+    renderStaffCard();
+    saveGameSoon();
   });
 
   startProductionBtn.addEventListener("click", function () {
@@ -2354,6 +2664,7 @@
       renderDeskStockVisual();
     }
     activePlacementKind = null;
+    if (confirmed) saveGameSoon();
   }
 
   confirmPlaceBtn.addEventListener("click", function () { exitPlacementMode(true); });
@@ -2384,8 +2695,9 @@
     else placementForward.normalize();
     var px = yawObject.position.x + placementForward.x * PLACEMENT_DISTANCE;
     var pz = yawObject.position.z + placementForward.z * PLACEMENT_DISTANCE;
-    px = THREE.MathUtils.clamp(px, -GROUND_HALF, GROUND_HALF);
-    pz = THREE.MathUtils.clamp(pz, -GROUND_HALF, GROUND_HALF);
+    var clamped = clampToPlot(px, pz);
+    px = clamped[0];
+    pz = clamped[1];
     group.position.set(px, 0, pz);
     if (rotateHoldDir !== 0) placementYaw += rotateHoldDir * ROTATE_SPEED * dt;
     group.rotation.y = placementYaw;
@@ -2533,11 +2845,11 @@
 
   function buildBottleMachine() {
     var group = new THREE.Group();
-    var bodyMat = new THREE.MeshStandardMaterial({ color: 0xf0f3f1, metalness: 0.04, roughness: 0.55 });
-    var darkMat = new THREE.MeshStandardMaterial({ color: 0x22242a, metalness: 0.12, roughness: 0.6 });
-    var accentMat = new THREE.MeshStandardMaterial({ color: 0x2dd6c4, metalness: 0.08, roughness: 0.4 });
-    var footMat = new THREE.MeshStandardMaterial({ color: 0x17181a, metalness: 0.1, roughness: 0.7 });
-    var stripeMat = new THREE.MeshStandardMaterial({ color: 0x2dd6c4, metalness: 0.05, roughness: 0.45 });
+    var bodyMat = new THREE.MeshStandardMaterial({ color: 0x24262b, metalness: 0.75, roughness: 0.32 });
+    var darkMat = new THREE.MeshStandardMaterial({ color: 0x141517, metalness: 0.6, roughness: 0.4 });
+    var accentMat = new THREE.MeshStandardMaterial({ color: 0x2dd6c4, metalness: 0.3, roughness: 0.35 });
+    var footMat = new THREE.MeshStandardMaterial({ color: 0x0d0e0f, metalness: 0.5, roughness: 0.55 });
+    var stripeMat = new THREE.MeshStandardMaterial({ color: 0x2dd6c4, metalness: 0.25, roughness: 0.3 });
 
     var footGeo = new THREE.CylinderGeometry(0.07, 0.09, 0.14, 10);
     var footOffsets = [[-0.62, -0.34], [0.62, -0.34], [-0.62, 0.34], [0.62, 0.34]];
@@ -2637,16 +2949,21 @@
     group.userData.statusLight = statusLight;
     group.userData.nozzleOffset = new THREE.Vector3(1.18, nozzleY - 0.06, 0);
     group.userData.pileOffset = new THREE.Vector3(1.6, 0.05, 0);
+    group.scale.set(1.18, 1.18, 1.18);
     return group;
   }
 
   function buildWaterMachine() {
     var group = new THREE.Group();
-    var bodyMat = new THREE.MeshStandardMaterial({ color: 0xf0f3f1, metalness: 0.04, roughness: 0.55 });
-    var darkMat = new THREE.MeshStandardMaterial({ color: 0x1c2a30, metalness: 0.12, roughness: 0.6 });
-    var accentMat = new THREE.MeshStandardMaterial({ color: 0x2dd6c4, metalness: 0.08, roughness: 0.4 });
-    var footMat = new THREE.MeshStandardMaterial({ color: 0x17181a, metalness: 0.1, roughness: 0.7 });
-    var tankMat = new THREE.MeshStandardMaterial({ color: 0x7fc9e8, transparent: true, opacity: 0.6, roughness: 0.15, metalness: 0 });
+    var bodyMat = new THREE.MeshStandardMaterial({ color: 0x24262b, metalness: 0.75, roughness: 0.32 });
+    var darkMat = new THREE.MeshStandardMaterial({ color: 0x121517, metalness: 0.6, roughness: 0.4 });
+    var accentMat = new THREE.MeshStandardMaterial({ color: 0x2dd6c4, metalness: 0.3, roughness: 0.35 });
+    var footMat = new THREE.MeshStandardMaterial({ color: 0x0d0e0f, metalness: 0.5, roughness: 0.55 });
+    // The old translucent "glass" tank read as cheap/broken -- a brushed
+    // dark-metal tank with a lighter horizontal ribbing reads as an
+    // actual pressure vessel instead.
+    var tankMat = new THREE.MeshStandardMaterial({ color: 0x3a3f45, metalness: 0.8, roughness: 0.28 });
+    var tankRibMat = new THREE.MeshStandardMaterial({ color: 0x4d545c, metalness: 0.85, roughness: 0.22 });
 
     var footGeo = new THREE.CylinderGeometry(0.07, 0.09, 0.14, 10);
     var footOffsets = [[-0.62, -0.34], [0.62, -0.34], [-0.62, 0.34], [0.62, 0.34]];
@@ -2690,6 +3007,14 @@
     tank.position.y = bodyBottomY + bodyHeight + 0.42;
     tank.castShadow = true;
     group.add(tank);
+    // Ribbing rings instead of a see-through band -- reads as welded
+    // metal seams on a real tank rather than a water-level window.
+    [-0.28, 0, 0.28].forEach(function (yOff) {
+      var rib = new THREE.Mesh(new THREE.TorusGeometry(0.43, 0.025, 8, 20), tankRibMat);
+      rib.rotation.x = Math.PI / 2;
+      rib.position.y = bodyBottomY + bodyHeight + 0.42 + yOff;
+      group.add(rib);
+    });
     var tankCap = new THREE.Mesh(new THREE.CylinderGeometry(0.44, 0.44, 0.08, 18), darkMat);
     tankCap.position.y = bodyBottomY + bodyHeight + 0.85;
     group.add(tankCap);
@@ -2733,6 +3058,7 @@
     group.userData.statusLight = statusLight;
     group.userData.nozzleOffset = new THREE.Vector3(1.18, nozzleY - 0.06, 0);
     group.userData.pileOffset = new THREE.Vector3(1.6, 0.05, 0);
+    group.scale.set(1.18, 1.18, 1.18);
     return group;
   }
 
@@ -2858,6 +3184,7 @@
     pileCtx.trayCount++;
 
     bottle.position.copy(startPos);
+    var spinDir = Math.random() < 0.5 ? -1 : 1;
     bottle.rotation.y = Math.random() * Math.PI * 2;
     scene.add(bottle);
 
@@ -2865,7 +3192,10 @@
       group.userData.statusLight.material.emissiveIntensity = 1.5;
     }
 
-    pileCtx.anims.push({ mesh: bottle, from: startPos, to: endPos, elapsed: 0, duration: 0.55 });
+    pileCtx.anims.push({
+      mesh: bottle, from: startPos, to: endPos, elapsed: 0, duration: 0.7,
+      spinDir: spinDir, startYaw: bottle.rotation.y, endYaw: bottle.rotation.y + spinDir * (Math.PI * 1.4)
+    });
 
     pileCtx.liveBottles.push(bottle);
     if (pileCtx.liveBottles.length > MAX_VISIBLE_BOTTLES) {
@@ -2882,11 +3212,19 @@
         a.elapsed += dt;
         var t = Math.min(a.elapsed / a.duration, 1);
         var tHoriz = 1 - Math.pow(1 - t, 2);
+        // A small extra hop (sine bump) layered on top of the straight
+        // ease-in fall reads as a bounce/toss instead of a flat slide.
         var tVert = t * t;
+        var hop = Math.sin(t * Math.PI) * 0.16 * (1 - t * 0.4);
         a.mesh.position.x = a.from.x + (a.to.x - a.from.x) * tHoriz;
         a.mesh.position.z = a.from.z + (a.to.z - a.from.z) * tHoriz;
-        a.mesh.position.y = a.from.y + (a.to.y - a.from.y) * tVert;
-        if (t >= 1) pileCtx.anims.splice(i, 1);
+        a.mesh.position.y = a.from.y + (a.to.y - a.from.y) * tVert + hop;
+        a.mesh.rotation.y = a.startYaw + (a.endYaw - a.startYaw) * tHoriz;
+        a.mesh.rotation.x = Math.sin(t * Math.PI) * 0.3 * a.spinDir;
+        if (t >= 1) {
+          a.mesh.rotation.x = 0;
+          pileCtx.anims.splice(i, 1);
+        }
       }
     });
     if (machines.bottle.group && machines.bottle.group.userData.statusLight && !econ.producing) {
@@ -2961,37 +3299,71 @@
     var hairMat = new THREE.MeshStandardMaterial({ color: variant.hair, roughness: 0.9 });
 
     var LEG_H = 0.5, TORSO_H = 0.5, HEAD_S = 0.32, ARM_H = 0.46;
+    var hipY = LEG_H;
 
-    var legs = new THREE.Mesh(new THREE.BoxGeometry(0.34, LEG_H, 0.18), pantsMat);
-    legs.position.y = LEG_H / 2;
-    legs.castShadow = true;
-    group.add(legs);
+    // Legs and arms are built as pivot groups at the hip/shoulder, with
+    // the actual box offset downward inside -- rotating the pivot then
+    // swings the whole limb like a real joint instead of the box
+    // rotating around its own centre.
+    var legGeo = new THREE.BoxGeometry(0.15, LEG_H, 0.17);
+    function buildLeg(xOff) {
+      var pivot = new THREE.Group();
+      pivot.position.set(xOff, hipY, 0);
+      var mesh = new THREE.Mesh(legGeo, pantsMat);
+      mesh.position.y = -LEG_H / 2;
+      mesh.castShadow = true;
+      pivot.add(mesh);
+      group.add(pivot);
+      return pivot;
+    }
+    var legL = buildLeg(-0.1);
+    var legR = buildLeg(0.1);
 
     var torso = new THREE.Mesh(new THREE.BoxGeometry(0.36, TORSO_H, 0.2), shirtMat);
     torso.position.y = LEG_H + TORSO_H / 2;
     torso.castShadow = true;
     group.add(torso);
 
+    var shoulderY = LEG_H + TORSO_H - 0.04;
     var armGeo = new THREE.BoxGeometry(0.12, ARM_H, 0.12);
-    var armL = new THREE.Mesh(armGeo, shirtMat);
-    armL.position.set(-0.24, LEG_H + TORSO_H - ARM_H / 2 + 0.02, 0);
-    armL.castShadow = true;
-    group.add(armL);
-    var armR = new THREE.Mesh(armGeo, shirtMat);
-    armR.position.set(0.24, LEG_H + TORSO_H - ARM_H / 2 + 0.02, 0);
-    armR.castShadow = true;
-    group.add(armR);
+    function buildArm(xOff) {
+      var pivot = new THREE.Group();
+      pivot.position.set(xOff, shoulderY, 0);
+      var mesh = new THREE.Mesh(armGeo, shirtMat);
+      mesh.position.y = -ARM_H / 2;
+      mesh.castShadow = true;
+      pivot.add(mesh);
+      group.add(pivot);
+      return pivot;
+    }
+    var armL = buildArm(-0.24);
+    var armR = buildArm(0.24);
 
     var head = new THREE.Mesh(new THREE.BoxGeometry(HEAD_S, HEAD_S, HEAD_S), skinMat);
     head.position.y = LEG_H + TORSO_H + HEAD_S / 2;
     head.castShadow = true;
     group.add(head);
 
-    var hair = new THREE.Mesh(new THREE.BoxGeometry(HEAD_S * 1.05, HEAD_S * 0.34, HEAD_S * 1.05), hairMat);
-    hair.position.y = LEG_H + TORSO_H + HEAD_S - HEAD_S * 0.17;
-    group.add(hair);
+    // Style variety: some customers get a full hair cap, some a short
+    // fringe, some none at all (bald) -- so silhouettes differ beyond
+    // just the shirt color.
+    var hairStyle = Math.floor(Math.random() * 3);
+    if (hairStyle !== 2) {
+      var hairH = hairStyle === 0 ? HEAD_S * 0.34 : HEAD_S * 0.18;
+      var hair = new THREE.Mesh(new THREE.BoxGeometry(HEAD_S * 1.05, hairH, HEAD_S * 1.05), hairMat);
+      hair.position.y = LEG_H + TORSO_H + HEAD_S - hairH / 2 + (hairStyle === 0 ? 0 : HEAD_S * 0.05);
+      group.add(hair);
+    }
 
-    group.scale.set(1.18, 1.18, 1.18);
+    // Style variety: a slightly randomized height/build per customer so
+    // they don't all read as clones of the same six color swaps.
+    var buildScale = 1.06 + Math.random() * 0.24;
+    group.scale.set(1.18 * (0.94 + Math.random() * 0.1), 1.18 * buildScale, 1.18 * (0.94 + Math.random() * 0.1));
+
+    group.userData.legL = legL;
+    group.userData.legR = legR;
+    group.userData.armL = armL;
+    group.userData.armR = armR;
     return group;
   }
 
@@ -3000,10 +3372,10 @@
   var customerSpawnTimer = 4;
   var CUSTOMER_SPEED = 1.25;
   var QUEUE_BASE_DIST = 1.6;
-  var QUEUE_SPACING = 0.85;
+  var QUEUE_SPACING = 1.15;
   var CUSTOMER_PATIENCE = 12;
   var CUSTOMER_SERVE_TIME = 1.3;
-  var CUSTOMER_EXIT_DIST = 8;
+  var CUSTOMER_EXIT_DIST = 6;
 
   function deskForwardVec() {
     var v = new THREE.Vector3(0, 0, 1);
@@ -3012,6 +3384,35 @@
     if (v.lengthSq() < 1e-6) v.set(0, 0, 1);
     else v.normalize();
     return v;
+  }
+
+  var CUSTOMER_WALK_CYCLE_SPEED = 9;
+  var CUSTOMER_LEG_SWING = 0.62;
+  var CUSTOMER_ARM_SWING = 0.42;
+  var CUSTOMER_BOB_HEIGHT = 0.055;
+
+  // Procedural walk cycle: legs/arms swing opposite each other and the
+  // whole body bobs a little on every other step, instead of the group
+  // just sliding across the ground like a puck. When not moving, limbs
+  // ease back to a neutral standing pose rather than freezing mid-stride.
+  function animateCustomerWalk(c, dt, moving) {
+    var ud = c.group.userData;
+    if (moving) {
+      c.walkTime = (c.walkTime || 0) + dt * CUSTOMER_WALK_CYCLE_SPEED;
+      var swing = Math.sin(c.walkTime);
+      if (ud.legL) ud.legL.rotation.x = swing * CUSTOMER_LEG_SWING;
+      if (ud.legR) ud.legR.rotation.x = -swing * CUSTOMER_LEG_SWING;
+      if (ud.armL) ud.armL.rotation.x = -swing * CUSTOMER_ARM_SWING;
+      if (ud.armR) ud.armR.rotation.x = swing * CUSTOMER_ARM_SWING;
+      c.group.position.y = Math.abs(Math.sin(c.walkTime)) * CUSTOMER_BOB_HEIGHT;
+    } else {
+      var ease = Math.min(1, dt * 8);
+      if (ud.legL) ud.legL.rotation.x *= (1 - ease);
+      if (ud.legR) ud.legR.rotation.x *= (1 - ease);
+      if (ud.armL) ud.armL.rotation.x *= (1 - ease);
+      if (ud.armR) ud.armR.rotation.x *= (1 - ease);
+      c.group.position.y *= (1 - ease);
+    }
   }
 
   function moveCustomerTowards(group, target, dt) {
@@ -3032,14 +3433,15 @@
     var deskPos = machines.desk.group.position;
     var fwd = deskForwardVec();
     var right = new THREE.Vector3(-fwd.z, 0, fwd.x);
-    var spawnDist = 7 + Math.random() * 3;
+    var spawnDist = 5.5 + Math.random() * 2.5;
     var lateral = (Math.random() - 0.5) * 4.5;
     var spawnPos = deskPos.clone().addScaledVector(fwd, spawnDist).addScaledVector(right, lateral);
-    spawnPos.x = THREE.MathUtils.clamp(spawnPos.x, -GROUND_HALF, GROUND_HALF);
-    spawnPos.z = THREE.MathUtils.clamp(spawnPos.z, -GROUND_HALF, GROUND_HALF);
+    var clamped = clampToPlot(spawnPos.x, spawnPos.z);
+    spawnPos.x = clamped[0];
+    spawnPos.z = clamped[1];
     group.position.set(spawnPos.x, 0, spawnPos.z);
     scene.add(group);
-    customers.push({ group: group, state: "walkingIn", patience: CUSTOMER_PATIENCE, serveTimer: 0 });
+    customers.push({ group: group, state: "walkingIn", patience: CUSTOMER_PATIENCE, serveTimer: 0, walkTime: Math.random() * Math.PI * 2 });
   }
 
   function queueTargetForIndex(i) {
@@ -3064,9 +3466,16 @@
 
       for (var qi = 0; qi < queueList.length; qi++) {
         var c = queueList[qi];
-        if (c.state === "buying") continue;
+        if (c.state === "buying") {
+          animateCustomerWalk(c, dt, false);
+          continue;
+        }
         var target = queueTargetForIndex(qi);
+        var dx0 = target.x - c.group.position.x;
+        var dz0 = target.z - c.group.position.z;
+        var distNow = Math.sqrt(dx0 * dx0 + dz0 * dz0);
         var remaining = moveCustomerTowards(c.group, target, dt);
+        animateCustomerWalk(c, dt, distNow > 0.05);
         if (remaining < 0.12) {
           c.state = "queue";
           if (qi === 0) {
@@ -3093,6 +3502,7 @@
             renderDeskStockVisual();
             renderDeskStockCard();
             flashWorldToast("Satış! +" + formatMoney(econ.deskPrice));
+            playCoinSound();
           }
           cb.state = "leaving";
         }
@@ -3107,6 +3517,7 @@
         cust.exitTarget = cust.group.position.clone().addScaledVector(fwd, CUSTOMER_EXIT_DIST);
       }
       var left = moveCustomerTowards(cust.group, cust.exitTarget, dt);
+      animateCustomerWalk(cust, dt, left > 0.05);
       if (left < 0.3) {
         scene.remove(cust.group);
         cust.group.traverse(disposeObj);
@@ -3175,22 +3586,45 @@
 
   // Always-available escape hatch: whatever is in hand, whenever no
   // machine/desk interaction applies, the player can just set it down
-  // instead of being stuck carrying it forever.
+  // instead of being stuck carrying it forever. Every bottle in the
+  // stack gets its own mesh, scattered around the player's feet, and
+  // goes back into the matching pile's liveBottles so it can be
+  // picked up again later -- dropping must never destroy inventory.
   function dropCarriedBottle() {
     if (!carriedBottleMesh) return;
-    var ground = buildBottle(carriedBottleFilled);
-    ground.scale.set(1.3, 1.3, 1.3);
+    var pile = carriedBottleFilled ? filledPile : bottlePile;
     var fwd = new THREE.Vector3(0, 0, -1).applyQuaternion(yawObject.quaternion);
-    ground.position.copy(yawObject.position).addScaledVector(fwd, 0.7);
-    ground.position.y = 0;
-    ground.rotation.y = Math.random() * Math.PI * 2;
-    scene.add(ground);
+    var basePos = yawObject.position.clone().addScaledVector(fwd, 0.8);
+    var n = carriedBottleCount;
+    for (var i = 0; i < n; i++) {
+      var ground = buildBottle(carriedBottleFilled);
+      ground.scale.set(1.3, 1.3, 1.3);
+      var angle = (i / n) * Math.PI * 2 + Math.random() * 0.6;
+      var radius = 0.25 + (i % 3) * 0.22;
+      ground.position.set(
+        basePos.x + Math.cos(angle) * radius,
+        0,
+        basePos.z + Math.sin(angle) * radius
+      );
+      ground.rotation.y = Math.random() * Math.PI * 2;
+      scene.add(ground);
+      pile.liveBottles.push(ground);
+    }
+    if (pile.liveBottles.length > MAX_VISIBLE_BOTTLES) {
+      var overflow = pile.liveBottles.length - MAX_VISIBLE_BOTTLES;
+      for (var j = 0; j < overflow; j++) {
+        var old = pile.liveBottles.shift();
+        scene.remove(old);
+        old.traverse(disposeObj);
+      }
+    }
     camera.remove(carriedBottleMesh);
     carriedBottleMesh.traverse(disposeObj);
     carriedBottleMesh = null;
     carriedBottleFilled = false;
     carriedBottleCount = 0;
     updateCarryChip();
+    flashWorldToast(n > 1 ? (n + " şişe yere bırakıldı") : "Şişe yere bırakıldı");
   }
 
   function placeBottleOnDesk() {
@@ -3467,6 +3901,437 @@
   }
 
   // ---------------------------------------------------------------------
+  // A small town around the plot: a handful of static buildings plus a
+  // few background NPCs that potter around near their "home" building.
+  // Purely atmospheric -- no economy ties, no interaction -- just enough
+  // to make the field around the factory feel inhabited rather than
+  // empty. Deliberately kept small (a few buildings, a few NPCs).
+  // ---------------------------------------------------------------------
+  function buildBuilding(opts) {
+    var group = new THREE.Group();
+    var wallMat = new THREE.MeshStandardMaterial({ color: opts.wallColor, roughness: 0.88 });
+    var roofMat = new THREE.MeshStandardMaterial({ color: opts.roofColor, roughness: 0.7 });
+    var doorMat = new THREE.MeshStandardMaterial({ color: 0x2b1d14, roughness: 0.85 });
+    var windowMat = new THREE.MeshStandardMaterial({
+      color: 0xffe9a8, emissive: 0xffcf72, emissiveIntensity: 0.5, roughness: 0.5
+    });
+    var sillMat = new THREE.MeshStandardMaterial({ color: 0xf5f2ea, roughness: 0.6 });
+
+    var w = opts.width, d = opts.depth, h = opts.height;
+
+    var plinth = new THREE.Mesh(new THREE.BoxGeometry(w + 0.16, 0.16, d + 0.16), sillMat);
+    plinth.position.y = 0.08;
+    plinth.receiveShadow = true;
+    group.add(plinth);
+
+    var walls = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), wallMat);
+    walls.position.y = 0.16 + h / 2;
+    walls.castShadow = true;
+    walls.receiveShadow = true;
+    group.add(walls);
+
+    if (opts.roofStyle === "pitched") {
+      var roofH = h * 0.5;
+      var roofRadius = Math.sqrt(w * w + d * d) / 2 + 0.25;
+      var roof = new THREE.Mesh(new THREE.ConeGeometry(roofRadius, roofH, 4, 1), roofMat);
+      roof.rotation.y = Math.PI / 4;
+      roof.position.y = 0.16 + h + roofH / 2 - 0.05;
+      roof.castShadow = true;
+      group.add(roof);
+    } else {
+      var roof = new THREE.Mesh(new THREE.BoxGeometry(w + 0.22, 0.2, d + 0.22), roofMat);
+      roof.position.y = 0.16 + h + 0.1;
+      roof.castShadow = true;
+      group.add(roof);
+      var cap = new THREE.Mesh(new THREE.BoxGeometry(w * 0.5, 0.14, d * 0.5), sillMat);
+      cap.position.y = 0.16 + h + 0.27;
+      group.add(cap);
+    }
+
+    var door = new THREE.Mesh(new THREE.BoxGeometry(0.56, 0.98, 0.06), doorMat);
+    door.position.set(0, 0.16 + 0.49, d / 2 + 0.02);
+    group.add(door);
+
+    var winSize = 0.34;
+    var winY = 0.16 + h * 0.6;
+    [-w * 0.3, w * 0.3].forEach(function (wx) {
+      var win = new THREE.Mesh(new THREE.BoxGeometry(winSize, winSize, 0.05), windowMat);
+      win.position.set(wx, winY, d / 2 + 0.02);
+      group.add(win);
+    });
+    var sideWin = new THREE.Mesh(new THREE.BoxGeometry(0.05, winSize, winSize), windowMat);
+    sideWin.position.set(w / 2 + 0.02, winY, 0);
+    group.add(sideWin);
+
+    group.position.set(opts.x, 0, opts.z);
+    group.rotation.y = opts.rotationY || 0;
+    return group;
+  }
+
+  var TOWN_BUILDINGS = [
+    { x: -19, z: -13, width: 4.2, depth: 3.4, height: 2.6, wallColor: 0xe9f0e2, roofColor: 0xb2503f, roofStyle: "pitched", rotationY: 0.45 },
+    { x: 18, z: -17, width: 3.6, depth: 3.6, height: 3.0, wallColor: 0xf4e6c9, roofColor: 0x596b74, roofStyle: "flat", rotationY: -0.3 },
+    { x: -22, z: 12, width: 4.6, depth: 3.2, height: 2.4, wallColor: 0xead9c2, roofColor: 0x83493a, roofStyle: "pitched", rotationY: -0.6 },
+    { x: 20, z: 14, width: 3.8, depth: 3.8, height: 2.9, wallColor: 0xdbe6e8, roofColor: 0x3d4a52, roofStyle: "pitched", rotationY: 0.9 }
+  ];
+  TOWN_BUILDINGS.forEach(function (def) { scene.add(buildBuilding(def)); });
+
+  // Trees, lamps and benches: cheap decoration (a handful of primitives
+  // each) scattered around the town so the field between the plot and
+  // the buildings doesn't read as empty. Kept well clear of the plot
+  // itself and of each building's footprint.
+  function buildTree(x, z, scale) {
+    var group = new THREE.Group();
+    var trunkMat = new THREE.MeshStandardMaterial({ color: 0x6b4a2f, roughness: 0.9 });
+    var leafColors = [0x4a8f4f, 0x5aa156, 0x3f7d45];
+    var leafMat = new THREE.MeshStandardMaterial({
+      color: leafColors[Math.floor(Math.random() * leafColors.length)], roughness: 0.85
+    });
+    var trunkH = 1.1;
+    var trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.15, trunkH, 8), trunkMat);
+    trunk.position.y = trunkH / 2;
+    trunk.castShadow = true;
+    group.add(trunk);
+    var tiers = 3;
+    for (var i = 0; i < tiers; i++) {
+      var r = 0.85 - i * 0.18;
+      var h = 0.95 - i * 0.12;
+      var cone = new THREE.Mesh(new THREE.ConeGeometry(r, h, 8), leafMat);
+      cone.position.y = trunkH + i * 0.55 + h * 0.35;
+      cone.castShadow = true;
+      group.add(cone);
+    }
+    group.position.set(x, 0, z);
+    group.scale.setScalar(scale);
+    return group;
+  }
+
+  function buildLamp(x, z) {
+    var group = new THREE.Group();
+    var poleMat = new THREE.MeshStandardMaterial({ color: 0x2b2d30, metalness: 0.5, roughness: 0.45 });
+    var glowMat = new THREE.MeshStandardMaterial({
+      color: 0xfff1c2, emissive: 0xffd98a, emissiveIntensity: 0.9, roughness: 0.5
+    });
+    var pole = new THREE.Mesh(new THREE.CylinderGeometry(0.045, 0.06, 2.4, 8), poleMat);
+    pole.position.y = 1.2;
+    pole.castShadow = true;
+    group.add(pole);
+    var arm = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.04, 0.04), poleMat);
+    arm.position.set(0.15, 2.35, 0);
+    group.add(arm);
+    var lamp = new THREE.Mesh(new THREE.SphereGeometry(0.13, 10, 10), glowMat);
+    lamp.position.set(0.3, 2.25, 0);
+    group.add(lamp);
+    var base = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.16, 0.08, 10), poleMat);
+    base.position.y = 0.04;
+    group.add(base);
+    group.position.set(x, 0, z);
+    return group;
+  }
+
+  function buildBench(x, z, rotationY) {
+    var group = new THREE.Group();
+    var woodMat = new THREE.MeshStandardMaterial({ color: 0x8a5a34, roughness: 0.8 });
+    var metalMat = new THREE.MeshStandardMaterial({ color: 0x2b2d30, metalness: 0.4, roughness: 0.5 });
+    var seat = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.06, 0.36), woodMat);
+    seat.position.y = 0.42;
+    seat.castShadow = true;
+    group.add(seat);
+    var back = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.4, 0.05), woodMat);
+    back.position.set(0, 0.64, -0.16);
+    group.add(back);
+    [-0.46, 0.46].forEach(function (lx) {
+      var leg = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.42, 0.32), metalMat);
+      leg.position.set(lx, 0.21, 0);
+      group.add(leg);
+    });
+    group.position.set(x, 0, z);
+    group.rotation.y = rotationY || 0;
+    return group;
+  }
+
+  var TREE_COUNT = 22;
+  for (var ti = 0; ti < TREE_COUNT; ti++) {
+    var tAngle = Math.random() * Math.PI * 2;
+    var tRadius = PLOT_HALF + 4 + Math.random() * 34;
+    var tx = Math.cos(tAngle) * tRadius;
+    var tz = Math.sin(tAngle) * tRadius;
+    var tooCloseToBuilding = TOWN_BUILDINGS.some(function (b) {
+      var dx = b.x - tx, dz = b.z - tz;
+      return Math.sqrt(dx * dx + dz * dz) < 4.5;
+    });
+    if (tooCloseToBuilding) continue;
+    scene.add(buildTree(tx, tz, 0.85 + Math.random() * 0.6));
+  }
+
+  var LAMP_SPOTS = [
+    [-PLOT_HALF - 2.4, -6], [PLOT_HALF + 2.4, -6],
+    [-PLOT_HALF - 2.4, 6], [PLOT_HALF + 2.4, 6],
+    [0, -PLOT_HALF - 3], [0, PLOT_HALF + 3]
+  ];
+  LAMP_SPOTS.forEach(function (p) { scene.add(buildLamp(p[0], p[1])); });
+
+  TOWN_BUILDINGS.forEach(function (b, bi) {
+    if (bi % 2 === 0) {
+      var bench = buildBench(b.x + Math.cos(b.rotationY) * 2.6, b.z + Math.sin(b.rotationY) * 2.6, b.rotationY + Math.PI);
+      scene.add(bench);
+    }
+  });
+
+  // Clouds: a handful of soft blob clusters drifting slowly across the
+  // sky and wrapping back around -- makes the sky read as alive instead
+  // of a static gradient.
+  var clouds = [];
+  var CLOUD_COUNT = 7;
+  var CLOUD_SPAN = 140;
+  function buildCloud() {
+    var group = new THREE.Group();
+    var mat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 1, emissive: 0x333333, emissiveIntensity: 0.15 });
+    var puffs = 3 + Math.floor(Math.random() * 3);
+    for (var p = 0; p < puffs; p++) {
+      var puff = new THREE.Mesh(new THREE.SphereGeometry(1.4 + Math.random() * 1.1, 8, 8), mat);
+      puff.position.set((p - puffs / 2) * 1.6 + Math.random() * 0.6, Math.random() * 0.4, Math.random() * 0.8);
+      group.add(puff);
+    }
+    return group;
+  }
+  for (var ci = 0; ci < CLOUD_COUNT; ci++) {
+    var cloud = buildCloud();
+    var cx = (Math.random() - 0.5) * CLOUD_SPAN;
+    var cz = (Math.random() - 0.5) * CLOUD_SPAN;
+    cloud.position.set(cx, 26 + Math.random() * 10, cz);
+    var s = 1.4 + Math.random() * 1.6;
+    cloud.scale.setScalar(s);
+    scene.add(cloud);
+    clouds.push({ group: cloud, speed: 0.25 + Math.random() * 0.35 });
+  }
+  function updateClouds(dt) {
+    for (var i = 0; i < clouds.length; i++) {
+      var c = clouds[i];
+      c.group.position.x += c.speed * dt;
+      if (c.group.position.x > CLOUD_SPAN / 2) c.group.position.x = -CLOUD_SPAN / 2;
+    }
+  }
+
+  // A tiny WebAudio "cha-ching" on every sale -- synthesized, no audio
+  // files to ship. The AudioContext is created lazily and resumed from
+  // the start-gate tap, which is a genuine user gesture, so it's never
+  // blocked by autoplay policy.
+  var audioCtx = null;
+  function ensureAudioCtx() {
+    if (audioCtx) return audioCtx;
+    var Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) return null;
+    audioCtx = new Ctx();
+    return audioCtx;
+  }
+  function playCoinSound() {
+    var ctx = ensureAudioCtx();
+    if (!ctx) return;
+    if (ctx.state === "suspended") ctx.resume();
+    [880, 1320].forEach(function (freq, i) {
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.type = "square";
+      osc.frequency.value = freq;
+      var startAt = ctx.currentTime + i * 0.06;
+      gain.gain.setValueAtTime(0.0001, startAt);
+      gain.gain.exponentialRampToValueAtTime(0.06, startAt + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startAt + 0.22);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(startAt);
+      osc.stop(startAt + 0.24);
+    });
+  }
+
+  var ambientNpcs = [];
+  var AMBIENT_NPC_COUNT = 6;
+  var AMBIENT_SPEED = 0.95;
+  var AMBIENT_ROAM_RADIUS = 4.5;
+  var AMBIENT_IDLE_MIN = 1.8;
+  var AMBIENT_IDLE_MAX = 4.6;
+
+  function spawnAmbientNpc(home) {
+    var variant = CUSTOMER_VARIANTS[Math.floor(Math.random() * CUSTOMER_VARIANTS.length)];
+    var group = buildCustomer(variant);
+    var angle = Math.random() * Math.PI * 2;
+    var r = Math.random() * AMBIENT_ROAM_RADIUS;
+    group.position.set(home.x + Math.cos(angle) * r, 0, home.z + Math.sin(angle) * r);
+    scene.add(group);
+    ambientNpcs.push({
+      group: group,
+      anchor: { x: home.x, z: home.z },
+      state: "idle",
+      idleTimer: Math.random() * AMBIENT_IDLE_MAX,
+      walkTime: Math.random() * Math.PI * 2,
+      target: null
+    });
+  }
+
+  function pickAmbientTarget(npc) {
+    var angle = Math.random() * Math.PI * 2;
+    var r = 1.5 + Math.random() * AMBIENT_ROAM_RADIUS;
+    npc.target = new THREE.Vector3(npc.anchor.x + Math.cos(angle) * r, 0, npc.anchor.z + Math.sin(angle) * r);
+  }
+
+  function updateAmbientNpcs(dt) {
+    for (var i = 0; i < ambientNpcs.length; i++) {
+      var npc = ambientNpcs[i];
+      if (npc.state === "idle") {
+        animateCustomerWalk(npc, dt, false);
+        npc.idleTimer -= dt;
+        if (npc.idleTimer <= 0) {
+          pickAmbientTarget(npc);
+          npc.state = "walking";
+        }
+      } else {
+        var dx0 = npc.target.x - npc.group.position.x;
+        var dz0 = npc.target.z - npc.group.position.z;
+        var distNow = Math.sqrt(dx0 * dx0 + dz0 * dz0);
+        var dist = Math.max(distNow, 1e-4);
+        var step = Math.min(dist, AMBIENT_SPEED * dt);
+        npc.group.position.x += (dx0 / dist) * step;
+        npc.group.position.z += (dz0 / dist) * step;
+        npc.group.rotation.y = Math.atan2(dx0, dz0);
+        animateCustomerWalk(npc, dt, distNow > 0.05);
+        if (distNow - step < 0.15) {
+          npc.state = "idle";
+          npc.idleTimer = AMBIENT_IDLE_MIN + Math.random() * (AMBIENT_IDLE_MAX - AMBIENT_IDLE_MIN);
+        }
+      }
+    }
+  }
+
+  for (var ni = 0; ni < AMBIENT_NPC_COUNT; ni++) {
+    spawnAmbientNpc(TOWN_BUILDINGS[ni % TOWN_BUILDINGS.length]);
+  }
+
+  // ---------------------------------------------------------------------
+  // Staff worker: hired via the tablet, automatically shuttles empty
+  // bottles from the bottle machine's pile to the water machine and
+  // feeds them into the same fill queue the player's own carry-and-
+  // insert flow uses. Entirely separate from the customer/ambient NPC
+  // systems above, but reuses their building blocks (buildCustomer,
+  // animateCustomerWalk, moveCustomerTowards, buildBottle).
+  // ---------------------------------------------------------------------
+  var STAFF_VARIANT = { skin: 0xe0b089, shirt: 0x2f8f5b, pants: 0x2a2c2f, hair: 0x241c14 };
+  var staff = { group: null, state: "idle", carrying: 0, carryMeshes: [], waitTimer: 0, walkTime: 0 };
+
+  function buildStaffWorker() {
+    var g = buildCustomer(STAFF_VARIANT);
+    var vestMat = new THREE.MeshStandardMaterial({ color: 0xffc94d, roughness: 0.75 });
+    var vest = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.32, 0.22), vestMat);
+    vest.position.y = 0.98;
+    g.add(vest);
+    return g;
+  }
+
+  function updateStaffCarryVisual() {
+    staff.carryMeshes.forEach(function (m) { staff.group.remove(m); m.traverse(disposeObj); });
+    staff.carryMeshes = [];
+    var n = Math.min(staff.carrying, 4);
+    for (var i = 0; i < n; i++) {
+      var b = buildBottle(false);
+      b.scale.set(0.85, 0.85, 0.85);
+      b.position.set(-0.14 + (i % 2) * 0.28, 1.5 + Math.floor(i / 2) * 0.24, -0.08);
+      staff.group.add(b);
+      staff.carryMeshes.push(b);
+    }
+  }
+
+  function ensureStaffVisual() {
+    if (!econ.staffOwned) {
+      if (staff.group) {
+        scene.remove(staff.group);
+        staff.group.traverse(disposeObj);
+        staff.group = null;
+        staff.carryMeshes = [];
+        staff.carrying = 0;
+      }
+      return;
+    }
+    if (!staff.group && machines.bottle.group) {
+      staff.group = buildStaffWorker();
+      staff.group.position.copy(machines.bottle.group.position);
+      scene.add(staff.group);
+      staff.state = "toBottle";
+      staff.waitTimer = 0;
+    }
+  }
+
+  function updateStaff(dt) {
+    ensureStaffVisual();
+    if (!staff.group) return;
+    if (!machines.bottle.group || !machines.water.group) {
+      animateCustomerWalk(staff, dt, false);
+      return;
+    }
+
+    var bottlePos = machines.bottle.group.localToWorld(machines.bottle.group.userData.pileOffset.clone());
+    var waterPos = machines.water.group.localToWorld(machines.water.group.userData.nozzleOffset.clone());
+
+    if (staff.state === "toBottle") {
+      var dx0 = bottlePos.x - staff.group.position.x, dz0 = bottlePos.z - staff.group.position.z;
+      var distNow0 = Math.sqrt(dx0 * dx0 + dz0 * dz0);
+      var remaining0 = moveCustomerTowards(staff.group, bottlePos, dt);
+      animateCustomerWalk(staff, dt, distNow0 > 0.08);
+      if (remaining0 < 0.4) { staff.state = "collecting"; staff.waitTimer = 0.5; }
+    } else if (staff.state === "collecting") {
+      animateCustomerWalk(staff, dt, false);
+      staff.waitTimer -= dt;
+      if (staff.waitTimer <= 0) {
+        var cap = staffCapacity(econ.staffLevel);
+        var n = Math.min(cap, bottlePile.liveBottles.length);
+        if (n > 0) {
+          for (var i = 0; i < n; i++) {
+            var mesh = bottlePile.liveBottles.pop();
+            scene.remove(mesh);
+            mesh.traverse(disposeObj);
+          }
+          staff.carrying = n;
+          updateStaffCarryVisual();
+          staff.state = "toWater";
+        } else {
+          staff.waitTimer = 1.4;
+        }
+      }
+    } else if (staff.state === "toWater") {
+      var dx1 = waterPos.x - staff.group.position.x, dz1 = waterPos.z - staff.group.position.z;
+      var distNow1 = Math.sqrt(dx1 * dx1 + dz1 * dz1);
+      var remaining1 = moveCustomerTowards(staff.group, waterPos, dt);
+      animateCustomerWalk(staff, dt, distNow1 > 0.08);
+      if (remaining1 < 0.4) { staff.state = "delivering"; staff.waitTimer = 0.5; }
+    } else if (staff.state === "delivering") {
+      animateCustomerWalk(staff, dt, false);
+      staff.waitTimer -= dt;
+      if (staff.waitTimer <= 0) {
+        var maxByWater = Math.floor(econ.waterML / BOTTLE_VOLUME_ML);
+        var inserted = Math.min(staff.carrying, maxByWater);
+        if (inserted > 0) {
+          econ.waterML -= inserted * BOTTLE_VOLUME_ML;
+          waterQueue += inserted;
+          runWaterProcessing();
+          renderWaterResourceCard();
+        }
+        var leftover = staff.carrying - inserted;
+        for (var j = 0; j < leftover; j++) {
+          var ground = buildBottle(false);
+          ground.scale.set(1.2, 1.2, 1.2);
+          ground.position.set(waterPos.x + (Math.random() - 0.5) * 0.7, 0, waterPos.z + (Math.random() - 0.5) * 0.7);
+          ground.rotation.y = Math.random() * Math.PI * 2;
+          scene.add(ground);
+          bottlePile.liveBottles.push(ground);
+        }
+        if (leftover > 0) flashWorldToast("Personel su bitince " + leftover + " şişeyi bıraktı");
+        staff.carrying = 0;
+        updateStaffCarryVisual();
+        staff.state = "toBottle";
+      }
+    }
+  }
+
+  // ---------------------------------------------------------------------
   // Main loop
   // ---------------------------------------------------------------------
   var clock = new THREE.Clock();
@@ -3480,8 +4345,31 @@
     updatePlacement(dt);
     updateMachineProximity();
     updateCustomers(dt);
+    updateAmbientNpcs(dt);
+    updateStaff(dt);
+    updateClouds(dt);
     renderer.render(scene, camera);
   }
+
+  // Restore any previous save now that every system (machines registry,
+  // desk stock visuals, staff visuals) it touches is fully defined. This
+  // must run before the loading-screen timer's completion callback
+  // fires so that callback sees the final factoryName/hasSavedGame.
+  var pendingSavedState = loadSavedState();
+  if (pendingSavedState) {
+    applySavedState(pendingSavedState);
+    hasSavedGame = true;
+  }
+
+  // Autosave: a steady safety-net timer on top of the explicit saves
+  // sprinkled after purchases/placements, plus a save whenever the tab
+  // is about to lose focus or close -- mobile browsers don't reliably
+  // fire anything later than that.
+  setInterval(saveGameNow, 12000);
+  document.addEventListener("visibilitychange", function () {
+    if (document.visibilityState === "hidden") saveGameNow();
+  });
+  window.addEventListener("pagehide", saveGameNow);
 
   onResize();
   animate();
